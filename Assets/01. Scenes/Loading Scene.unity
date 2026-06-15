@@ -151,6 +151,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadingCanvas
   loadingCanvasType: 1
+  loadingImage: {fileID: 2124111004}
+  targetRot: 360
+  duration: 0.5
+  rotateInterval: 1.5
 --- !u!114 &189586133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,6 +1207,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadingCanvas
   loadingCanvasType: 0
+  loadingImage: {fileID: 476021719}
+  targetRot: 360
+  duration: 0.5
+  rotateInterval: 1.5
 --- !u!1 &1082592636
 GameObject:
   m_ObjectHideFlags: 0
@@ -2171,6 +2179,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadingCanvas
   loadingCanvasType: 2
+  loadingImage: {fileID: 314425265}
+  targetRot: 360
+  duration: 0.5
+  rotateInterval: 1.5
 --- !u!114 &1957842780
 MonoBehaviour:
   m_ObjectHideFlags: 0
