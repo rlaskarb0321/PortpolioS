@@ -23,6 +23,12 @@ public class AppLaunchManager : MonoBehaviour, IBootstrapInstance
 
     public void AllocateToBootstrapInstance()
     {
+        if (BootstrapSceneInstance.Instance == null)
+        {
+            Debug.LogError("[AppLaunchManager] Failed to assign to BootstrapSceneInstance");
+            return;
+        }
+        
         BootstrapSceneInstance.Instance.AllocateToBootstrapInstance(GetInstanceType(), this);
     }
 

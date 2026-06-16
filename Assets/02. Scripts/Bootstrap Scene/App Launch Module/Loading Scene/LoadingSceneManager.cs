@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum ELoadingSceneType
 {
-    AppInitLoading,
+    SelectModeLoading,
     StageModeLoading,
     MultiplayModeLoading,
     Count
@@ -23,21 +23,27 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
 
     public void AllocateToBootstrapInstance()
     {
+        if (BootstrapSceneInstance.Instance == null)
+        {
+            Debug.LogError("[LoadingSceneManager] Failed to assign to BootstrapSceneInstance");
+            return;
+        }
+        
         BootstrapSceneInstance.Instance.AllocateToBootstrapInstance(GetInstanceType(), this);
     }
 
     public void Execute()
     {
+        ActivateLoadingCanvas(ELoadingSceneType.SelectModeLoading);
     }
 
     public void ActivateLoadingCanvas(ELoadingSceneType targetCanvas)
     {
         foreach (ELoadingSceneType loadingSceneType in canvases.Keys)
         {
-            canvases[loadingSceneType].ToggleCanvas(targetCanvas != loadingSceneType);
+            canvases[loadingSceneType].ToggleCanvas(targetCanvas == loadingSceneType);
         }
     }
-    
     
     private void Awake()
     {
