@@ -1,16 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class AppLaunchManager : MonoBehaviour
 {
     [SerializeField] private AppLaunchModule[] appLaunchModules;
     [SerializeField] private AppLaunchModule lastLaunchModule;
-    
+
     private void Start()
     {
-        
+        ExecuteAllAsync(this.GetCancellationTokenOnDestroy()).Forget();
+    }
+
+    private async UniTask ExecuteAllAsync(System.Threading.CancellationToken ct)
+    {
+        foreach (var module in appLaunchModules)
+        {
+            if (module.appLaunchModuleBase == null) continue;
+            await module.appLaunchModuleBase.Execute(ct);
+        }
+
+        if (lastLaunchModule.appLaunchModuleBase != null)
+            await lastLaunchModule.appLaunchModuleBase.Execute(ct);
     }
 
     #if UNITY_EDITOR
@@ -40,5 +50,4 @@ public struct AppLaunchModule
     public string moduleName;
     public AppLaunchModuleBase appLaunchModuleBase;
     public float delay;
-    
 }

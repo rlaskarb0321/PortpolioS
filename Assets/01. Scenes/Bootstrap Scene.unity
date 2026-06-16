@@ -210,11 +210,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BootstrapScene::AppLaunchManager
   appLaunchModules:
-  - moduleName: 
+  - moduleName: The Backend Init Manager
     appLaunchModuleBase: {fileID: 115791157}
     delay: 0.5
   lastLaunchModule:
-    moduleName: 
+    moduleName: Menu Scene Load Manager
     appLaunchModuleBase: {fileID: 786211327}
     delay: 0.5
 --- !u!1 &786211325
@@ -261,40 +261,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7403fd86a552af4e8ae69dabcc284e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: AppLaunchModule::MenuSceneLoadManager
---- !u!1 &2059716614
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2059716615}
-  m_Layer: 0
-  m_Name: Scene Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2059716615
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2059716614}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 2059716615}
   - {fileID: 653228844}
