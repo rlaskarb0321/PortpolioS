@@ -5,5 +5,7 @@ using UnityEngine;
 public abstract class AppLaunchModuleBase : MonoBehaviour
 {
     public abstract string ModuleName { get; }
-    public abstract UniTask Execute(CancellationToken token = default);
+    
+    public virtual UniTask ExecuteAsync(CancellationToken token = default) { return UniTask.CompletedTask; }
+    public virtual void ExecuteSync() { }
 }

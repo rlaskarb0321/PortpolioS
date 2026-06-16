@@ -163,6 +163,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c124cb0a7e2e9694eabf36a63b5aed4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: AppLaunchModule::TheBackendInitManager
+--- !u!1 &644515200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 644515201}
+  - component: {fileID: 644515202}
+  m_Layer: 0
+  m_Name: Bootstrap Scene Instance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &644515201
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644515200}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &644515202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644515200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7e7208f3dbf93446978191de2ba2a66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BootstrapScene::BootstrapSceneInstance
+  appLaunchManager: {fileID: 653228845}
 --- !u!1 &653228843
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +238,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 786211326}
+  - {fileID: 1972744054}
   - {fileID: 115791156}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -209,15 +254,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb8f7ca848170f346985922022e0ccdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BootstrapScene::AppLaunchManager
+  firstLaunchModule:
+    moduleName: Loading Scene Load Manager
+    appLaunchModuleBase: {fileID: 1972744055}
+    delay: 0.1
   appLaunchModules:
   - moduleName: The Backend Init Manager
     appLaunchModuleBase: {fileID: 115791157}
     delay: 0.5
-  lastLaunchModule:
-    moduleName: Menu Scene Load Manager
-    appLaunchModuleBase: {fileID: 786211327}
-    delay: 0.5
---- !u!1 &786211325
+--- !u!1 &1972744053
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -225,22 +270,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 786211326}
-  - component: {fileID: 786211327}
+  - component: {fileID: 1972744054}
+  - component: {fileID: 1972744055}
   m_Layer: 0
-  m_Name: Menu Scene Load Manager
+  m_Name: Loading Scene Load Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &786211326
+--- !u!4 &1972744054
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786211325}
+  m_GameObject: {fileID: 1972744053}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -249,20 +294,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 653228844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &786211327
+--- !u!114 &1972744055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786211325}
+  m_GameObject: {fileID: 1972744053}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7403fd86a552af4e8ae69dabcc284e9, type: 3}
+  m_Script: {fileID: 11500000, guid: c0cf4a42ede581543a3d12ee0797c774, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: AppLaunchModule::MenuSceneLoadManager
+  m_EditorClassIdentifier: BootstrapScene::LoadingSceneLoadManager
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 644515201}
   - {fileID: 653228844}

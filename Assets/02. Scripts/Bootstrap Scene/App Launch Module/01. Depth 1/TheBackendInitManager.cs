@@ -7,7 +7,7 @@ public class TheBackendInitManager : AppLaunchModuleBase
 {
     public override string ModuleName { get => "The Backend Init Manager"; }
     
-    public override async UniTask Execute(CancellationToken token = default)
+    public override async UniTask ExecuteAsync(CancellationToken token = default)
     {
         var uniTask = new UniTaskCompletionSource();
 

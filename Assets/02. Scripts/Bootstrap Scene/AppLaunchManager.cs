@@ -1,26 +1,51 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class AppLaunchManager : MonoBehaviour
+public class AppLaunchManager : MonoBehaviour, IBootstrapInstance
 {
+    [Header("Load Loading Scene")]
+    [SerializeField] private AppLaunchModule firstLaunchModule;
+    
+    [Header("App Launch Modules")]
     [SerializeField] private AppLaunchModule[] appLaunchModules;
-    [SerializeField] private AppLaunchModule lastLaunchModule;
 
-    private void Start()
+    public void Start()
     {
-        ExecuteAllAsync(this.GetCancellationTokenOnDestroy()).Forget();
+        AllocateToBootstrapInstance();
+        Execute();
     }
 
-    private async UniTask ExecuteAllAsync(System.Threading.CancellationToken ct)
+    public EBootstrapInstance GetInstanceType()
+    {
+        return EBootstrapInstance.AppLaunchManager;
+    }
+
+    public void AllocateToBootstrapInstance()
+    {
+        BootstrapSceneInstance.Instance.AllocateToBootstrapInstance(GetInstanceType(), this);
+    }
+
+    public void Execute()
+    {
+        LoadLoadingScene();
+        ExecuteLaunchAsync(this.GetCancellationTokenOnDestroy()).Forget();
+    }
+
+    private void LoadLoadingScene()
+    {
+        firstLaunchModule.appLaunchModuleBase.ExecuteSync();
+    }
+    
+    private async UniTask ExecuteLaunchAsync(System.Threading.CancellationToken ct)
     {
         foreach (var module in appLaunchModules)
         {
-            if (module.appLaunchModuleBase == null) continue;
-            await module.appLaunchModuleBase.Execute(ct);
+            if (module.appLaunchModuleBase == null)
+                continue;
+            
+            await module.appLaunchModuleBase.ExecuteAsync(ct);
         }
-
-        if (lastLaunchModule.appLaunchModuleBase != null)
-            await lastLaunchModule.appLaunchModuleBase.Execute(ct);
     }
 
     #if UNITY_EDITOR
@@ -28,17 +53,17 @@ public class AppLaunchManager : MonoBehaviour
     {
         if (appLaunchModules == null) return;
 
+        if (firstLaunchModule.moduleName == string.Empty && firstLaunchModule.appLaunchModuleBase != null)
+        {
+            firstLaunchModule.moduleName = firstLaunchModule.appLaunchModuleBase.ModuleName;
+        }
+
         for (int i = 0; i < appLaunchModules.Length; i++)
         {
             if (appLaunchModules[i].moduleName != string.Empty) continue;
             if (appLaunchModules[i].appLaunchModuleBase == null) continue;
 
             appLaunchModules[i].moduleName = appLaunchModules[i].appLaunchModuleBase.ModuleName;
-        }
-
-        if (lastLaunchModule.moduleName == string.Empty && lastLaunchModule.appLaunchModuleBase != null)
-        {
-            lastLaunchModule.moduleName = lastLaunchModule.appLaunchModuleBase.ModuleName;
         }
     }
     #endif
