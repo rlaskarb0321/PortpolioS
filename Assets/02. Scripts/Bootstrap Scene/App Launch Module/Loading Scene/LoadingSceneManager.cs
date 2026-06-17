@@ -2,6 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
 public enum ELoadingSceneType
 {
@@ -14,8 +18,13 @@ public enum ELoadingSceneType
 public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
 {
     [SerializeField] private LoadingCanvas[] loadingCanvases;
+    [SerializeField] private AssetReference[] scenes;
+    [SerializeField] private float loadDelay = 0.8f;
 
     private Dictionary<ELoadingSceneType, LoadingCanvas> canvases;
+    private LoadingCanvas activatedCanvas;
+    private AsyncOperationHandle<SceneInstance> sceneHandle;
+    private WaitForSeconds ws;
 
     public EBootstrapInstance GetInstanceType()
     {
@@ -42,20 +51,36 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
     {
         foreach (ELoadingSceneType loadingSceneType in canvases.Keys)
         {
-            canvases[loadingSceneType].ToggleCanvas(targetCanvas == loadingSceneType);
+            if (targetCanvas == loadingSceneType)
+            {
+                canvases[loadingSceneType].ToggleCanvas(true);
+                activatedCanvas = canvases[loadingSceneType];
+            }
+            else
+            {
+                canvases[loadingSceneType].ToggleCanvas(false);
+            }
         }
 
         StartCoroutine(LoadSceneInBackground(targetCanvas));
     }
 
-    private IEnumerator LoadSceneInBackground(ELoadingSceneType targetScene)
+    private IEnumerator LoadSceneInBackground(ELoadingSceneType sceneType)
     {
-        yield return null;
+        if (sceneHandle.IsValid())
+            yield return Addressables.UnloadSceneAsync(sceneHandle);
+
+        sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive, false);
+        yield return ws;
+        yield return sceneHandle.Result.ActivateAsync();
+        
+        activatedCanvas.ToggleCanvas(false);
     }
     
     private void Awake()
     {
         canvases = new Dictionary<ELoadingSceneType, LoadingCanvas>();
+        ws = new WaitForSeconds(loadDelay);
     }
 
     public void Start()
@@ -67,5 +92,16 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
 
         AllocateToBootstrapInstance();
         Execute();
+    }
+    
+    private void OnDestroy()
+    {
+        if (sceneHandle.IsValid() == false)
+            return;
+
+        if (sceneHandle.IsDone)
+            Addressables.UnloadSceneAsync(sceneHandle);
+        else
+            Addressables.Release(sceneHandle);
     }
 }
