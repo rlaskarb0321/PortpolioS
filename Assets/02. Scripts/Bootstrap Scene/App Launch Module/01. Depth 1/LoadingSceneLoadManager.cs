@@ -1,11 +1,14 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadingSceneLoadManager : AppLaunchModuleBase
 {
-    public override string ModuleName { get => "Loading Scene Load Manager"; }
+    [SerializeField] private SceneField loadingScene;
+    
+    public override string ModuleName { get => "Loading Scene Additive Load Manager"; }
 
     public override void ExecuteSync()
     {
-        SceneManager.LoadScene("Loading Scene", LoadSceneMode.Additive);
+        SceneManager.LoadScene(loadingScene.SceneName, LoadSceneMode.Additive);
     }
 }

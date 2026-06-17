@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,6 +44,13 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
         {
             canvases[loadingSceneType].ToggleCanvas(targetCanvas == loadingSceneType);
         }
+
+        StartCoroutine(LoadSceneInBackground(targetCanvas));
+    }
+
+    private IEnumerator LoadSceneInBackground(ELoadingSceneType targetScene)
+    {
+        yield return null;
     }
     
     private void Awake()

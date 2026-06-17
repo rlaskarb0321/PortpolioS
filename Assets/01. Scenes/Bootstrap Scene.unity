@@ -207,7 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7e7208f3dbf93446978191de2ba2a66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BootstrapScene::BootstrapSceneInstance
-  appLaunchManager: {fileID: 653228845}
 --- !u!1 &653228843
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +305,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0cf4a42ede581543a3d12ee0797c774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BootstrapScene::LoadingSceneLoadManager
+  loadingScene:
+    sceneAsset: {fileID: 102900000, guid: 3f0c63f35e896d24985444a2b6bd11df, type: 3}
+    sceneName: Loading Scene
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
