@@ -31,14 +31,17 @@ public class LoadingCanvas : MonoBehaviour
     public void ToggleCanvas(bool isActive)
     {
         canvas.enabled = isActive;
+        rotateSequence?.Kill();
 
         if (isActive)
         {
             loadingImage.transform.localEulerAngles = Vector3.zero;
             rotateSequence = DOTween.Sequence();
-            rotateSequence.Append
-            (
-                loadingImage.transform.DOLocalRotate(new Vector3(0f, 0f, targetRot), duration)
+            rotateSequence.Append(
+                loadingImage.transform.DOLocalRotate(
+                    new Vector3(0f, 0f, targetRot), 
+                    duration, 
+                    RotateMode.FastBeyond360)
             );
             rotateSequence.AppendInterval(rotateInterval);
             rotateSequence.SetLoops(-1, LoopType.Restart);
