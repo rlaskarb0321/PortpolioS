@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -24,24 +24,23 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
     private Dictionary<ELoadingSceneType, LoadingCanvas> canvases;
     private LoadingCanvas activatedCanvas;
     private AsyncOperationHandle<SceneInstance> sceneHandle;
-    private WaitForSeconds ws;
 
-    public EBootstrapInstance GetInstanceType()
+    private void Awake()
     {
-        return EBootstrapInstance.LoadingSceneManager;
+        canvases = new Dictionary<ELoadingSceneType, LoadingCanvas>();
     }
 
-    public void AllocateToBootstrapInstance()
+    public void Start()
     {
-        if (BootstrapSceneInstance.Instance == null)
+        for (int i = 0; i < loadingCanvases.Length; i++)
         {
-            Debug.LogError("[LoadingSceneManager] Failed to assign to BootstrapSceneInstance");
-            return;
+            canvases.Add(loadingCanvases[i].LoadingCanvasType, loadingCanvases[i]);
         }
-        
-        BootstrapSceneInstance.Instance.AllocateToBootstrapInstance(GetInstanceType(), this);
-    }
 
+        AllocateToBootstrapInstance();
+        Execute();
+    }
+    
     public void Execute()
     {
         ActivateLoadingCanvas(ELoadingSceneType.SelectModeLoading);
@@ -62,36 +61,24 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
             }
         }
 
-        StartCoroutine(LoadSceneInBackground(targetCanvas));
+        LoadSceneInBackground(targetCanvas).Forget();
     }
 
-    private IEnumerator LoadSceneInBackground(ELoadingSceneType sceneType)
+    private async UniTaskVoid LoadSceneInBackground(ELoadingSceneType sceneType)
     {
         if (sceneHandle.IsValid())
-            yield return Addressables.UnloadSceneAsync(sceneHandle);
+            await Addressables.UnloadSceneAsync(sceneHandle).ToUniTask();
 
         sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive, false);
-        yield return ws;
-        yield return sceneHandle.Result.ActivateAsync();
-        
+        await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
+        await sceneHandle.Result.ActivateAsync().ToUniTask();
+
+        // You must turn off the Loading Canvas after completing the tasks for each scene.
+        // 각 로드 목적지 씬의 static 에게 OnCompleteLoad 와 OnSceneActivated 델리게이트를 달아두고
+        // OnSceneActivated 에 UniTask 비동기 메소드들을 구독시킨뒤 실행, OnSceneActivated 의 작업이 다 끝나면 OnCompleteLoad Broadcast
+        // OnCompleteLoad 는 아래에 있는 ToggleCanvas 만 하면 되긴하는데 이상한 냄새가남
+
         activatedCanvas.ToggleCanvas(false);
-    }
-    
-    private void Awake()
-    {
-        canvases = new Dictionary<ELoadingSceneType, LoadingCanvas>();
-        ws = new WaitForSeconds(loadDelay);
-    }
-
-    public void Start()
-    {
-        for (int i = 0; i < loadingCanvases.Length; i++)
-        {
-            canvases.Add(loadingCanvases[i].LoadingCanvasType, loadingCanvases[i]);
-        }
-
-        AllocateToBootstrapInstance();
-        Execute();
     }
     
     private void OnDestroy()
@@ -103,5 +90,21 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
             Addressables.UnloadSceneAsync(sceneHandle);
         else
             Addressables.Release(sceneHandle);
+    }
+    
+    public EBootstrapInstance GetInstanceType()
+    {
+        return EBootstrapInstance.LoadingSceneManager;
+    }
+
+    public void AllocateToBootstrapInstance()
+    {
+        if (BootstrapSceneInstance.Instance == null)
+        {
+            Debug.LogError("[LoadingSceneManager] Failed to assign to BootstrapSceneInstance");
+            return;
+        }
+        
+        BootstrapSceneInstance.Instance.AllocateToBootstrapInstance(GetInstanceType(), this);
     }
 }
