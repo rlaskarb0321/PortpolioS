@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Fusion;
 using UnityEngine;
 
 public enum EBootstrapInstance
@@ -20,7 +21,23 @@ public interface IBootstrapInstance
 
 public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
 {
+    [SerializeField] private NetworkRunner networkRunner;
+    
     private Dictionary<EBootstrapInstance, IBootstrapInstance> bootstrapInstances;
+    
+    public NetworkRunner NetworkRunner => networkRunner;
+
+    public void TrySetNetworkRunner()
+    {
+        if (networkRunner != null)
+            return;
+        
+        GameObject runner = new GameObject("NetworkRunner");
+        
+        runner.AddComponent<NetworkRunner>();
+        runner.AddComponent<NetworkRunnerController>();
+        networkRunner = runner.GetComponent<NetworkRunner>();
+    }
     
     public T GetBootstrapInstance<T>(EBootstrapInstance type) where T : class, IBootstrapInstance
     {

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class MenuSceneManager : MonoBehaviour, ISceneLoadCallback
 {
+    [SerializeField] private EMenuSceneActivateTask completedTask;
+    
     private void Awake()
     {
         var loadingSceneManager =
@@ -16,6 +18,8 @@ public class MenuSceneManager : MonoBehaviour, ISceneLoadCallback
     public async UniTask OnSceneActivated()
     {
         Debug.Log($"[MenuSceneManager] OnSceneActivated");
+        
+        BootstrapSceneInstance.Instance.TrySetNetworkRunner();
         await UniTask.CompletedTask;
     }
 
@@ -23,4 +27,11 @@ public class MenuSceneManager : MonoBehaviour, ISceneLoadCallback
     {
         Debug.Log($"[MenuSceneManager] OnSceneLoaded");
     }
+    
+}
+
+[System.Flags]
+public enum EMenuSceneActivateTask
+{
+    NetworkRunner = 1 << 0,
 }
