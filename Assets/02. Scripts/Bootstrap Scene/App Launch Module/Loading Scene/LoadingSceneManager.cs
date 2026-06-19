@@ -17,12 +17,14 @@ public enum ELoadingSceneType
 
 public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
 {
+    public Func<UniTask> OnSceneActivated;
+    public Action OnCompleteLoad;
+    
     [SerializeField] private LoadingCanvas[] loadingCanvases;
     [SerializeField] private AssetReference[] scenes;
     [SerializeField] private float loadDelay = 0.8f;
 
     private Dictionary<ELoadingSceneType, LoadingCanvas> canvases;
-    private LoadingCanvas activatedCanvas;
     private AsyncOperationHandle<SceneInstance> sceneHandle;
 
     private void Awake()
@@ -43,17 +45,27 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
     
     public void Execute()
     {
-        ActivateLoadingCanvas(ELoadingSceneType.SelectModeLoading);
+        ActivateLoadingCanvas(ELoadingSceneType.SelectModeLoading).Forget();
     }
 
-    public void ActivateLoadingCanvas(ELoadingSceneType targetCanvas)
+    public async UniTask ActivateLoadingCanvas(ELoadingSceneType targetCanvas)
     {
+        if (targetCanvas == ELoadingSceneType.Count)
+        {
+            Debug.LogError($"TargetCanvas Type is {targetCanvas}");
+            return;
+        }
+        
+        OnSceneActivated = null;
+        OnCompleteLoad = null;
         foreach (ELoadingSceneType loadingSceneType in canvases.Keys)
         {
             if (targetCanvas == loadingSceneType)
             {
                 canvases[loadingSceneType].ToggleCanvas(true);
-                activatedCanvas = canvases[loadingSceneType];
+                
+                // subscribes a callback to turn off the enabled Canvas upon successful scene load.
+                OnCompleteLoad += () => canvases[loadingSceneType].ToggleCanvas(false);
             }
             else
             {
@@ -61,24 +73,23 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
             }
         }
 
-        LoadSceneInBackground(targetCanvas).Forget();
+        // After Scene Load finishes, each Scene instance subscribes to OnCompleteLoad.
+        await LoadSceneInBackground(targetCanvas);
+        OnCompleteLoad?.Invoke();
     }
 
-    private async UniTaskVoid LoadSceneInBackground(ELoadingSceneType sceneType)
+    private async UniTask LoadSceneInBackground(ELoadingSceneType sceneType)
     {
         if (sceneHandle.IsValid())
             await Addressables.UnloadSceneAsync(sceneHandle).ToUniTask();
 
-        sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive, false);
+        sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive);
+        await sceneHandle.ToUniTask();
+
+        if (OnSceneActivated != null)
+            await OnSceneActivated.Invoke();
+
         await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
-        await sceneHandle.Result.ActivateAsync().ToUniTask();
-
-        // You must turn off the Loading Canvas after completing the tasks for each scene.
-        // 각 로드 목적지 씬의 static 에게 OnCompleteLoad 와 OnSceneActivated 델리게이트를 달아두고
-        // OnSceneActivated 에 UniTask 비동기 메소드들을 구독시킨뒤 실행, OnSceneActivated 의 작업이 다 끝나면 OnCompleteLoad Broadcast
-        // OnCompleteLoad 는 아래에 있는 ToggleCanvas 만 하면 되긴하는데 이상한 냄새가남
-
-        activatedCanvas.ToggleCanvas(false);
     }
     
     private void OnDestroy()

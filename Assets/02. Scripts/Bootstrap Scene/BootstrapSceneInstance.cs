@@ -22,7 +22,10 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
 {
     private Dictionary<EBootstrapInstance, IBootstrapInstance> bootstrapInstances;
     
-    public IReadOnlyDictionary<EBootstrapInstance, IBootstrapInstance> BootstrapInstances => bootstrapInstances;
+    public T GetBootstrapInstance<T>(EBootstrapInstance type) where T : class, IBootstrapInstance
+    {
+        return bootstrapInstances[type] as T;
+    }
 
     public void AllocateToBootstrapInstance(EBootstrapInstance instanceType, IBootstrapInstance bootstrapInstance)
     {
