@@ -1645,7 +1645,7 @@ GameObject:
   - component: {fileID: 1140932544}
   - component: {fileID: 1140932543}
   m_Layer: 5
-  m_Name: StageMode Backgroun Image
+  m_Name: StageMode Background Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1716,7 +1716,6 @@ GameObject:
   - component: {fileID: 1228875718}
   - component: {fileID: 1228875717}
   - component: {fileID: 1228875716}
-  - component: {fileID: 1228875715}
   m_Layer: 5
   m_Name: Stage Mode Canvas
   m_TagString: Untagged
@@ -1724,23 +1723,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1228875715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1228875714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &1228875716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1943,6 +1925,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1412862196}
   - component: {fileID: 1412862197}
+  - component: {fileID: 1412862198}
   m_Layer: 5
   m_Name: Dynamic Canvas (High Frequency)
   m_TagString: Untagged
@@ -1993,6 +1976,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1412862198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412862195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1472274919
 GameObject:
   m_ObjectHideFlags: 0
