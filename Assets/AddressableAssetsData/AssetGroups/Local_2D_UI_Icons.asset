@@ -10,18 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Local_MenuScene
+  m_Name: Local_2D_UI_Icons
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: Local_MenuScene
+  m_GroupName: Local_2D_UI_Icons
   m_GUID: d3c816abded1bc0468f670140e13dc32
   m_SerializeEntries:
-  - m_GUID: 3fc60c4d10c31475686ff5619e7e9403
-    m_Address: Assets/03. Assets/2D Icons-PictoIconPack01/Icons/PictoIcon_256/Icon_PictoIcon_Unlock.Png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 612e8ac26a3ed4f8c845e705c2154179
-    m_Address: Assets/03. Assets/2D Icons-PictoIconPack01/Icons/PictoIcon_256/Icon_PictoIcon_Lock.Png
+  - m_GUID: 62f58946e63ec8d4fa7a5e9d7c3587e1
+    m_Address: Assets/03. Assets/2D Icons-PictoIconPack01/Icons/2D UI Icon Atlas.spriteatlasv2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
