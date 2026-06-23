@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Local_MenuScene
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Local_MenuScene
+  m_GUID: d3c816abded1bc0468f670140e13dc32
+  m_SerializeEntries:
+  - m_GUID: 3fc60c4d10c31475686ff5619e7e9403
+    m_Address: Assets/03. Assets/2D Icons-PictoIconPack01/Icons/PictoIcon_256/Icon_PictoIcon_Unlock.Png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 612e8ac26a3ed4f8c845e705c2154179
+    m_Address: Assets/03. Assets/2D Icons-PictoIconPack01/Icons/PictoIcon_256/Icon_PictoIcon_Lock.Png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0362bc36c440eb045936a8a4c2bb81db, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e3572eccfd6a9d9409969281f6431328, type: 2}
+    - {fileID: 11400000, guid: d5fea5bdfbb9c79459ff4708c7cb4419, type: 2}
