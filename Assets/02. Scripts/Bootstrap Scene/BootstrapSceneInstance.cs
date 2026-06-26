@@ -6,14 +6,16 @@ using UnityEngine;
 
 public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
 {
-    [Space(10.0f)]
+    [Header("Network Runner")]
     [SerializeField] private NetworkRunner networkRunner;
-    [SerializeField] private ESceneMode sceneMode = ESceneMode.None;
+
+    [Header("Game Mode Instance")]
+    [SerializeField] private GameModeInstanceBase currentGameMode;
     
     private Dictionary<EBootstrapInstance, IBootstrapInstance> bootstrapInstances;
     
     public NetworkRunner NetworkRunner => networkRunner;
-    public ESceneMode SceneMode => sceneMode;
+    public GameModeInstanceBase CurrentGameMode { get => currentGameMode; }
 
     public void TrySetNetworkRunner()
     {
@@ -25,6 +27,17 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
         runner.AddComponent<NetworkRunner>();
         runner.AddComponent<NetworkRunnerController>();
         networkRunner = runner.GetComponent<NetworkRunner>();
+    }
+
+    public void TrySetGameModeInstance(GameModeInstanceBase gameModeInstance)
+    {
+        if (gameModeInstance == null)
+        {
+            Debug.LogError($"{gameModeInstance.GetType().Name} does not exist");
+            return;
+        }
+        
+        currentGameMode = gameModeInstance;
     }
     
     public T GetBootstrapInstance<T>(EBootstrapInstance type) where T : class, IBootstrapInstance
@@ -48,16 +61,6 @@ public enum EBootstrapInstance
 {
     AppLaunchManager,
     LoadingSceneManager,
-    Count
-}
-
-public enum ESceneMode
-{
-    None,
-    Menu,
-    Loading,
-    StageMode,
-    MultiplayMode,
     Count
 }
 

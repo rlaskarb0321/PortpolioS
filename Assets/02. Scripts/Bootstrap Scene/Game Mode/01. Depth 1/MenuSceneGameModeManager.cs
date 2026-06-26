@@ -2,23 +2,25 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuSceneManager : MonoBehaviour, ISceneLoadCallback
+public class MenuSceneGameModeManager : GameModeInstanceBase, ISceneLoadCallback
 {
-    [Header("Tasks")]
-    [SerializeField] private EMenuSceneActivateTask completedTask;
+    [Header("Canvases")]
+    [SerializeField] private Canvas menuSceneCanvas;
+    [SerializeField] private Canvas stageModeCanvas;
 
     [Header("UI Buttons")]
     [SerializeField] private Button stageModeButton;
     [SerializeField] private Button multiplayerModeButton;
     
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         var loadingSceneManager =
             BootstrapSceneInstance.Instance
             .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
 
         loadingSceneManager.OnSceneActivated += OnSceneActivated;
-        loadingSceneManager.OnCompleteLoad += OnSceneCompletlyLoaded;
+        loadingSceneManager.OnCompleteLoad += OnSceneCompletelyLoaded;
     }
 
     public async UniTask OnSceneActivated()
@@ -27,31 +29,28 @@ public class MenuSceneManager : MonoBehaviour, ISceneLoadCallback
         BootstrapSceneInstance.Instance.TrySetNetworkRunner();
         await UniTask.CompletedTask;
 
-        completedTask |= EMenuSceneActivateTask.NetworkRunner;
+        menuSceneCanvas.enabled = true;
+        stageModeButton.interactable = false;
+        
         stageModeButton.onClick.RemoveAllListeners();
         stageModeButton.onClick.AddListener(OnClickStageModeButton);
         multiplayerModeButton.onClick.RemoveAllListeners();
         multiplayerModeButton.onClick.AddListener(OnClickMultiplayerModeButton);
     }
 
-    public void OnSceneCompletlyLoaded()
+    public void OnSceneCompletelyLoaded()
     {
         Debug.Log($"[MenuSceneManager] OnSceneLoaded");
     }
 
     private void OnClickStageModeButton()
     {
-        
+        menuSceneCanvas.enabled = false;
+        stageModeButton.interactable = true;
     }
 
     private void OnClickMultiplayerModeButton()
     {
         
     }
-}
-
-[System.Flags]
-public enum EMenuSceneActivateTask
-{
-    NetworkRunner = 1 << 0,
 }

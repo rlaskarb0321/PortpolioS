@@ -3,5 +3,5 @@ using Cysharp.Threading.Tasks;
 public interface ISceneLoadCallback
 {
     public UniTask OnSceneActivated();
-    public void OnSceneCompletlyLoaded();
+    public void OnSceneCompletelyLoaded();
 }

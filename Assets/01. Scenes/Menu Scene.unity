@@ -662,6 +662,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 209789941}
+  - component: {fileID: 209789942}
   m_Layer: 0
   m_Name: Stage Mode Manager
   m_TagString: Untagged
@@ -684,6 +685,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 100866832}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &209789942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209789940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34de4997826018a46a69b6aa4eec2222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: StageMode::StageModeManager
 --- !u!1 &237987529
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,6 +845,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: OtherScenes::MenuSceneManager
   completedTask: 0
+  menuSceneCanvas: {fileID: 237987532}
+  stageModeCanvas: {fileID: 1228875717}
   stageModeButton: {fileID: 1547617189}
   multiplayerModeButton: {fileID: 1576579094}
 --- !u!1 &372550583
@@ -2345,7 +2360,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 372550585}
   m_HandleRect: {fileID: 372550584}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
