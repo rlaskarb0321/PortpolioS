@@ -9,7 +9,7 @@ public enum EGameModeType
     Count
 }
 
-public abstract class GameModeInstanceBase : SceneSingleton<GameModeInstanceBase>
+public abstract class GameModeBase : MonoSingleton<GameModeBase>
 {
     [SerializeField] private EGameModeType gameMode = EGameModeType.MenuScene;
     

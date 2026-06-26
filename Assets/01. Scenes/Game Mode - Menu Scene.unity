@@ -268,7 +268,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Multiplayer Mode
+  m_Text: Multiplayer Type
 --- !u!222 &67287659
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -516,7 +516,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Stage Mode
+  m_Text: Stage Type
 --- !u!222 &104887279
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -705,9 +705,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: OtherScenes::MenuSceneManager
   gameMode: 0
   menuSceneCanvas: {fileID: 237987532}
-  stageModeCanvas: {fileID: 1228875717}
-  stageModeButton: {fileID: 1547617189}
-  multiplayerModeButton: {fileID: 1576579094}
+  stageTypeCanvas: {fileID: 1228875717}
+  stageTypeButton: {fileID: 1547617189}
+  multiplayTypeButton: {fileID: 1576579094}
 --- !u!1 &372550583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,7 +1236,7 @@ GameObject:
   - component: {fileID: 723881929}
   - component: {fileID: 723881928}
   m_Layer: 5
-  m_Name: Select Mode Group
+  m_Name: Select Type Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1603,7 +1603,7 @@ GameObject:
   - component: {fileID: 930457129}
   - component: {fileID: 930457128}
   m_Layer: 5
-  m_Name: Select Game Mode Text
+  m_Name: Select Game Type Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1675,7 +1675,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Select Game Mode
+  m_Text: Select Game Type
 --- !u!222 &930457130
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1696,7 +1696,7 @@ GameObject:
   - component: {fileID: 1002779194}
   - component: {fileID: 1002779195}
   m_Layer: 5
-  m_Name: Mode Select Button Group
+  m_Name: Type Select Button Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2505,7 +2505,7 @@ GameObject:
   - component: {fileID: 1547617190}
   - component: {fileID: 1547617189}
   m_Layer: 5
-  m_Name: Stage Mode Button
+  m_Name: Stage Type Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2704,7 +2704,7 @@ GameObject:
   - component: {fileID: 1576579095}
   - component: {fileID: 1576579094}
   m_Layer: 5
-  m_Name: Multiplay Mode Button
+  m_Name: Multiplay Type Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

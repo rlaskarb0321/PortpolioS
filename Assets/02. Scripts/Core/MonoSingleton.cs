@@ -2,6 +2,8 @@ using UnityEngine;
 
 public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
 {
+    [SerializeField] private bool isDontDestroyOnLoad = false;
+
     private static T instance;
 
     public static T Instance => instance;
@@ -15,7 +17,9 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
         }
 
         instance = (T)this;
-        DontDestroyOnLoad(gameObject);
+
+        if (isDontDestroyOnLoad)
+            DontDestroyOnLoad(gameObject);
     }
 
     protected virtual void OnDestroy()

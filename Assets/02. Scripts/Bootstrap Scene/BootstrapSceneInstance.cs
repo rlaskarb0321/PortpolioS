@@ -10,12 +10,12 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
     [SerializeField] private NetworkRunner networkRunner;
 
     [Header("Game Mode Instance")]
-    [SerializeField] private GameModeInstanceBase currentGameMode;
+    [SerializeField] private GameModeBase currentGameMode;
     
     private Dictionary<EBootstrapInstance, IBootstrapInstance> bootstrapInstances;
     
     public NetworkRunner NetworkRunner => networkRunner;
-    public GameModeInstanceBase CurrentGameMode { get => currentGameMode; }
+    public GameModeBase CurrentGameMode { get => currentGameMode; }
 
     public void TrySetNetworkRunner()
     {
@@ -29,15 +29,15 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
         networkRunner = runner.GetComponent<NetworkRunner>();
     }
 
-    public void TrySetGameModeInstance(GameModeInstanceBase gameModeInstance)
+    public void TrySetGameModeInstance(GameModeBase gameMode)
     {
-        if (gameModeInstance == null)
+        if (gameMode == null)
         {
-            Debug.LogError($"{gameModeInstance.GetType().Name} does not exist");
+            Debug.LogError($"{gameMode.GetType().Name} does not exist");
             return;
         }
         
-        currentGameMode = gameModeInstance;
+        currentGameMode = gameMode;
     }
     
     public T GetBootstrapInstance<T>(EBootstrapInstance type) where T : class, IBootstrapInstance
