@@ -18,6 +18,6 @@ public abstract class GameModeBase : MonoSingleton<GameModeBase>
     protected override void Awake()
     {
         base.Awake();
-        BootstrapSceneInstance.Instance.TrySetGameModeInstance(this);
+        BootstrapSceneInstance.Instance.SetGameModeInstance(this);
     }
 }

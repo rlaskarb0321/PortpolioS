@@ -2,8 +2,11 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuSceneGameModeManager : GameModeBase, ISceneLoadCallback
+public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
 {
+    [Header("Game Type Managers")]
+    [SerializeField] private GameTypeManagerBase[] gameTypeManagers;
+    
     [Header("Canvases")]
     [SerializeField] private Canvas menuSceneCanvas;
     [SerializeField] private Canvas stageTypeCanvas;
@@ -23,14 +26,23 @@ public class MenuSceneGameModeManager : GameModeBase, ISceneLoadCallback
         loadingSceneManager.OnCompleteLoad += OnSceneCompletelyLoaded;
     }
 
+    public void OnSceneCompletelyLoaded()
+    {
+        Debug.Log($"[MenuSceneManager] OnSceneLoaded");
+    }
+
     public async UniTask OnSceneActivated()
     {
         Debug.Log($"[MenuSceneManager] OnSceneActivated");
         
-        // Set Network Runner, allocate event method
-        BootstrapSceneInstance.Instance.TrySetNetworkRunner();
+        // Set Network Runner
+        BootstrapSceneInstance.Instance.SetNetworkRunner();
         await UniTask.CompletedTask;
 
+        // Init GameTypeManagers
+        await UniTask.WhenAll(gameTypeManagers.Select(m => m.DoInit()));
+        
+        // Init view(canvas), allocate event method
         menuSceneCanvas.enabled = true;
         stageTypeCanvas.enabled = false;
         
@@ -38,11 +50,6 @@ public class MenuSceneGameModeManager : GameModeBase, ISceneLoadCallback
         stageTypeButton.onClick.AddListener(OnClickStageModeButton);
         multiplayTypeButton.onClick.RemoveAllListeners();
         multiplayTypeButton.onClick.AddListener(OnClickMultiplayerModeButton);
-    }
-
-    public void OnSceneCompletelyLoaded()
-    {
-        Debug.Log($"[MenuSceneManager] OnSceneLoaded");
     }
 
     private void OnClickStageModeButton()

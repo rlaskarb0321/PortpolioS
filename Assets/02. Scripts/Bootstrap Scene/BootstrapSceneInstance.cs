@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Fusion;
 using UnityEngine;
 
@@ -15,9 +14,8 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
     private Dictionary<EBootstrapInstance, IBootstrapInstance> bootstrapInstances;
     
     public NetworkRunner NetworkRunner => networkRunner;
-    public GameModeBase CurrentGameMode { get => currentGameMode; }
 
-    public void TrySetNetworkRunner()
+    public void SetNetworkRunner()
     {
         if (networkRunner != null)
             return;
@@ -29,7 +27,7 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
         networkRunner = runner.GetComponent<NetworkRunner>();
     }
 
-    public void TrySetGameModeInstance(GameModeBase gameMode)
+    public void SetGameModeInstance(GameModeBase gameMode)
     {
         if (gameMode == null)
         {
@@ -42,7 +40,36 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
     
     public T GetBootstrapInstance<T>(EBootstrapInstance type) where T : class, IBootstrapInstance
     {
-        return bootstrapInstances[type] as T;
+        if (bootstrapInstances.TryGetValue(type, out var instance) == false)
+        {
+            Debug.LogError($"[BootstrapSceneInstance] {type} is not registered");
+            return null;
+        }
+
+        if (instance is not T casted)
+        {
+            Debug.LogError($"[BootstrapSceneInstance] {type} cannot be cast to {typeof(T).Name}");
+            return null;
+        }
+
+        return casted;
+    }
+
+    public T GetCurrentGameMode<T>() where T : class
+    {
+        if (currentGameMode == null)
+        {
+            Debug.LogError($"[BootstrapSceneInstance] GameMode is not set");
+            return null;
+        }
+
+        if (currentGameMode is not T casted)
+        {
+            Debug.LogError($"[BootstrapSceneInstance] GameMode cannot be cast to {typeof(T).Name}");
+            return null;
+        }
+
+        return casted;
     }
 
     public void AllocateToBootstrapInstance(EBootstrapInstance instanceType, IBootstrapInstance bootstrapInstance)

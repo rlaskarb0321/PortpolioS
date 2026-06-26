@@ -424,7 +424,7 @@ GameObject:
   m_Component:
   - component: {fileID: 100866832}
   m_Layer: 0
-  m_Name: ==== Managers ====
+  m_Name: ==== Game Type ====
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -534,6 +534,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 209789941}
+  - component: {fileID: 209789942}
   m_Layer: 0
   m_Name: Stage Type Manager
   m_TagString: Untagged
@@ -556,6 +557,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 100866832}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &209789942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209789940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82f738dde3f944945b2b1c9915307f59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: StageMode::StageTypeManager
 --- !u!1 &237987529
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,11 +716,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419a94531097e374da79766075281a28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: OtherScenes::MenuSceneManager
+  isDontDestroyOnLoad: 0
   gameMode: 0
+  gameTypeManagers:
+  - {fileID: 209789942}
   menuSceneCanvas: {fileID: 237987532}
   stageTypeCanvas: {fileID: 1228875717}
   stageTypeButton: {fileID: 1547617189}
   multiplayTypeButton: {fileID: 1576579094}
+--- !u!1 &354126066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 354126067}
+  m_Layer: 0
+  m_Name: Stage Type View Presenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &354126067
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354126066}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2014236969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &372550583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1853,6 +1900,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1039089959}
   m_CullTransparentMesh: 1
+--- !u!1 &1041998072
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1041998073}
+  m_Layer: 0
+  m_Name: The Backend View Initializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1041998073
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1041998072}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2014236969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1069961256
 GameObject:
   m_ObjectHideFlags: 0
@@ -2219,7 +2297,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 372550585}
   m_HandleRect: {fileID: 372550584}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3073,6 +3151,40 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 67301454676063727, guid: 9fcc558fd98c05c4fa5d278c5b8cad78, type: 3}
   m_PrefabInstance: {fileID: 2008458780}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2014236968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2014236969}
+  m_Layer: 0
+  m_Name: ==== Managers ====
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2014236969
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014236968}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 354126067}
+  - {fileID: 2146769136}
+  - {fileID: 1041998073}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2066752452
 GameObject:
   m_ObjectHideFlags: 0
@@ -3133,6 +3245,37 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &2146769135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2146769136}
+  m_Layer: 0
+  m_Name: Asset Addressable Loader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2146769136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146769135}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2014236969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1565379219507640308
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3244,6 +3387,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1857243920}
   - {fileID: 100866832}
+  - {fileID: 2014236969}
   - {fileID: 237987533}
   - {fileID: 1228875718}
   - {fileID: 74767631}
