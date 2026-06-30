@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public enum EGameModeType
@@ -18,5 +19,14 @@ public abstract class GameModeBase : MonoSingleton<GameModeBase>
     {
         base.Awake();
         BootstrapSceneInstance.Instance.SetGameModeInstance(this);
+        var loadingSceneManager =
+            BootstrapSceneInstance.Instance
+            .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
+
+        loadingSceneManager.OnSceneActivated += OnSceneActivated;
+        loadingSceneManager.OnCompleteLoad += OnSceneCompletelyLoaded;
     }
+
+    public abstract UniTask OnSceneActivated();
+    public abstract void OnSceneCompletelyLoaded();
 }

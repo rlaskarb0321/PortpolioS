@@ -1,9 +1,8 @@
-using BackEnd;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
+public class MenuSceneGameMode : GameModeBase
 {
     [Header("Game Type Managers")]
     [SerializeField] private GameTypeManagerBase[] gameTypeManagers;
@@ -14,25 +13,17 @@ public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
 
     [Header("UI Buttons")]
     [SerializeField] private Button stageTypeButton;
+    [SerializeField] private Button multiplayerTypeButton;
     
-    protected override void Awake()
+    public override void OnSceneCompletelyLoaded()
     {
-        base.Awake();
-        var loadingSceneManager =
-            BootstrapSceneInstance.Instance
-            .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
-
-        loadingSceneManager.OnSceneActivated += OnSceneActivated;
-        loadingSceneManager.OnCompleteLoad += OnSceneCompletelyLoaded;
-    }
-
-    public void OnSceneCompletelyLoaded()
-    {
+        // Init view(canvas)
         Debug.Log($"[MenuSceneManager] OnSceneLoaded");
-        // StartGoogleLogin();
+        menuSceneCanvas.enabled = true;
+        stageTypeCanvas.enabled = false;
     }
 
-    public async UniTask OnSceneActivated()
+    public override async UniTask OnSceneActivated()
     {
         Debug.Log($"[MenuSceneManager] OnSceneActivated");
         
@@ -43,12 +34,11 @@ public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
         // Init GameTypeManagers
         await UniTask.WhenAll(gameTypeManagers.Select(m => m.DoInit()));
 
-        // Init view(canvas), allocate event method
-        menuSceneCanvas.enabled = true;
-        stageTypeCanvas.enabled = false;
-        
+        // allocate event method
         stageTypeButton.onClick.RemoveAllListeners();
         stageTypeButton.onClick.AddListener(OnClickStageModeButton);
+        multiplayerTypeButton.onClick.RemoveAllListeners();
+        multiplayerTypeButton.onClick.AddListener(OnClickMultiplayerModeButton);
     }
 
     private void OnClickStageModeButton()
@@ -59,6 +49,10 @@ public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
 
     private void OnClickMultiplayerModeButton()
     {
-        
+        var loadingSceneManager =
+            BootstrapSceneInstance.Instance
+            .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
+
+        loadingSceneManager.ActivateLoadingCanvas(ELoadingSceneType.MultiplayModeLoading).Forget();
     }
 }

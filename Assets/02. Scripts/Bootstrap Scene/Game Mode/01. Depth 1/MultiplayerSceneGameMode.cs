@@ -1,19 +1,15 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class MultiplayerSceneGameMode : GameModeBase, ISceneLoadCallback
+public class MultiplayerSceneGameMode : GameModeBase
 {
-    protected override void Awake()
+    public override async UniTask OnSceneActivated()
     {
-        base.Awake();
+        BootstrapSceneInstance.Instance.NetworkRunner.ProvideInput = true;
+        await UniTask.CompletedTask;
     }
 
-    public UniTask OnSceneActivated()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnSceneCompletelyLoaded()
+    public override void OnSceneCompletelyLoaded()
     {
         throw new System.NotImplementedException();
     }
