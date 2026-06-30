@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class MenuSceneGameMode : GameModeBase
 {
-    [Header("Game Type Managers")]
-    [SerializeField] private GameTypeManagerBase[] gameTypeManagers;
     
     [Header("Canvases")]
     [SerializeField] private Canvas menuSceneCanvas;
@@ -29,16 +27,16 @@ public class MenuSceneGameMode : GameModeBase
         
         // Set Network Runner
         BootstrapSceneInstance.Instance.SetNetworkRunner();
-        await UniTask.CompletedTask;
 
         // Init GameTypeManagers
-        await UniTask.WhenAll(gameTypeManagers.Select(m => m.DoInit()));
+        await UniTask.WhenAll(GameTypeManagers.Select(m => m.DoInit()));
 
-        // allocate event method
+        // Allocate event method
         stageTypeButton.onClick.RemoveAllListeners();
         stageTypeButton.onClick.AddListener(OnClickStageModeButton);
         multiplayerTypeButton.onClick.RemoveAllListeners();
         multiplayerTypeButton.onClick.AddListener(OnClickMultiplayerModeButton);
+        await UniTask.CompletedTask;
     }
 
     private void OnClickStageModeButton()
