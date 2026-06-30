@@ -718,6 +718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: OtherScenes::MenuSceneManager
   isDontDestroyOnLoad: 0
   gameMode: 0
+  googleLoginButton: {fileID: 0}
   gameTypeManagers:
   - {fileID: 209789942}
   menuSceneCanvas: {fileID: 237987532}

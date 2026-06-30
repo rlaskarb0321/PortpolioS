@@ -1,3 +1,4 @@
+using BackEnd;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,7 @@ public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
     public void OnSceneCompletelyLoaded()
     {
         Debug.Log($"[MenuSceneManager] OnSceneLoaded");
+        // StartGoogleLogin();
     }
 
     public async UniTask OnSceneActivated()
@@ -41,7 +43,7 @@ public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
 
         // Init GameTypeManagers
         await UniTask.WhenAll(gameTypeManagers.Select(m => m.DoInit()));
-        
+
         // Init view(canvas), allocate event method
         menuSceneCanvas.enabled = true;
         stageTypeCanvas.enabled = false;

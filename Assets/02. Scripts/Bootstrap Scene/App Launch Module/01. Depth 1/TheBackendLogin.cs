@@ -3,53 +3,56 @@ using UnityEngine;
 
 public class BackendLogin
 {
-    private static BackendLogin instance = null;
-
-    public static BackendLogin Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new BackendLogin();
-            }
-
-            return instance;
-        }
-    }
-
-    public void CustomSignUp(string id, string pw)
-    {
-        Debug.Log("회원가입을 요청합니다.");
-        var bro = Backend.BMember.CustomSignUp(id, pw);
-
-        if (bro.IsSuccess())
-        {
-            Debug.Log("회원가입에 성공했습니다. : " + bro);
-        }
-        else
-        {
-            Debug.LogError("회원가입에 실패했습니다. : " + bro);
-        }
-    }
-
     public void CustomLogin(string id, string pw)
     {
         Debug.Log("로그인을 요청합니다.");
+        
+#if UNITY_EDITOR
         var bro = Backend.BMember.CustomLogin(id, pw);
 
-        if (bro.IsSuccess())
-        {
-            Debug.Log("로그인이 성공했습니다. : " + bro);
-        }
-        else
+        if (bro.IsSuccess() == false)
         {
             Debug.LogError("로그인이 실패했습니다. : " + bro);
         }
+#else
+        GoogleLoginManager googleLogin = new GoogleLoginManager();
+        
+        googleLogin.StartGoogleLogin();
+#endif
+    }
+}
+
+public class GoogleLoginManager
+{
+    public void StartGoogleLogin()
+    {
+        Debug.Log($"[MenuSceneManager] StartGoogleLogin");
+        string webClientId = "919448465881-qg2ukmpoa21leao4hunbftnrjuu1ub9b.apps.googleusercontent.com";
+        
+        GoogleCredentialManagerBridge.SignIn(webClientId, GoogleLoginCallback);
+        Debug.Log($"[MenuSceneManager] GoogleLogin called successfully");
     }
 
-    public void UpdateNickname(string nickname)
+    private void GoogleLoginCallback(bool isSuccess, string errorMessage, string token)
     {
-        // Step 4. 닉네임 변경 구현하기 로직
+        if (isSuccess == false)
+        {
+            Debug.Log($"[MenuSceneManager] GoogleLoginCallback");
+            Debug.LogError(errorMessage);
+            return;
+        }
+
+        Debug.Log("구글 토큰 : " + token);
+        Backend.BMember.AuthorizeFederation(token, FederationType.Google, "google", callback =>
+        {
+            if (callback.IsSuccess())
+            {
+                Debug.Log("구글 로그인 성공");
+            }
+            else
+            {
+                Debug.LogError("구글 로그인 실패: " + callback.GetErrorCode() + " " + callback.GetMessage());
+            }
+        });
     }
 }
