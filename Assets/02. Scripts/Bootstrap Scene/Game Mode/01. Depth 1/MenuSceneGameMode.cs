@@ -14,7 +14,6 @@ public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
 
     [Header("UI Buttons")]
     [SerializeField] private Button stageTypeButton;
-    [SerializeField] private Button multiplayTypeButton;
     
     protected override void Awake()
     {
@@ -50,8 +49,6 @@ public class MenuSceneGameMode : GameModeBase, ISceneLoadCallback
         
         stageTypeButton.onClick.RemoveAllListeners();
         stageTypeButton.onClick.AddListener(OnClickStageModeButton);
-        multiplayTypeButton.onClick.RemoveAllListeners();
-        multiplayTypeButton.onClick.AddListener(OnClickMultiplayerModeButton);
     }
 
     private void OnClickStageModeButton()

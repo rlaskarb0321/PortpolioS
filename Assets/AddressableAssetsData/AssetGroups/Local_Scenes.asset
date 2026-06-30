@@ -15,6 +15,16 @@ MonoBehaviour:
   m_GroupName: Local_Scenes
   m_GUID: aca0c93e8e16c414cbe6e99e66511e5c
   m_SerializeEntries:
+  - m_GUID: 23ff797f793604242a67787935cd8246
+    m_Address: Assets/01. Scenes/Game Mode - Multiplayer Scene.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6343c37f0c3d3741b1eddb34132c877
+    m_Address: Assets/01. Scenes/Game Mode - Stage Mode Scene.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2f86b8bf2555414988614e25d690955
     m_Address: Assets/01. Scenes/Menu Scene.unity
     m_ReadOnly: 0
