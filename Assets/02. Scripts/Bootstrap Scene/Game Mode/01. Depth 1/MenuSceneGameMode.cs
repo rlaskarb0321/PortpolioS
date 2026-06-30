@@ -16,6 +16,7 @@ public class MenuSceneGameMode : GameModeBase
     {
         // Init view(canvas)
         Debug.Log($"[MenuSceneManager] OnSceneLoaded");
+        
         menuSceneCanvas.enabled = true;
         stageTypeCanvas.enabled = false;
     }
@@ -28,7 +29,7 @@ public class MenuSceneGameMode : GameModeBase
         BootstrapSceneInstance.Instance.SetNetworkRunner();
 
         // Init GameTypeManagers
-        await UniTask.WhenAll(GameTypeManagers.Select(m => m.DoInit()));
+        await UniTask.WhenAll(SubManagers.Select(m => m.DoInit()));
 
         // Allocate event method
         stageTypeButton.onClick.RemoveAllListeners();

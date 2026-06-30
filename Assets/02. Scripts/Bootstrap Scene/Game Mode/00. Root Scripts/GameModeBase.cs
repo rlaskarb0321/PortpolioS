@@ -14,11 +14,11 @@ public abstract class GameModeBase : MonoSingleton<GameModeBase>
     [Header("Game Mode")]
     [SerializeField] private EGameModeType gameMode = EGameModeType.MenuScene;
     
-    [Header("Sub Managers")]
-    [SerializeField] private GameTypeManagerBase[] gameTypeManagers;
+    [Header("Sub Game Modes")]
+    [SerializeField] private SubManagerBase[] subManagers;
     
     public EGameModeType GameModeType { get => gameMode; }
-    protected GameTypeManagerBase[] GameTypeManagers { get => gameTypeManagers; }
+    protected SubManagerBase[] SubManagers { get => subManagers; }
 
     protected override void Awake()
     {
