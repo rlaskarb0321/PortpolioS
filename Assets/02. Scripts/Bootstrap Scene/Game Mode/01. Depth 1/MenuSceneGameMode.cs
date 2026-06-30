@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class MenuSceneGameMode : GameModeBase
 {
-    
     [Header("Canvases")]
     [SerializeField] private Canvas menuSceneCanvas;
     [SerializeField] private Canvas stageTypeCanvas;

@@ -14,7 +14,7 @@ public abstract class GameModeBase : MonoSingleton<GameModeBase>
     [Header("Game Mode")]
     [SerializeField] private EGameModeType gameMode = EGameModeType.MenuScene;
     
-    [Header("Game Type Managers")]
+    [Header("Sub Managers")]
     [SerializeField] private GameTypeManagerBase[] gameTypeManagers;
     
     public EGameModeType GameModeType { get => gameMode; }
