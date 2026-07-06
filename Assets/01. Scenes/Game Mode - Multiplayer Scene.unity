@@ -165,7 +165,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: BootstrapScene::MultiplayerSceneGameMode
   isDontDestroyOnLoad: 0
   gameMode: 2
-  subManagers: []
+  subManagers:
+  - {fileID: 1955369820}
 --- !u!1 &122125009
 GameObject:
   m_ObjectHideFlags: 0
