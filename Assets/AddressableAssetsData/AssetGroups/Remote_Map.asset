@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote_Map
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Remote_Map
+  m_GUID: e6ee75b88f9d0ef47bce422fcb6f3b8d
+  m_SerializeEntries:
+  - m_GUID: b990815a845a1c84db3efb1c0e97ce52
+    m_Address: Model/Forest/Map/Stage/1, 2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Model/Map
+    - Stage/Forest
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe2f1719ac14ee34fa98e62019714a67
+    m_Address: Model/Forest/Map/Stage/3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Model/Map
+    - Stage/Forest
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0362bc36c440eb045936a8a4c2bb81db, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6fc201e16baf74a40b90ebe58b8be702, type: 2}
+    - {fileID: 11400000, guid: baed9c0378b3ead488dcf04d381dd574, type: 2}

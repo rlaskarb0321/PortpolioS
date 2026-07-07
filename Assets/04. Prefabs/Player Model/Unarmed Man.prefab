@@ -1051,7 +1051,7 @@ GameObject:
   - component: {fileID: 8317373266222696941}
   - component: {fileID: 5420245229594255741}
   m_Layer: 0
-  m_Name: Unarmed Character
+  m_Name: Unarmed Man
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

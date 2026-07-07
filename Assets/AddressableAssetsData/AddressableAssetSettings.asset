@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 0271e76b92f546d44831e254e3c77f7c
   m_currentHash:
     serializedVersion: 2
-    Hash: 81c28029fe38636255396198eca7e94f
+    Hash: d19c0fe207c41fdca7b1bec6107e8d53
   m_DisableWriteTypeTree: 0
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
@@ -64,9 +64,11 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 8fe3e27f9f286c84ca3f9987861ea30e, type: 2}
+  - {fileID: 11400000, guid: bafcf172a64f90f4c907b4bb4f5741c6, type: 2}
   - {fileID: 11400000, guid: 59245fddaf466bb43b94e357a2dc03d4, type: 2}
   - {fileID: 11400000, guid: c0f3e4e4f1154d54c812be42fe687591, type: 2}
   - {fileID: 11400000, guid: 28ab318d427991241abd77031aaefef9, type: 2}
+  - {fileID: 11400000, guid: f53083dbca430ef4097b28488b918248, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_ContentDirectoryBuildPath: Temp/com.unity.addressables/ContentDirectories
@@ -134,7 +136,11 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-    - default
+    - Audio/BGM
+    - Stage/Forest
+    - Model/Humanoid
+    - Playable/Unarmed Man
+    - Model/Map
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1be0dc1b0e64ffd42a4a0947dad0bc47, type: 2}

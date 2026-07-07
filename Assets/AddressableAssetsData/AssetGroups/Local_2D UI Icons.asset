@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Local_2D_UI_Icons
+  m_Name: Local_2D UI Icons
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: Local_2D_UI_Icons
+  m_GroupName: Local_2D UI Icons
   m_GUID: d3c816abded1bc0468f670140e13dc32
   m_SerializeEntries:
   - m_GUID: 62f58946e63ec8d4fa7a5e9d7c3587e1

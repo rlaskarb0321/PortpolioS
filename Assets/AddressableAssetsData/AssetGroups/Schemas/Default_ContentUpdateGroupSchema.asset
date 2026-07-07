@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
-  m_Name: Remote_Sound_Clip_ContentUpdateGroupSchema
+  m_Name: Default_ContentUpdateGroupSchema
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.GroupSchemas.ContentUpdateGroupSchema
-  m_Group: {fileID: 11400000, guid: 28ab318d427991241abd77031aaefef9, type: 2}
+  m_Group: {fileID: 11400000, guid: 8fe3e27f9f286c84ca3f9987861ea30e, type: 2}
   m_SchemaIsEnabled: 1
   m_StaticContent: 0
