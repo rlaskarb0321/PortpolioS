@@ -64,10 +64,9 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 8fe3e27f9f286c84ca3f9987861ea30e, type: 2}
-  - {fileID: 11400000, guid: 1bf4369406582b7488ca5f8a7dbcae04, type: 2}
+  - {fileID: 11400000, guid: 75aa02dd88c40154e9a54f2eee4554de, type: 2}
   - {fileID: 11400000, guid: 59245fddaf466bb43b94e357a2dc03d4, type: 2}
   - {fileID: 11400000, guid: c0f3e4e4f1154d54c812be42fe687591, type: 2}
-  - {fileID: 11400000, guid: 75aa02dd88c40154e9a54f2eee4554de, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_ContentDirectoryBuildPath: Temp/com.unity.addressables/ContentDirectories
@@ -86,6 +85,20 @@ MonoBehaviour:
         m_Value: 'ServerData/[BuildTarget]'
       - m_Id: 601022cf2d22b25499add8d66be437dd
         m_Value: 
+      - m_Id: d58a15146db3dad4d8534d290e827262
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+    - m_InheritedParent: 
+      m_Id: d44fb3200fff7df42a13511245faebf4
+      m_ProfileName: AWS S3
+      m_Values:
+      - m_Id: 1fb81adc2ea2c1c4c967d878adb10cf9
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: 3c6484efd5081324ca2df990b013b65c
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: 5de6ad6880534764eab700e664adf158
+        m_Value: 'ServerData/[BuildTarget]'
+      - m_Id: 601022cf2d22b25499add8d66be437dd
+        m_Value: https://portpolio-s-addressable-734102829989-ap-southeast-2-an.s3.ap-southeast-2.amazonaws.com
       - m_Id: d58a15146db3dad4d8534d290e827262
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
     m_ProfileEntryNames:
@@ -121,4 +134,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eb6824375f1e2b547a6ee428bf8025a4, type: 2}
   - {fileID: 11400000, guid: b61c378fc8d74904f83bae041a93532b, type: 2}
   - {fileID: 11400000, guid: 49d8f2978a3b57343b2bb61ce0e1f672, type: 2}
-  m_ActiveProfileId: a0f43073a17226a489bd0b0a2ffe5da0
+  m_ActiveProfileId: d44fb3200fff7df42a13511245faebf4
