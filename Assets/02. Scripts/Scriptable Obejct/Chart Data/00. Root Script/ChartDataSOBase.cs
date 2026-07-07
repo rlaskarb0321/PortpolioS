@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BackEnd;
+using BackEnd.Content;
 using UnityEngine;
 
 public abstract class ChartDataSOBase : ScriptableObject
@@ -8,20 +9,32 @@ public abstract class ChartDataSOBase : ScriptableObject
     [SerializeField] private string chartId;
 
     protected abstract void DeserializeFlattenRows(LitJson.JsonData flattenRows);
+
+    protected abstract void OnEndedParse();
     
     [ContextMenu("Test")]
     public void LoadChart()
     {
         CustomLogin();
         
-        var bro2 = Backend.CDN.Content.Table.Get();
-        var bro3 = Backend.CDN.Content.Get(bro2.GetContentTableItemList());
-        Dictionary<string, BackEnd.Content.ContentItem> dic = bro3.GetContentDictionarySortByChartId();
+        var table = Backend.CDN.Content.Table.Get();
+        var chartList = Backend.CDN.Content.Get(table.GetContentTableItemList());
+        var chartDict = chartList.GetContentDictionarySortByChartId();
         
-        foreach (string keyName in dic.Keys)
+        foreach (string key in chartDict.Keys)
         {
-            Debug.Log(dic[keyName].ToString());
+            ContentItem content = chartDict[key];
+            if (content.selectedChartFileId != chartId.ToString())
+                continue;
+
+            string loadedData = content.contentString;
+            LitJson.JsonData flattenRows = LitJson.JsonMapper.ToObject(loadedData);
+            
+            DeserializeFlattenRows(flattenRows);
+            break;
         }
+        
+        OnEndedParse();
     }
 
     protected virtual void OnValidate()

@@ -13,10 +13,26 @@ MonoBehaviour:
   m_Name: Multiplay Stage Data
   m_EditorClassIdentifier: MultiplayStageData::MultiplayStageDataSO
   chartId: 248737
-  multiplayDefinitions: []
+  multiplayDefinitions:
+  - sessionName: The edge of the forest
+    stageIndex: 1
+    multiplayMapType: 0
+    multiplayMapTypeIndex: 1
+    bgmAddress: 
+  - sessionName: Afternoon Forest
+    stageIndex: 2
+    multiplayMapType: 0
+    multiplayMapTypeIndex: 1
+    bgmAddress: 
+  - sessionName: Deep Forest
+    stageIndex: 3
+    multiplayMapType: 0
+    multiplayMapTypeIndex: 2
+    bgmAddress: 
   columIds:
   - SessionName
   - StageIndex
   - MapType
   - LoadMapIndex
   - BGMAddress
+  - Version
