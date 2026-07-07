@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
+using UnityEngine;
+#if UNITY_EDITOR
 using BackEnd;
 using BackEnd.Content;
-using UnityEngine;
+#endif
 
 public abstract class ChartDataSOBase : ScriptableObject
 {
@@ -10,12 +10,12 @@ public abstract class ChartDataSOBase : ScriptableObject
 
     protected abstract void DeserializeFlattenRows(LitJson.JsonData flattenRows);
 
-    protected abstract void OnEndedParse();
+    // protected abstract void OnEndedParse();
     
-    [ContextMenu("Test")]
+#if UNITY_EDITOR
     public void LoadChart()
     {
-        CustomLogin();
+        // CustomLogin();
         
         var table = Backend.CDN.Content.Table.Get();
         var chartList = Backend.CDN.Content.Get(table.GetContentTableItemList());
@@ -34,19 +34,15 @@ public abstract class ChartDataSOBase : ScriptableObject
             break;
         }
         
-        OnEndedParse();
+        // OnEndedParse();
     }
 
-    protected virtual void OnValidate()
-    {
-        
-    }
-
-    protected void CustomLogin()
-    {
-        BackendLogin backendLogin = new BackendLogin();
-
-        Backend.Initialize();
-        backendLogin.CustomLogin("user1", "1234");
-    }
+    // private void CustomLogin()
+    // {
+    //     BackendLogin backendLogin = new BackendLogin();
+    //
+    //     Backend.Initialize();
+    //     backendLogin.CustomLogin("user1", "1234");
+    // }
+#endif
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Codice.Client.BaseCommands;
 using UnityEngine;
 
 [CreateAssetMenu
@@ -33,9 +32,9 @@ public class MultiplayStageDataSO : ChartDataSOBase
         }
     }
 
-    protected override void OnEndedParse()
-    {
-        Debug.Log("Destroy BackendManager");
-        DestroyImmediate(GameObject.Find("BackendManager"));
-    }
+    // protected override void OnEndedParse()
+    // {
+    //     Debug.Log("Destroy BackendManager");
+    //     DestroyImmediate(GameObject.Find("BackendManager"));
+    // }
 }
