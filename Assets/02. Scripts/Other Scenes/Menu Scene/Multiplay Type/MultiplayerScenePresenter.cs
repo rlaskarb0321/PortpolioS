@@ -2,32 +2,40 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class MultiplayerScenePresenter : SubManagerBase
 {
     [SerializeField] private List<AssetLabelReference> definitionLabel;
     
+    private AsyncOperationHandle<IList<MultiplayStageDataSO>> loadHandle;
+    private MultiplayStageDataSO loadedObject;
+    
     public override UniTask DoInit()
     {
         Debug.Log($"[MultiplayerSceneGameMode] DoInit");
-        string targetAddress = SetTargetAddress().ToString();
+        List<string> labelString = new List<string>();
+        
+        for (int i = 0; i < definitionLabel.Count; i++)
+        {
+            labelString.Add(definitionLabel[i].labelString);
+        }
+
+        loadHandle = Addressables.LoadAssetsAsync<MultiplayStageDataSO>
+        (
+            labelString,
+            OnAssetEachLoaded,
+            Addressables.MergeMode.Intersection
+        );
         
         return UniTask.CompletedTask;
     }
 
-    private System.Text.StringBuilder SetTargetAddress()
+    private void OnAssetEachLoaded(MultiplayStageDataSO obj)
     {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-        for (int i = 0; i < definitionLabel.Count; i++)
-        {
-            sb.Append(definitionLabel[i].labelString);
-            if (i != definitionLabel.Count - 1)
-            {
-                sb.Append("/");
-            }
-        }
-
-        return sb;
+        if (obj == null)
+            return;
+        
+        loadedObject = obj;
     }
 }

@@ -13,6 +13,8 @@ public class MultiplayStageDataSO : ChartDataSOBase
     [SerializeField] private List<MultiplayStageDefinition> multiplayDefinitions;
     [SerializeField] private List<string> columIds;
     
+    public List<MultiplayStageDefinition> MultiplayDefinitions { get => multiplayDefinitions; }
+    
     protected override void DeserializeFlattenRows(LitJson.JsonData flattenRows)
     {
         multiplayDefinitions.Clear();
