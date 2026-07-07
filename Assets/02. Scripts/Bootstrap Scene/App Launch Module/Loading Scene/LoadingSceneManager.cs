@@ -85,11 +85,10 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
 
         sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive);
         await sceneHandle.ToUniTask();
+        await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
 
         if (OnSceneActivated != null)
             await OnSceneActivated.Invoke();
-
-        await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
     }
     
     private void OnDestroy()

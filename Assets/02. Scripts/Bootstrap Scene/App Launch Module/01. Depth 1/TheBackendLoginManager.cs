@@ -9,7 +9,6 @@ public class TheBackendLoginManager : AppLaunchModuleBase
 {
     [SerializeField] private GameObject loginCanvas;
     [SerializeField] private Button loginButton;
-    [SerializeField] private GameObject eventSystem;
     
     public override string ModuleName { get => "The Backend Login Manager"; }
 
@@ -19,7 +18,6 @@ public class TheBackendLoginManager : AppLaunchModuleBase
         await UniTask.CompletedTask;
         
         Destroy(loginCanvas);
-        Destroy(eventSystem);
     }
 
     private void Start()

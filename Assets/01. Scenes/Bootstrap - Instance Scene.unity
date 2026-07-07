@@ -571,6 +571,7 @@ MonoBehaviour:
   isDontDestroyOnLoad: 0
   networkRunner: {fileID: 0}
   currentGameMode: {fileID: 0}
+  eventSystem: {fileID: 1459589988}
 --- !u!1 &653228843
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,7 +942,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: BootstrapScene::TheBackendLoginManager
   loginCanvas: {fileID: 7621335}
   loginButton: {fileID: 380373667}
-  eventSystem: {fileID: 1459589988}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

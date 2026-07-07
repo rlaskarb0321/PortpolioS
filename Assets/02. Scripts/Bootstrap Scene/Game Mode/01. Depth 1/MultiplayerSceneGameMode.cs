@@ -13,6 +13,7 @@ public class MultiplayerSceneGameMode : GameModeBase
 
     public override void OnSceneCompletelyLoaded()
     {
+        Debug.Log($"[MultiplayerSceneGameMode] OnSceneCompletelyLoaded");
         
     }
 }

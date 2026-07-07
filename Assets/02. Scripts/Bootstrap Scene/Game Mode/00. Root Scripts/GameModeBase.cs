@@ -33,12 +33,12 @@ public abstract class GameModeBase : MonoSingleton<GameModeBase>
     }
 
     /// <summary>
-    /// The point at which scene asset activation is complete
+    /// 01. The point at which scene asset activation is complete
     /// </summary>
     public abstract UniTask OnSceneActivated();
     
     /// <summary>
-    /// When all tasks are finished after activating the scene
+    /// 02. When all tasks are finished after activating the scene
     /// </summary>
     public abstract void OnSceneCompletelyLoaded();
 }

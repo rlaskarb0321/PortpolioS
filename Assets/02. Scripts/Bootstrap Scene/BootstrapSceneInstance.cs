@@ -10,7 +10,7 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
 
     [Header("Game Mode Instance")]
     [SerializeField] private GameModeBase currentGameMode;
-    
+
     private Dictionary<EBootstrapInstance, IBootstrapInstance> bootstrapInstances;
     
     public NetworkRunner NetworkRunner => networkRunner;
