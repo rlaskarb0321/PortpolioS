@@ -31,10 +31,4 @@ public class MultiplayStageDataSO : ChartDataSOBase
             multiplayDefinitions.Add(definition);
         }
     }
-
-    // protected override void OnEndedParse()
-    // {
-    //     Debug.Log("Destroy BackendManager");
-    //     DestroyImmediate(GameObject.Find("BackendManager"));
-    // }
 }

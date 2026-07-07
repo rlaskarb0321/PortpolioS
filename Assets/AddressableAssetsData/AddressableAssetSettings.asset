@@ -67,6 +67,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1bf4369406582b7488ca5f8a7dbcae04, type: 2}
   - {fileID: 11400000, guid: 59245fddaf466bb43b94e357a2dc03d4, type: 2}
   - {fileID: 11400000, guid: c0f3e4e4f1154d54c812be42fe687591, type: 2}
+  - {fileID: 11400000, guid: 75aa02dd88c40154e9a54f2eee4554de, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_ContentDirectoryBuildPath: Temp/com.unity.addressables/ContentDirectories

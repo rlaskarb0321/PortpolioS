@@ -10,13 +10,9 @@ public abstract class ChartDataSOBase : ScriptableObject
 
     protected abstract void DeserializeFlattenRows(LitJson.JsonData flattenRows);
 
-    // protected abstract void OnEndedParse();
-    
 #if UNITY_EDITOR
     public void LoadChart()
     {
-        // CustomLogin();
-        
         var table = Backend.CDN.Content.Table.Get();
         var chartList = Backend.CDN.Content.Get(table.GetContentTableItemList());
         var chartDict = chartList.GetContentDictionarySortByChartId();
@@ -33,16 +29,6 @@ public abstract class ChartDataSOBase : ScriptableObject
             DeserializeFlattenRows(flattenRows);
             break;
         }
-        
-        // OnEndedParse();
     }
-
-    // private void CustomLogin()
-    // {
-    //     BackendLogin backendLogin = new BackendLogin();
-    //
-    //     Backend.Initialize();
-    //     backendLogin.CustomLogin("user1", "1234");
-    // }
 #endif
 }
