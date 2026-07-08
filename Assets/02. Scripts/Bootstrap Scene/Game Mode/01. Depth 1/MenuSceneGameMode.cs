@@ -25,9 +25,6 @@ public class MenuSceneGameMode : GameModeBase
     {
         Debug.Log($"[MenuSceneManager] OnSceneActivated");
         
-        // Set Network Runner
-        BootstrapSceneInstance.Instance.SetNetworkRunner();
-
         // Init GameTypeManagers
         await UniTask.WhenAll(SubManagers.Select(m => m.DoInit()));
 

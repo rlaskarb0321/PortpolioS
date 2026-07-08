@@ -21,7 +21,9 @@ public class MatchMakingManager
         var result = await runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
-            SessionName = sessionName
+            SessionName = sessionName,
+            SceneManager = runner.GetComponent<NetworkSceneManagerDefault>() 
+                           ?? runner.gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
 
         if (result.Ok)

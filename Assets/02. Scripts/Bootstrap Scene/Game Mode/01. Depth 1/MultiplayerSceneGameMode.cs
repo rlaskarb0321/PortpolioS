@@ -7,6 +7,9 @@ public class MultiplayerSceneGameMode : GameModeBase
     {
         Debug.Log($"[MultiplayerSceneGameMode] OnSceneActivated");
         
+        // Set Network Runner
+        BootstrapSceneInstance.Instance.SetNetworkRunner();
+        
         // Addressable 로 UI-Image 에셋과 BGM, 3d Model 등등 불러오기를 SubManager 에서 구현
         await UniTask.WhenAll(SubManagers.Select(m => m.DoInit()));
     }

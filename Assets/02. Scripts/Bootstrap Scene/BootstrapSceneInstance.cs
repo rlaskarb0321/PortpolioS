@@ -17,14 +17,16 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
 
     public void SetNetworkRunner()
     {
-        if (networkRunner != null)
-            return;
+        Instantiate(networkRunner);
         
-        GameObject runner = new GameObject("NetworkRunner");
-        
-        runner.AddComponent<NetworkRunner>();
-        runner.AddComponent<NetworkRunnerController>();
-        networkRunner = runner.GetComponent<NetworkRunner>();
+        // if (networkRunner != null)
+        //     return;
+        //
+        // GameObject runner = new GameObject("NetworkRunner");
+        //
+        // runner.AddComponent<NetworkRunner>();
+        // runner.AddComponent<NetworkRunnerController>();
+        // networkRunner = runner.GetComponent<NetworkRunner>();
     }
 
     public void SetGameModeInstance(GameModeBase gameMode)

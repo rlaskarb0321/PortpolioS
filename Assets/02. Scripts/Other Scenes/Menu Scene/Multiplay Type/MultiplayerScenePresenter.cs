@@ -15,6 +15,7 @@ public class MultiplayerScenePresenter : SubManagerBase
     [SerializeField] private CreateSessionView createSessionView;
     
     private AsyncOperationHandle<MultiplayStageDataSO> loadHandle;
+    private MultiplayStageDefinition selectedDefinition;
     
     public override async UniTask DoInit()
     {
@@ -44,10 +45,12 @@ public class MultiplayerScenePresenter : SubManagerBase
         
         // Init Create Session View
         createSessionView.SetState(ECreateSessionViewState.None);
+        createSessionView.ElementButton.onClick.AddListener(OnClickCreateSessionView);
     }
 
     private void OnClickElementView(in MultiplayStageDefinition definition)
     {
+        selectedDefinition = definition;
         createSessionView.SetState(ECreateSessionViewState.MapSelected, definition);
     }
 
@@ -56,7 +59,14 @@ public class MultiplayerScenePresenter : SubManagerBase
         if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
             return;
         
+    }
+
+    private void OnClickCancelSearchingButton()
+    {
+        if (createSessionView.CurrentState != ECreateSessionViewState.MatchMaking)
+            return;
         
+        createSessionView.SetState(ECreateSessionViewState.MapSelected, selectedDefinition);
     }
 
     private void OnDestroy()
@@ -68,5 +78,7 @@ public class MultiplayerScenePresenter : SubManagerBase
         {
             elementViews[i].ElementButton.onClick.RemoveAllListeners();
         }
+        
+        createSessionView.ElementButton.onClick.RemoveAllListeners();
     }
 }
