@@ -3361,6 +3361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2640c2fbdd712a94a85a090ddeab2379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Multiplayer::MultiplayerScenePresenter
+  lobbyPlayer: {fileID: 1903746397676478785, guid: 0a4ecf29b01bd4346a2dd4a70f05570a, type: 3}
   loadAddress: Data/Definitions/Play Mode/Multi
   elementViews:
   - {fileID: 2573508290403592954}

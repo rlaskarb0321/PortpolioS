@@ -2,31 +2,36 @@ using System;
 using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
 {
     [Header("Network Runner")]
-    [SerializeField] private NetworkRunner networkRunner;
+    [FormerlySerializedAs("networkRunner")]
+    [SerializeField] private NetworkRunner networkRunnerPrefab;
 
     [Header("Game Mode Instance")]
     [SerializeField] private GameModeBase currentGameMode;
 
     private Dictionary<EBootstrapInstance, IBootstrapInstance> bootstrapInstances;
-    
-    public NetworkRunner NetworkRunner => networkRunner;
+    private NetworkRunner networkRunnerInstance;
+    private NetworkRunnerController runnerController;
 
-    public void SetNetworkRunner()
+    public NetworkRunner NetworkRunner { get => networkRunnerInstance; }
+    public NetworkRunnerController RunnerController { get => runnerController; }
+
+    /// <summary>
+    /// NetworkRunner is designed for single use, so a new instance must be created at the start of each session.
+    /// If an existing instance remains, it is destroyed, and the prefab is instantiated anew.
+    /// </summary>
+    public NetworkRunner CreateNetworkRunner()
     {
-        Instantiate(networkRunner);
-        
-        // if (networkRunner != null)
-        //     return;
-        //
-        // GameObject runner = new GameObject("NetworkRunner");
-        //
-        // runner.AddComponent<NetworkRunner>();
-        // runner.AddComponent<NetworkRunnerController>();
-        // networkRunner = runner.GetComponent<NetworkRunner>();
+        if (networkRunnerInstance != null)
+            Destroy(networkRunnerInstance.gameObject);
+
+        networkRunnerInstance = Instantiate(networkRunnerPrefab);
+        runnerController = networkRunnerInstance.GetComponent<NetworkRunnerController>();
+        return networkRunnerInstance;
     }
 
     public void SetGameModeInstance(GameModeBase gameMode)

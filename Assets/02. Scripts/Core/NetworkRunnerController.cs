@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public event Action<NetworkRunner, PlayerRef> PlayerJoined;
+    public event Action<NetworkRunner, PlayerRef> PlayerLeft;
+    
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
     }
@@ -16,10 +19,12 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        PlayerJoined?.Invoke(runner, player);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
+        PlayerLeft?.Invoke(runner, player);
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)

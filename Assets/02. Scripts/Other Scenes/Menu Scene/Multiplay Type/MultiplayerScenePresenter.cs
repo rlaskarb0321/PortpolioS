@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Fusion;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class MultiplayerScenePresenter : SubManagerBase
 {
+    [Header("Lobby Player")]
+    [SerializeField] private LobbyPlayer lobbyPlayer;
+    
     [Header("Definition Asset Address")]
     [SerializeField] private string loadAddress;
 
@@ -16,6 +20,7 @@ public class MultiplayerScenePresenter : SubManagerBase
     
     private AsyncOperationHandle<MultiplayStageDataSO> loadHandle;
     private MultiplayStageDefinition selectedDefinition;
+    private MatchMakingManager matchMakingManager = new();
     
     public override async UniTask DoInit()
     {
@@ -46,6 +51,7 @@ public class MultiplayerScenePresenter : SubManagerBase
         // Init Create Session View
         createSessionView.SetState(ECreateSessionViewState.None);
         createSessionView.ElementButton.onClick.AddListener(OnClickCreateSessionView);
+        createSessionView.CancelSearchButton.onClick.AddListener(OnClickCancelSearchingButton);
     }
 
     private void OnClickElementView(in MultiplayStageDefinition definition)
@@ -58,7 +64,48 @@ public class MultiplayerScenePresenter : SubManagerBase
     {
         if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
             return;
+
+        CreateSessionAsync().Forget();
+    }
+
+    private async UniTask CreateSessionAsync()
+    {
+        createSessionView.SetState(ECreateSessionViewState.MatchMaking);
+
+        // Create Runner
+        BootstrapSceneInstance.Instance.CreateNetworkRunner();
         
+        // Subscribe Event Method
+        var controller = BootstrapSceneInstance.Instance.RunnerController;
+        
+        controller.PlayerJoined -= CreateLobbyPlayer;
+        controller.PlayerJoined += CreateLobbyPlayer;
+        controller.PlayerLeft -= DestroyLobbyPlayer;
+        controller.PlayerLeft += DestroyLobbyPlayer;
+        
+        // Match Making
+        bool isSuccess = await matchMakingManager.JoinOrCreateSession(selectedDefinition.sessionName);
+        
+        if (isSuccess)
+        {
+            
+        }
+        else
+        {
+            createSessionView.SetState(ECreateSessionViewState.MapSelected, selectedDefinition);
+        }
+    }
+
+    private void CreateLobbyPlayer(NetworkRunner runner, PlayerRef playerRef)
+    {
+        if (runner.IsServer)
+            runner.Spawn(lobbyPlayer);
+    }
+
+    private void DestroyLobbyPlayer(NetworkRunner runner, PlayerRef playerRef)
+    {
+        if (runner.IsServer)
+            runner.Despawn(lobbyPlayer.Object);
     }
 
     private void OnClickCancelSearchingButton()
