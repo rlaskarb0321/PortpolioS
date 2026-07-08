@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -11,9 +12,9 @@ public class MultiplayerScenePresenter : SubManagerBase
 
     [Header("Init UIs")]
     [SerializeField] private List<MultiplayStageElementView> elementViews;
+    [SerializeField] private CreateSessionView createSessionView;
     
     private AsyncOperationHandle<MultiplayStageDataSO> loadHandle;
-    private MultiplayStageDefinition selectedDefinition;
     
     public override async UniTask DoInit()
     {
@@ -32,18 +33,40 @@ public class MultiplayerScenePresenter : SubManagerBase
             return;
         }
 
+        // Init Element Views
         for (int i = 0; i < elementViews.Count; i++)
         {
             MultiplayStageDefinition definition = definitions[i];
             
             elementViews[i].InitElementView(definition);
-            elementViews[i].ElementButton.onClick.RemoveListener(() => OnClickElementView(definition));
             elementViews[i].ElementButton.onClick.AddListener(() => OnClickElementView(definition));
         }
+        
+        // Init Create Session View
+        createSessionView.SetState(ECreateSessionViewState.None);
     }
 
-    private void OnClickElementView(MultiplayStageDefinition definition)
+    private void OnClickElementView(in MultiplayStageDefinition definition)
     {
-        selectedDefinition = definition;
+        createSessionView.SetState(ECreateSessionViewState.MapSelected, definition);
+    }
+
+    private void OnClickCreateSessionView()
+    {
+        if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
+            return;
+        
+        
+    }
+
+    private void OnDestroy()
+    {
+        if (loadHandle.IsValid())
+            loadHandle.Release();
+        
+        for (int i = 0; i < elementViews.Count; i++)
+        {
+            elementViews[i].ElementButton.onClick.RemoveAllListeners();
+        }
     }
 }

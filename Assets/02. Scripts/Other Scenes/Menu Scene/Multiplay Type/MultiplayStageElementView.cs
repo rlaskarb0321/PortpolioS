@@ -12,7 +12,7 @@ public class MultiplayStageElementView : MonoBehaviour
     
     public Button ElementButton => elementButton;
 
-    public void InitElementView(MultiplayStageDefinition inDefinition)
+    public void InitElementView(in MultiplayStageDefinition inDefinition)
     {
         sessionName.text = inDefinition.sessionName;
     }
