@@ -6,36 +6,44 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class MultiplayerScenePresenter : SubManagerBase
 {
-    [SerializeField] private List<AssetLabelReference> definitionLabel;
+    [Header("Definition Asset Address")]
+    [SerializeField] private string loadAddress;
+
+    [Header("Init UIs")]
+    [SerializeField] private List<MultiplayStageElementView> elementViews;
     
-    private AsyncOperationHandle<IList<MultiplayStageDataSO>> loadHandle;
-    private MultiplayStageDataSO loadedObject;
+    private AsyncOperationHandle<MultiplayStageDataSO> loadHandle;
+    private MultiplayStageDefinition selectedDefinition;
     
-    public override UniTask DoInit()
+    public override async UniTask DoInit()
     {
         Debug.Log($"[MultiplayerSceneGameMode] DoInit");
-        List<string> labelString = new List<string>();
+        loadHandle = Addressables.LoadAssetAsync<MultiplayStageDataSO>(loadAddress);
+        await loadHandle;
         
-        for (int i = 0; i < definitionLabel.Count; i++)
-        {
-            labelString.Add(definitionLabel[i].labelString);
-        }
-
-        loadHandle = Addressables.LoadAssetsAsync<MultiplayStageDataSO>
-        (
-            labelString,
-            OnAssetEachLoaded,
-            Addressables.MergeMode.Intersection
-        );
-        
-        return UniTask.CompletedTask;
+        InitUIs(loadHandle.Result.MultiplayDefinitions);
     }
 
-    private void OnAssetEachLoaded(MultiplayStageDataSO obj)
+    private void InitUIs(List<MultiplayStageDefinition> definitions)
     {
-        if (obj == null)
+        if (definitions.Count != elementViews.Count)
+        {
+            Debug.LogError("[MultiplayerSceneGameMode] Invalid number of element views");
             return;
-        
-        loadedObject = obj;
+        }
+
+        for (int i = 0; i < elementViews.Count; i++)
+        {
+            MultiplayStageDefinition definition = definitions[i];
+            
+            elementViews[i].InitElementView(definition);
+            elementViews[i].ElementButton.onClick.RemoveListener(() => OnClickElementView(definition));
+            elementViews[i].ElementButton.onClick.AddListener(() => OnClickElementView(definition));
+        }
+    }
+
+    private void OnClickElementView(MultiplayStageDefinition definition)
+    {
+        selectedDefinition = definition;
     }
 }

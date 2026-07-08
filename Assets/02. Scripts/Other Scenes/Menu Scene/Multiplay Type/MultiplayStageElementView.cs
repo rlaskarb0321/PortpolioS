@@ -5,24 +5,20 @@ using UnityEngine.UI;
 
 public class MultiplayStageElementView : MonoBehaviour
 {
-    public UnityEvent OnClickElementView;
-    
+    [Header("UI Elements")]
     [SerializeField] private Text sessionName;
 
     private Button elementButton;
+    
+    public Button ElementButton => elementButton;
 
-    public void InitElementView()
+    public void InitElementView(MultiplayStageDefinition inDefinition)
     {
-        
+        sessionName.text = inDefinition.sessionName;
     }
     
     private void Awake()
     {
         elementButton = GetComponent<Button>();
-    }
-
-    private void Start()
-    {
-        elementButton.onClick.AddListener(() => OnClickElementView.Invoke());
     }
 }
