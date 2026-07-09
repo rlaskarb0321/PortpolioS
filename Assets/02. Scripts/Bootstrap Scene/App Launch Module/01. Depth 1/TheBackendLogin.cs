@@ -5,7 +5,7 @@ public class BackendLogin
 {
     public void CustomLogin(string id, string pw)
     {
-        Debug.Log("로그인을 요청합니다.");
+        Debug.Log($"로그인을 요청합니다. id: {id}");
         
 #if UNITY_EDITOR
         var bro = Backend.BMember.CustomLogin(id, pw);

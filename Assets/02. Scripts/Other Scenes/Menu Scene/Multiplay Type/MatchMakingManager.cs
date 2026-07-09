@@ -22,7 +22,8 @@ public class MatchMakingManager
             GameMode = mode,
             SessionName = sessionName,
             SceneManager = runner.GetComponent<NetworkSceneManagerDefault>() 
-                           ?? runner.gameObject.AddComponent<NetworkSceneManagerDefault>()
+                           ?? runner.gameObject.AddComponent<NetworkSceneManagerDefault>(),
+            PlayerCount = 3
         });
 
         if (result.Ok)

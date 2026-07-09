@@ -17,6 +17,7 @@ public class MultiplayerScenePresenter : SubManagerBase
     [Header("Init UIs")]
     [SerializeField] private List<MultiplayStageElementView> elementViews;
     [SerializeField] private CreateSessionView createSessionView;
+    [SerializeField] private LobbyPlayerManagerView lobbyPlayerViewManager;
     
     private AsyncOperationHandle<MultiplayStageDataSO> loadHandle;
     private MultiplayStageDefinition selectedDefinition;
@@ -29,6 +30,7 @@ public class MultiplayerScenePresenter : SubManagerBase
         await loadHandle;
         
         InitUIs(loadHandle.Result.MultiplayDefinitions);
+        LobbyPlayer.OnLobbyModelChanged += lobbyPlayerViewManager.ChangeJoinedPlayerView;
     }
 
     private void InitUIs(List<MultiplayStageDefinition> definitions)
@@ -88,7 +90,6 @@ public class MultiplayerScenePresenter : SubManagerBase
         
         if (isSuccess)
         {
-            
         }
         else
         {
@@ -99,13 +100,14 @@ public class MultiplayerScenePresenter : SubManagerBase
     private void CreateLobbyPlayer(NetworkRunner runner, PlayerRef playerRef)
     {
         if (runner.IsServer)
-            runner.Spawn(lobbyPlayer);
+        {
+            runner.Spawn(lobbyPlayer, inputAuthority: playerRef);
+        }
     }
 
     private void DestroyLobbyPlayer(NetworkRunner runner, PlayerRef playerRef)
     {
-        if (runner.IsServer)
-            runner.Despawn(lobbyPlayer.Object);
+        
     }
 
     private void OnClickCancelSearchingButton()
