@@ -22,6 +22,7 @@ public class MultiplayerScenePresenter : SubManagerBase
     private AsyncOperationHandle<MultiplayStageDataSO> loadHandle;
     private MultiplayStageDefinition selectedDefinition;
     private MatchMakingManager matchMakingManager = new();
+    private bool isMatched;
     
     public override async UniTask DoInit()
     {
@@ -64,10 +65,28 @@ public class MultiplayerScenePresenter : SubManagerBase
 
     private void OnClickCreateSessionView()
     {
-        if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
-            return;
+        if (isMatched == false)
+        {
+            if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
+                return;
 
-        CreateSessionAsync().Forget();
+            CreateSessionAsync().Forget();
+        }
+        else
+        {
+            switch (createSessionView.CurrentState)
+            {
+                case ECreateSessionViewState.UnReady:
+                    createSessionView.SetState(ECreateSessionViewState.Ready);
+                    LobbyPlayer.Local.RPC_RequestUpdateModel(LobbyPlayer.Local.LobbyModel.nickName.ToString(), true);
+                    break;
+                
+                case ECreateSessionViewState.Ready:
+                    createSessionView.SetState(ECreateSessionViewState.UnReady);
+                    LobbyPlayer.Local.RPC_RequestUpdateModel(LobbyPlayer.Local.LobbyModel.nickName.ToString(), false);
+                    break;
+            }
+        }
     }
 
     private async UniTask CreateSessionAsync()
@@ -86,10 +105,14 @@ public class MultiplayerScenePresenter : SubManagerBase
         controller.PlayerLeft += DestroyLobbyPlayer;
         
         // Match Making
-        bool isSuccess = await matchMakingManager.JoinOrCreateSession(selectedDefinition.sessionName);
-        
-        if (isSuccess)
+        isMatched = await matchMakingManager.JoinOrCreateSession(selectedDefinition.sessionName);
+
+        if (isMatched)
         {
+            await UniTask.WaitUntil(() => LobbyPlayer.Local != null);
+
+            createSessionView.SetState(ECreateSessionViewState.UnReady);
+            LobbyPlayer.Local.RPC_RequestUpdateModel(LobbyPlayer.Local.LobbyModel.nickName.ToString(), false);
         }
         else
         {

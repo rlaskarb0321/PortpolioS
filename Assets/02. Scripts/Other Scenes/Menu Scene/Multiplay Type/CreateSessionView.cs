@@ -11,6 +11,10 @@ public class CreateSessionView : MonoBehaviour
     [Header("Other State UIs")]
     [SerializeField] private Text selectedStageNameText;
     [SerializeField] private Text startMatchText;
+
+    [Header("Ready State UIs")]
+    [SerializeField] private Text readyStateText;
+    [SerializeField] private Text cancelReadyStateText;
     
     private Button elementButton;
     private ECreateSessionViewState currentState;
@@ -29,6 +33,8 @@ public class CreateSessionView : MonoBehaviour
                 searchingMatchGroup.gameObject.SetActive(false);
                 selectedStageNameText.gameObject.SetActive(false);
                 startMatchText.gameObject.SetActive(false);
+                cancelReadyStateText.gameObject.SetActive(false);
+                readyStateText.gameObject.SetActive(false);
                 break;
             
             case ECreateSessionViewState.MapSelected:
@@ -36,11 +42,31 @@ public class CreateSessionView : MonoBehaviour
                 selectedStageNameText.gameObject.SetActive(true);
                 selectedStageNameText.text = definition.sessionName;
                 startMatchText.gameObject.SetActive(true);
+                cancelReadyStateText.gameObject.SetActive(false);
+                readyStateText.gameObject.SetActive(false);
                 break;
             
             case ECreateSessionViewState.MatchMaking:
                 searchingMatchGroup.gameObject.SetActive(true);
                 startMatchText.gameObject.SetActive(false);
+                cancelReadyStateText.gameObject.SetActive(false);
+                readyStateText.gameObject.SetActive(false);
+                break;
+            
+            case ECreateSessionViewState.Ready:
+                searchingMatchGroup.gameObject.SetActive(false);
+                startMatchText.gameObject.SetActive(false);
+                
+                cancelReadyStateText.gameObject.SetActive(true);
+                readyStateText.gameObject.SetActive(false);
+                break;
+            
+            case ECreateSessionViewState.UnReady:
+                searchingMatchGroup.gameObject.SetActive(false);
+                startMatchText.gameObject.SetActive(false);
+                
+                cancelReadyStateText.gameObject.SetActive(false);
+                readyStateText.gameObject.SetActive(true);
                 break;
         }
     }
@@ -56,5 +82,7 @@ public enum ECreateSessionViewState
     None,
     MapSelected,
     MatchMaking,
+    Ready,
+    UnReady,
     Count
 }
