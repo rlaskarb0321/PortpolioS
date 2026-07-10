@@ -8,9 +8,6 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class MultiplayerScenePresenter : SubManagerBase
 {
-    [Header("Lobby Player")]
-    [SerializeField] private LobbyPlayer lobbyPlayer;
-    
     [Header("Definition Asset Address")]
     [SerializeField] private string loadAddress;
 
@@ -22,7 +19,6 @@ public class MultiplayerScenePresenter : SubManagerBase
     private AsyncOperationHandle<MultiplayStageDataSO> loadHandle;
     private MultiplayStageDefinition selectedDefinition;
     private MatchMakingManager matchMakingManager = new();
-    private bool isMatched;
     
     public override async UniTask DoInit()
     {
@@ -31,7 +27,6 @@ public class MultiplayerScenePresenter : SubManagerBase
         await loadHandle;
         
         InitUIs(loadHandle.Result.MultiplayDefinitions);
-        LobbyPlayer.OnLobbyModelChanged += lobbyPlayerViewManager.ChangeJoinedPlayerView;
     }
 
     private void InitUIs(List<MultiplayStageDefinition> definitions)
@@ -65,28 +60,30 @@ public class MultiplayerScenePresenter : SubManagerBase
 
     private void OnClickCreateSessionView()
     {
-        if (isMatched == false)
-        {
-            if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
-                return;
+        if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
+            return;
 
-            CreateSessionAsync().Forget();
-        }
-        else
-        {
-            switch (createSessionView.CurrentState)
-            {
-                case ECreateSessionViewState.UnReady:
-                    createSessionView.SetState(ECreateSessionViewState.Ready);
-                    LobbyPlayer.Local.RPC_RequestUpdateModel(LobbyPlayer.Local.LobbyModel.nickName.ToString(), true);
-                    break;
-                
-                case ECreateSessionViewState.Ready:
-                    createSessionView.SetState(ECreateSessionViewState.UnReady);
-                    LobbyPlayer.Local.RPC_RequestUpdateModel(LobbyPlayer.Local.LobbyModel.nickName.ToString(), false);
-                    break;
-            }
-        }
+        CreateSessionAsync().Forget();
+        // if (isMatched == false)
+        // {
+        //     if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
+        //         return;
+        //
+        //     CreateSessionAsync().Forget();
+        // }
+        // else
+        // {
+        //     switch (createSessionView.CurrentState)
+        //     {
+        //         case ECreateSessionViewState.UnReady:
+        //             createSessionView.SetState(ECreateSessionViewState.Ready);
+        //             break;
+        //         
+        //         case ECreateSessionViewState.Ready:
+        //             createSessionView.SetState(ECreateSessionViewState.UnReady);
+        //             break;
+        //     }
+        // }
     }
 
     private async UniTask CreateSessionAsync()
@@ -96,41 +93,20 @@ public class MultiplayerScenePresenter : SubManagerBase
         // Create Runner
         BootstrapSceneInstance.Instance.CreateNetworkRunner();
         
-        // Subscribe Event Method
-        var controller = BootstrapSceneInstance.Instance.RunnerController;
-        
-        controller.PlayerJoined -= CreateLobbyPlayer;
-        controller.PlayerJoined += CreateLobbyPlayer;
-        controller.PlayerLeft -= DestroyLobbyPlayer;
-        controller.PlayerLeft += DestroyLobbyPlayer;
-        
         // Match Making
-        isMatched = await matchMakingManager.JoinOrCreateSession(selectedDefinition.sessionName);
+        bool isMatched = await matchMakingManager.JoinOrCreateSession(selectedDefinition.sessionName);
 
-        if (isMatched)
-        {
-            await UniTask.WaitUntil(() => LobbyPlayer.Local != null);
-
-            createSessionView.SetState(ECreateSessionViewState.UnReady);
-            LobbyPlayer.Local.RPC_RequestUpdateModel(LobbyPlayer.Local.LobbyModel.nickName.ToString(), false);
-        }
-        else
+        if (isMatched == false)
         {
             createSessionView.SetState(ECreateSessionViewState.MapSelected, selectedDefinition);
+            return;
         }
-    }
 
-    private void CreateLobbyPlayer(NetworkRunner runner, PlayerRef playerRef)
-    {
-        if (runner.IsServer)
+        if (BootstrapSceneInstance.Instance.NetworkRunner.IsServer)
         {
-            runner.Spawn(lobbyPlayer, inputAuthority: playerRef);
+            Debug.Log($"Spawn LobbyState");
         }
-    }
-
-    private void DestroyLobbyPlayer(NetworkRunner runner, PlayerRef playerRef)
-    {
-        
+        // createSessionView.SetState(ECreateSessionViewState.UnReady);
     }
 
     private void OnClickCancelSearchingButton()
