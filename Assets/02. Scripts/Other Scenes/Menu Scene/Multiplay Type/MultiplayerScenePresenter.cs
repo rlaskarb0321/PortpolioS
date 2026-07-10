@@ -8,6 +8,9 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class MultiplayerScenePresenter : SubManagerBase
 {
+    [Header("LobbyStateManager")]
+    [SerializeField] private LobbyStateManager lobbyStateManagerPrefab;
+    
     [Header("Definition Asset Address")]
     [SerializeField] private string loadAddress;
 
@@ -104,9 +107,9 @@ public class MultiplayerScenePresenter : SubManagerBase
 
         if (BootstrapSceneInstance.Instance.NetworkRunner.IsServer)
         {
+            BootstrapSceneInstance.Instance.NetworkRunner.Spawn(lobbyStateManagerPrefab);
             Debug.Log($"Spawn LobbyState");
         }
-        // createSessionView.SetState(ECreateSessionViewState.UnReady);
     }
 
     private void OnClickCancelSearchingButton()

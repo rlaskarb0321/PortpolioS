@@ -569,7 +569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BootstrapScene::BootstrapSceneInstance
   isDontDestroyOnLoad: 0
-  networkRunner: {fileID: 1723246796772642806, guid: fc412d55ff8039f448e3398ea2ed7215, type: 3}
+  networkRunnerPrefab: {fileID: 1723246796772642806, guid: fc412d55ff8039f448e3398ea2ed7215, type: 3}
   currentGameMode: {fileID: 0}
 --- !u!1 &653228843
 GameObject:
