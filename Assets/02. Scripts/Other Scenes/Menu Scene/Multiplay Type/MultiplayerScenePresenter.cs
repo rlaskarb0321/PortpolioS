@@ -30,6 +30,7 @@ public class MultiplayerScenePresenter : SubManagerBase
         await loadHandle;
         
         InitUIs(loadHandle.Result.MultiplayDefinitions);
+        LobbyStateManager.OnLobbyPlayerJoined += lobbyPlayerViewManager.OnChangedLobbyPlayerView;
     }
 
     private void InitUIs(List<MultiplayStageDefinition> definitions)
@@ -92,8 +93,6 @@ public class MultiplayerScenePresenter : SubManagerBase
     private async UniTask CreateSessionAsync()
     {
         createSessionView.SetState(ECreateSessionViewState.MatchMaking);
-
-        // Create Runner
         BootstrapSceneInstance.Instance.CreateNetworkRunner();
         
         // Match Making
@@ -108,7 +107,6 @@ public class MultiplayerScenePresenter : SubManagerBase
         if (BootstrapSceneInstance.Instance.NetworkRunner.IsServer)
         {
             BootstrapSceneInstance.Instance.NetworkRunner.Spawn(lobbyStateManagerPrefab);
-            Debug.Log($"Spawn LobbyState");
         }
     }
 
