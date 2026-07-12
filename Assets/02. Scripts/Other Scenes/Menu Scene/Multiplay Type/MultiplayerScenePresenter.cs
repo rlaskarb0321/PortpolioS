@@ -106,7 +106,14 @@ public class MultiplayerScenePresenter : SubManagerBase
 
         if (BootstrapSceneInstance.Instance.NetworkRunner.IsServer)
         {
-            BootstrapSceneInstance.Instance.NetworkRunner.Spawn(lobbyStateManagerPrefab);
+            var instance = 
+                BootstrapSceneInstance.
+                Instance.
+                NetworkRunner.
+                Spawn(lobbyStateManagerPrefab, inputAuthority: BootstrapSceneInstance.Instance.NetworkRunner.LocalPlayer);
+
+            await UniTask.Yield();
+            instance.RPC_UpdateLobbyPlayerView();
         }
     }
 
