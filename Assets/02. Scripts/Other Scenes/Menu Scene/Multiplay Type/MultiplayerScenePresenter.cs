@@ -64,6 +64,7 @@ public class MultiplayerScenePresenter : SubManagerBase
 
     private void OnClickCreateSessionView()
     {
+        // Before Match Making
         if (isMatched == false)
         {
             if (createSessionView.CurrentState != ECreateSessionViewState.MapSelected)
@@ -74,6 +75,7 @@ public class MultiplayerScenePresenter : SubManagerBase
             return;
         }
 
+        // After Match Making
         if (lobbyStateManager == null)
         {
             Debug.LogError($"[MultiplayerScenePresenter] lobbyStateManager instance is Null");
@@ -81,19 +83,22 @@ public class MultiplayerScenePresenter : SubManagerBase
         }
 
         int playerIndex = BootstrapSceneInstance.Instance.NetworkRunner.LocalPlayer.PlayerId - 1;
+        LobbyPlayerRef lobbyPlayerRef = lobbyStateManager.LobbyPlayer[playerIndex];
         
         switch (createSessionView.CurrentState)
         {
             case ECreateSessionViewState.UnReady:
+                lobbyPlayerRef.isReady = true;
                 createSessionView.SetState(ECreateSessionViewState.Ready);
-                lobbyStateManager.RPC_UpdatePlayerReadyState(playerIndex, true);
                 break;
  
             case ECreateSessionViewState.Ready:
+                lobbyPlayerRef.isReady = false;
                 createSessionView.SetState(ECreateSessionViewState.UnReady);
-                lobbyStateManager.RPC_UpdatePlayerReadyState(playerIndex, false);
                 break;
         }
+        
+        lobbyStateManager.RPC_UpdateLobbyPlayerView(lobbyPlayerRef, playerIndex);
     }
 
     private async UniTask CreateSessionAsync()

@@ -25,16 +25,7 @@ public class LobbyStateManager : NetworkBehaviour
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_UpdatePlayerReadyState(int inIndex, bool inIsReady)
-    {
-        LobbyPlayerRef lobbyPlayerRef = LobbyPlayer[inIndex];
-
-        lobbyPlayerRef.isReady = inIsReady;
-        LobbyPlayer.Set(inIndex, lobbyPlayerRef);
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    private void RPC_UpdateLobbyPlayerView(LobbyPlayerRef lobbyPlayerRef, int index)
+    public void RPC_UpdateLobbyPlayerView(LobbyPlayerRef lobbyPlayerRef, int index)
     {
         LobbyPlayer.Set(index, lobbyPlayerRef);
     }
