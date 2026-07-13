@@ -5,7 +5,8 @@ public enum EGameModeType
 {
     MenuScene,
     StageModeScene,
-    MultiplayModeScene,
+    MultiplayLobbyScene,
+    InGame_MultiplayScene,
     Count
 }
 

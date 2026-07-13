@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class MultiplayerSceneGameMode : GameModeBase
+public class MultiplayerLobbyGameMode : GameModeBase
 {
     public override async UniTask OnSceneActivated()
     {

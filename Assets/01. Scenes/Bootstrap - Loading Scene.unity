@@ -2470,7 +2470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5944fe02ce1ecdf4c8215d4c19b2f92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadingCanvas
-  loadingCanvasType: 0
+  loadingCanvasType: 3
   loadingImage: {fileID: 146271685}
   targetRot: 360
   duration: 0.5

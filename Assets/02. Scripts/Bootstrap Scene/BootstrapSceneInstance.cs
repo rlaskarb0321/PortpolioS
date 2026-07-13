@@ -95,13 +95,18 @@ public enum EBootstrapInstance
 {
     AppLaunchManager,
     LoadingSceneManager,
+    MultiplaySessionContext,
     Count
 }
 
 public interface IBootstrapInstance
 {
-    public void Start();
     public EBootstrapInstance GetInstanceType();
     public void AllocateToBootstrapInstance();
+    public void Start();
+}
+
+public interface IBootstrapLifecycle : IBootstrapInstance
+{
     public void Execute();
 }

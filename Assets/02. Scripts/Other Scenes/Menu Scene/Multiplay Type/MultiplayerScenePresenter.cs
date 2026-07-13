@@ -109,8 +109,15 @@ public class MultiplayerScenePresenter : SubManagerBase
             {
                 case ECreateSessionViewState.AllReady:
                     // Debug.Log($"Enter Game !!");
-                    // 여기서 Definition 을 통해 Map 과 BGM 과 몬스터 뭐 기타 등등 불러올 Addressable 의 정보가 담긴
-                    // selectedDefinition 을 누군가에게 전달해줘야함
+                    var loadingSceneManager =
+                        BootstrapSceneInstance.Instance
+                        .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
+                    var multiplaySessionContext =
+                        BootstrapSceneInstance.Instance
+                        .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
+
+                    loadingSceneManager.ActivateLoadingCanvas(ELoadingSceneType.InGame_MultiplayLoading).Forget();
+                    multiplaySessionContext.UpdateSelectedDefinition(selectedDefinition);
                     break;
                 
                 case ECreateSessionViewState.NotAllReady:

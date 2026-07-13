@@ -16,7 +16,7 @@ public enum ELoadingSceneType
     Count
 }
 
-public class LoadingSceneManager : MonoBehaviour, IBootstrapInstance
+public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
 {
     public Func<UniTask> OnSceneActivated;
     public Action OnCompleteLoad;

@@ -16,14 +16,14 @@ MonoBehaviour:
   m_GUID: e6ee75b88f9d0ef47bce422fcb6f3b8d
   m_SerializeEntries:
   - m_GUID: b990815a845a1c84db3efb1c0e97ce52
-    m_Address: Model/Forest/Map/Stage/1, 2
+    m_Address: Model/Forest/Map/Stage/1
     m_ReadOnly: 0
     m_SerializedLabels:
     - Model/Map
     - Stage/Forest
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe2f1719ac14ee34fa98e62019714a67
-    m_Address: Model/Forest/Map/Stage/3
+    m_Address: Model/Forest/Map/Stage/2
     m_ReadOnly: 0
     m_SerializedLabels:
     - Model/Map

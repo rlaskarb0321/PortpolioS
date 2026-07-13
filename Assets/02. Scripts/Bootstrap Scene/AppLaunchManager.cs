@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class AppLaunchManager : MonoBehaviour, IBootstrapInstance
+public class AppLaunchManager : MonoBehaviour, IBootstrapLifecycle
 {
     [Header("Load Loading Scene")]
     [SerializeField] private AppLaunchModule firstLaunchModule;
