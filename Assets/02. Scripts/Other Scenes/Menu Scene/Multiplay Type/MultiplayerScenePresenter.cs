@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Fusion;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -106,14 +105,7 @@ public class MultiplayerScenePresenter : SubManagerBase
 
         if (BootstrapSceneInstance.Instance.NetworkRunner.IsServer)
         {
-            var instance = 
-                BootstrapSceneInstance.
-                Instance.
-                NetworkRunner.
-                Spawn(lobbyStateManagerPrefab, inputAuthority: BootstrapSceneInstance.Instance.NetworkRunner.LocalPlayer);
-
-            await UniTask.Yield();
-            instance.RPC_UpdateLobbyPlayerView();
+            BootstrapSceneInstance.Instance.NetworkRunner.Spawn(lobbyStateManagerPrefab);
         }
     }
 
