@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: NickName
+  m_Text: '[Empty]'
 --- !u!1 &7046249125896188696
 GameObject:
   m_ObjectHideFlags: 0

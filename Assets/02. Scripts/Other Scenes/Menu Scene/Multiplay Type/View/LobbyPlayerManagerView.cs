@@ -7,7 +7,7 @@ public class LobbyPlayerManagerView : MonoBehaviour
     [SerializeField] private List<LobbyCharacterSlotView> lobbyCharacterSlots;
     [SerializeField] private List<LobbyCharacterReadyView> lobbyCharacterReadyViews;
 
-    public void OnChangedLobbyPlayerView(NetworkArray<LobbyPlayerRef> lobbyPlayerRefs)
+    public void OnChangedChangedLobbyPlayerView(NetworkArray<LobbyPlayerRef> lobbyPlayerRefs)
     {
         for (int i = 0; i < lobbyPlayerRefs.Length; i++)
         {
