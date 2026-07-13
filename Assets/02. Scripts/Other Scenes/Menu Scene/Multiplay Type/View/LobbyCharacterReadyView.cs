@@ -8,7 +8,8 @@ public class LobbyCharacterReadyView : MonoBehaviour
     public void SetView(LobbyPlayerRef lobbyPlayerRef)
     {
         string readyText = lobbyPlayerRef.isReady ? "Ready" : "Not Ready";
-        
+
+        readyText = lobbyPlayerRef.isHost ? "[ Host ]" : readyText;
         readyStateText.text = readyText;
     }
 }

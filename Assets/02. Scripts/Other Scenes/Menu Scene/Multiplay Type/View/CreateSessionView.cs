@@ -1,4 +1,5 @@
 using System;
+using Codice.CM.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,10 @@ public class CreateSessionView : MonoBehaviour
     [Header("Ready State UIs")]
     [SerializeField] private Text readyStateText;
     [SerializeField] private Text cancelReadyStateText;
+
+    [Header("All Ready State UIs")]
+    [SerializeField] private Text allReadyText;
+    [SerializeField] private Text notAllReadyText;
     
     private Button elementButton;
     private ECreateSessionViewState currentState;
@@ -26,6 +31,32 @@ public class CreateSessionView : MonoBehaviour
     public void SetState(ECreateSessionViewState state, in MultiplayStageDefinition definition = default)
     {
         currentState = state;
+        
+        if (BootstrapSceneInstance.Instance.NetworkRunner != null &&
+            BootstrapSceneInstance.Instance.NetworkRunner.IsServer)
+        {
+            searchingMatchGroup.gameObject.SetActive(false);
+            startMatchText.gameObject.SetActive(false);
+            cancelReadyStateText.gameObject.SetActive(false);
+            readyStateText.gameObject.SetActive(false);
+            
+            switch (state)
+            {
+                case ECreateSessionViewState.NotAllReady:
+                    allReadyText.gameObject.SetActive(false);
+                    notAllReadyText.gameObject.SetActive(true);
+                    break;
+                
+                case ECreateSessionViewState.AllReady:
+                    allReadyText.gameObject.SetActive(true);
+                    notAllReadyText.gameObject.SetActive(false);
+                    break;
+            }
+            return;
+        }
+        
+        allReadyText.gameObject.SetActive(false);
+        notAllReadyText.gameObject.SetActive(false);
         
         switch (state)
         {
@@ -84,5 +115,7 @@ public enum ECreateSessionViewState
     MatchMaking,
     Ready,
     UnReady,
+    AllReady,
+    NotAllReady,
     Count
 }

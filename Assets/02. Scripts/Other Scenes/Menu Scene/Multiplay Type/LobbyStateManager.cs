@@ -18,9 +18,12 @@ public class LobbyStateManager : NetworkBehaviour
         int index = BootstrapSceneInstance.Instance.NetworkRunner.LocalPlayer.PlayerId - 1;
         LobbyPlayerRef lobbyPlayerRef = new LobbyPlayerRef();
         TheBackendUserInfoGetter infoGetter = new TheBackendUserInfoGetter();
+        bool initIsReady = HasStateAuthority ? true : false;
         
         lobbyPlayerRef.nickName = infoGetter.GetUserNickName();
-        lobbyPlayerRef.isReady = false;
+        lobbyPlayerRef.isReady = initIsReady;
+        lobbyPlayerRef.isPlayerValid = true;
+        lobbyPlayerRef.isHost = HasStateAuthority;
         RPC_UpdateLobbyPlayerView(lobbyPlayerRef, index);
     }
 
@@ -40,5 +43,7 @@ public class LobbyStateManager : NetworkBehaviour
 public struct LobbyPlayerRef : INetworkStruct
 {
     public NetworkString<_16> nickName;
+    public bool isPlayerValid;
     public bool isReady;
+    public bool isHost;
 }
