@@ -11,7 +11,7 @@ public enum ELoadingSceneType
 {
     SelectModeLoading,
     StageModeLoading,
-    MultiplayModeLoading,
+    MultiplayLobbyLoading,
     Count
 }
 

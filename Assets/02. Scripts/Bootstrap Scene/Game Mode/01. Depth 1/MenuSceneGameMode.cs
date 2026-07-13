@@ -48,6 +48,6 @@ public class MenuSceneGameMode : GameModeBase
             BootstrapSceneInstance.Instance
             .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
 
-        loadingSceneManager.ActivateLoadingCanvas(ELoadingSceneType.MultiplayModeLoading).Forget();
+        loadingSceneManager.ActivateLoadingCanvas(ELoadingSceneType.MultiplayLobbyLoading).Forget();
     }
 }

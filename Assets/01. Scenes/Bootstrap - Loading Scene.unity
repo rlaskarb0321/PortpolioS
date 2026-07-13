@@ -2034,7 +2034,7 @@ GameObject:
   - component: {fileID: 1957842780}
   - component: {fileID: 1957842779}
   m_Layer: 5
-  m_Name: To Multiplay Mode Loading Canvas
+  m_Name: To Multiplay Lobby Loading Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
