@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Fusion;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -84,21 +85,37 @@ public class MultiplayerScenePresenter : SubManagerBase
 
         int playerIndex = BootstrapSceneInstance.Instance.NetworkRunner.LocalPlayer.PlayerId - 1;
         LobbyPlayerRef lobbyPlayerRef = lobbyStateManager.LobbyPlayer[playerIndex];
-        
-        switch (createSessionView.CurrentState)
+
+        if (lobbyPlayerRef.isHost == false)
         {
-            case ECreateSessionViewState.UnReady:
-                lobbyPlayerRef.isReady = true;
-                createSessionView.SetState(ECreateSessionViewState.Ready);
-                break;
- 
-            case ECreateSessionViewState.Ready:
-                lobbyPlayerRef.isReady = false;
-                createSessionView.SetState(ECreateSessionViewState.UnReady);
-                break;
+            switch (createSessionView.CurrentState)
+            {
+                case ECreateSessionViewState.UnReady:
+                    lobbyPlayerRef.isReady = true;
+                    createSessionView.SetState(ECreateSessionViewState.Ready);
+                    break;
+     
+                case ECreateSessionViewState.Ready:
+                    lobbyPlayerRef.isReady = false;
+                    createSessionView.SetState(ECreateSessionViewState.UnReady);
+                    break;
+            }
+            
+            lobbyStateManager.RPC_UpdateLobbyPlayerView(lobbyPlayerRef, playerIndex);
         }
-        
-        lobbyStateManager.RPC_UpdateLobbyPlayerView(lobbyPlayerRef, playerIndex);
+        else
+        {
+            switch (createSessionView.CurrentState)
+            {
+                case ECreateSessionViewState.AllReady:
+                    Debug.Log($"Enter Game !!");
+                    break;
+                
+                case ECreateSessionViewState.NotAllReady:
+                    Debug.Log($"All Players must be ready");
+                    break;
+            }
+        }
     }
 
     private async UniTask CreateSessionAsync()
@@ -109,6 +126,7 @@ public class MultiplayerScenePresenter : SubManagerBase
         BootstrapSceneInstance.Instance.CreateNetworkRunner();
         isMatched = await matchMakingManager.JoinOrCreateSession(selectedDefinition.sessionName);
 
+        // Failed to Matching
         if (isMatched == false)
         {
             createSessionView.SetState(ECreateSessionViewState.MapSelected, selectedDefinition);
@@ -119,6 +137,7 @@ public class MultiplayerScenePresenter : SubManagerBase
         if (BootstrapSceneInstance.Instance.NetworkRunner.IsServer)
         {
             BootstrapSceneInstance.Instance.NetworkRunner.Spawn(lobbyStateManagerPrefab);
+            createSessionView.SetState(ECreateSessionViewState.NotAllReady);
         }
     }
 
@@ -132,8 +151,32 @@ public class MultiplayerScenePresenter : SubManagerBase
 
     private void OnLobbyStateManagerSpawned(LobbyStateManager inLobbyStateManager)
     {
-        inLobbyStateManager.OnChangedLobbyPlayer += lobbyPlayerViewManager.OnChangedChangedLobbyPlayerView;
         lobbyStateManager = inLobbyStateManager;
+        lobbyStateManager.OnChangedLobbyPlayer += OnChangedLobbyPlayer;
+    }
+
+    private void OnChangedLobbyPlayer(NetworkArray<LobbyPlayerRef> lobbyPlayerRefs)
+    {
+        lobbyPlayerViewManager.Render(lobbyPlayerRefs);
+
+        if (BootstrapSceneInstance.Instance.NetworkRunner != null &&
+            BootstrapSceneInstance.Instance.NetworkRunner.IsServer)
+        {
+            createSessionView.SetState(IsAllPlayerReady(lobbyPlayerRefs)
+                ? ECreateSessionViewState.AllReady
+                : ECreateSessionViewState.NotAllReady);
+        }
+    }
+
+    private bool IsAllPlayerReady(NetworkArray<LobbyPlayerRef> players)
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i].isPlayerValid == false) continue;
+            if (players[i].isReady == false) return false;
+        }
+        
+        return true;
     }
 
     private void OnDestroy()
@@ -147,7 +190,9 @@ public class MultiplayerScenePresenter : SubManagerBase
         }
         
         createSessionView.ElementButton.onClick.RemoveAllListeners();
-        lobbyStateManager.OnChangedLobbyPlayer -= lobbyPlayerViewManager.OnChangedChangedLobbyPlayerView;
+        if (lobbyStateManager != null)
+            lobbyStateManager.OnChangedLobbyPlayer -= OnChangedLobbyPlayer;
+
         LobbyStateManager.OnSpawned -= OnLobbyStateManagerSpawned;
     }
 }
