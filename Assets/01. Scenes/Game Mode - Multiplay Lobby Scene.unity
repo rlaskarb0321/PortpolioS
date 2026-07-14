@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 113922025}
   - component: {fileID: 113922026}
   m_Layer: 0
-  m_Name: Multiplayer Scene Game Mode
+  m_Name: Multiplay Lobby Game Mode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

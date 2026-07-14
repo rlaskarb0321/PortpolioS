@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Fusion;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -27,11 +28,7 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
 
     private Dictionary<ELoadingSceneType, LoadingCanvas> canvases;
     private AsyncOperationHandle<SceneInstance> sceneHandle;
-
-    private void Awake()
-    {
-        canvases = new Dictionary<ELoadingSceneType, LoadingCanvas>();
-    }
+    private SceneRef networkScene;
 
     public void Start()
     {
@@ -49,7 +46,7 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
         ActivateLoadingCanvas(ELoadingSceneType.SelectModeLoading).Forget();
     }
 
-    public async UniTask ActivateLoadingCanvas(ELoadingSceneType targetCanvas)
+    public async UniTask ActivateLoadingCanvas(ELoadingSceneType targetCanvas, bool isMultiplay = false)
     {
         if (targetCanvas == ELoadingSceneType.Count)
         {
@@ -75,9 +72,36 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
         }
 
         // After Scene Load finishes, each Scene instance subscribes to OnCompleteLoad.
+        // if (isMultiplay == false)
+        //     await LoadSceneInBackground(targetCanvas);
+        // else
+        // {
+        //     string address = "Assets/01. Scenes/Game Mode - InGame Multiplay.unity";
+        //     
+        //     await LoadNetworkSceneInBackground(address);
+        // }
+        
         await LoadSceneInBackground(targetCanvas);
         OnCompleteLoad?.Invoke();
     }
+
+    // private async UniTask LoadNetworkSceneInBackground(string address)
+    // {
+    //     var runner = BootstrapSceneInstance.Instance.NetworkRunner;
+    //     
+    //     if (networkScene.IsValid)
+    //         await runner.UnloadScene(networkScene);
+    //     if (sceneHandle.IsValid())
+    //         await Addressables.UnloadSceneAsync(sceneHandle).ToUniTask();
+    //
+    //     networkScene = SceneRef.FromPath(address);
+    //     
+    //     await runner.LoadScene(networkScene, LoadSceneMode.Additive);
+    //     await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
+    //     
+    //     if (OnSceneActivated != null)
+    //         await OnSceneActivated.Invoke();
+    // }
 
     private async UniTask LoadSceneInBackground(ELoadingSceneType sceneType)
     {
@@ -85,6 +109,7 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
             await Addressables.UnloadSceneAsync(sceneHandle).ToUniTask();
 
         sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive);
+        
         await sceneHandle.ToUniTask();
         await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
 
@@ -117,5 +142,10 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
         }
         
         BootstrapSceneInstance.Instance.AllocateToBootstrapInstance(GetInstanceType(), this);
+    }
+    
+    private void Awake()
+    {
+        canvases = new Dictionary<ELoadingSceneType, LoadingCanvas>();
     }
 }

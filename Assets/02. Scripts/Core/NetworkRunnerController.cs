@@ -8,6 +8,8 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 {
     public event Action<NetworkRunner, PlayerRef> PlayerJoined;
     public event Action<NetworkRunner, PlayerRef> PlayerLeft;
+    public event Action<NetworkRunner> SceneLoadStart;
+    public event Action<NetworkRunner> SceneLoadDone;
     
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
@@ -81,9 +83,11 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
+        SceneLoadDone?.Invoke(runner);
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
     {
+        SceneLoadStart?.Invoke(runner);
     }
 }

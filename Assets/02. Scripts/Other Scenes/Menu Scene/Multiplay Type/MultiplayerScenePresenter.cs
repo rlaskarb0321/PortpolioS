@@ -125,11 +125,12 @@ public class MultiplayerScenePresenter : SubManagerBase
         var multiplaySessionContext =
             BootstrapSceneInstance.Instance
             .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
+        var loadingSceneManager =
+            BootstrapSceneInstance.Instance
+            .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
         
         multiplaySessionContext.UpdateSelectedDefinition(selectedDefinition);
-
-        SceneRef sceneRef = SceneRef.FromPath(multiplaySceneAddress);
-        await BootstrapSceneInstance.Instance.NetworkRunner.LoadScene(sceneRef, LoadSceneMode.Additive);
+        await loadingSceneManager.ActivateLoadingCanvas(ELoadingSceneType.InGame_MultiplayLoading, true);
     }
 
     private async UniTask CreateSessionAsync()
