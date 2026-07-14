@@ -239,7 +239,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7946de4bbb0c3e44f886d4ff4f466b1e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BootstrapScene::MultiplayerInGameGameMode
+  m_EditorClassIdentifier: BootstrapScene::MultiplayerInGameMode
   isDontDestroyOnLoad: 0
   gameMode: 3
   subManagers:
