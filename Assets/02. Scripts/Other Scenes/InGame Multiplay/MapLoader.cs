@@ -1,9 +1,14 @@
 using Cysharp.Threading.Tasks;
+using Fusion;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class MapLoader : SubManagerBase
 {
     [SerializeField] private string loadAddressTemplate;
+
+    private AsyncOperationHandle<GameObject> mapLoadHandle;
     
     public override async UniTask DoInit()
     {
@@ -12,8 +17,12 @@ public class MapLoader : SubManagerBase
             GetBootstrapInstance<MultiplaySessionContext>
             (EBootstrapInstance.MultiplaySessionContext).
             GetSelectedDefinition();
-        string loadMapAddress = loadAddressTemplate + selectedDefinition.multiplayMapTypeIndex.ToString();
+        string loadMapAddress = loadAddressTemplate + selectedDefinition.multiplayMapTypeIndex;
+
+        mapLoadHandle = Addressables.LoadAssetAsync<GameObject>(loadMapAddress);
+        await mapLoadHandle.Task;
         
-        await UniTask.CompletedTask;
+        GameObject loadedMap = mapLoadHandle.Result;
+        Instantiate(loadedMap, Vector3.zero, Quaternion.identity, transform);
     }
 }

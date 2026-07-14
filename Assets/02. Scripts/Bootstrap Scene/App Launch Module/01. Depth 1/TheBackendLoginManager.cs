@@ -30,6 +30,7 @@ public class TheBackendLoginManager : AppLaunchModuleBase
         if (project.EndsWith("_clone_1")) return "user3";
         return "user1";
 #endif
+        return "user1";
     }
 
     private void Start()
