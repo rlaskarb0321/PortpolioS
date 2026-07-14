@@ -14,12 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default
   m_GUID: 0271e76b92f546d44831e254e3c77f7c
-  m_SerializeEntries:
-  - m_GUID: 02b37fe59eee5934d9ec7d0a16f2af53
-    m_Address: Assets/01. Scenes/Game Mode - InGame Multiplay.unity
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0362bc36c440eb045936a8a4c2bb81db, type: 2}
   m_SchemaSet:

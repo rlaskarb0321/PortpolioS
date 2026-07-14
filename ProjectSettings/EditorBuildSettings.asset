@@ -11,9 +11,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01. Scenes/Bootstrap - Loading Scene.unity
     guid: 3f0c63f35e896d24985444a2b6bd11df
-  - enabled: 1
+  - enabled: 0
     path: Assets/01. Scenes/Game Mode - Menu Scene.unity
     guid: e2f86b8bf2555414988614e25d690955
+  - enabled: 0
+    path: Assets/01. Scenes/Game Mode - Multiplay Lobby Scene.unity
+    guid: 23ff797f793604242a67787935cd8246
+  - enabled: 0
+    path: Assets/01. Scenes/Game Mode - Stage Mode Scene.unity
+    guid: d6343c37f0c3d3741b1eddb34132c877
+  - enabled: 0
+    path: Assets/01. Scenes/Game Mode - InGame Multiplay.unity
+    guid: 02b37fe59eee5934d9ec7d0a16f2af53
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 60930ffa5c33f03418da3117742774a6, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

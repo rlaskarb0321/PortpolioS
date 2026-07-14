@@ -257,7 +257,6 @@ MonoBehaviour:
   - {fileID: 136916247552871682}
   - {fileID: 3914329587553520137}
   - {fileID: 8217631439966401869}
-  createSessionView: {fileID: 291253069}
 --- !u!1 &211610508
 GameObject:
   m_ObjectHideFlags: 0
@@ -3233,6 +3232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Multiplayer::MultiplayerScenePresenter
   lobbyStateManagerPrefab: {fileID: 1768753687676037372, guid: 567743036d0a2834581d0dd8fe722372, type: 3}
   loadAddress: Data/Definitions/Play Mode/Multi
+  multiplaySceneAddress: Assets/01. Scenes/Game Mode - InGame Multiplay.unity
   elementViews:
   - {fileID: 2573508290403592954}
   - {fileID: 955470915}

@@ -5,14 +5,16 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.SceneManagement;
 
 public class MultiplayerScenePresenter : SubManagerBase
 {
     [Header("LobbyStateManager")]
     [SerializeField] private LobbyStateManager lobbyStateManagerPrefab;
     
-    [Header("Definition Asset Address")]
+    [Header("Asset Address")]
     [SerializeField] private string loadAddress;
+    [SerializeField] private string multiplaySceneAddress;
 
     [Header("Init UIs")]
     [SerializeField] private List<MultiplayStageElementView> elementViews;
@@ -108,16 +110,7 @@ public class MultiplayerScenePresenter : SubManagerBase
             switch (createSessionView.CurrentState)
             {
                 case ECreateSessionViewState.AllReady:
-                    // Debug.Log($"Enter Game !!");
-                    var loadingSceneManager =
-                        BootstrapSceneInstance.Instance
-                        .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
-                    var multiplaySessionContext =
-                        BootstrapSceneInstance.Instance
-                        .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
-
-                    loadingSceneManager.ActivateLoadingCanvas(ELoadingSceneType.InGame_MultiplayLoading).Forget();
-                    multiplaySessionContext.UpdateSelectedDefinition(selectedDefinition);
+                    EnterInGameAsync().Forget();
                     break;
                 
                 case ECreateSessionViewState.NotAllReady:
@@ -125,6 +118,18 @@ public class MultiplayerScenePresenter : SubManagerBase
                     break;
             }
         }
+    }
+
+    private async UniTask EnterInGameAsync()
+    {
+        var multiplaySessionContext =
+            BootstrapSceneInstance.Instance
+            .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
+        
+        multiplaySessionContext.UpdateSelectedDefinition(selectedDefinition);
+
+        SceneRef sceneRef = SceneRef.FromPath(multiplaySceneAddress);
+        await BootstrapSceneInstance.Instance.NetworkRunner.LoadScene(sceneRef, LoadSceneMode.Additive);
     }
 
     private async UniTask CreateSessionAsync()

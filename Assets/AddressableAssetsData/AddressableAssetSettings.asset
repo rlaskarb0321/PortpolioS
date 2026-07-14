@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 0271e76b92f546d44831e254e3c77f7c
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: 0a98c4d1333660fd2122878f73a5849c
   m_DisableWriteTypeTree: 0
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
@@ -145,6 +145,7 @@ MonoBehaviour:
     - Stage/Forest
     - Play Mode/Multi
     - Play Mode/Story
+    - FusionScenes
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1be0dc1b0e64ffd42a4a0947dad0bc47, type: 2}
