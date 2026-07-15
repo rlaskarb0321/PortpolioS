@@ -31,7 +31,9 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
 
     private Dictionary<ELoadingSceneType, LoadingCanvas> canvases;
     private Dictionary<ESceneLoadStrategy, SceneLoadStrategyBase> sceneLoadStrategyDict;
-    private AsyncOperationHandle<SceneInstance> sceneHandle;
+    // private AsyncOperationHandle<SceneInstance> sceneHandle;
+    
+    public float LoadDelay { get => loadDelay; }
 
     public void Start()
     {
@@ -65,35 +67,29 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
             Debug.LogError($"TargetCanvas Type is {targetCanvas}");
             return;
         }
+
+        SceneLoadStrategyBase strategy = sceneLoadStrategyDict[loadStrategy];
         
         OnSceneActivated = null;
         OnCompleteLoad = null;
-        foreach (ELoadingSceneType loadingSceneType in canvases.Keys)
-        {
-            if (targetCanvas == loadingSceneType)
-            {
-                canvases[loadingSceneType].ToggleCanvas(true);
-                
-                // subscribes a callback to turn off the enabled Canvas upon successful scene load.
-                OnCompleteLoad += () => canvases[loadingSceneType].ToggleCanvas(false);
-            }
-            else
-            {
-                canvases[loadingSceneType].ToggleCanvas(false);
-            }
-        }
-
-        // After Scene Load finishes, each Scene instance subscribes to OnCompleteLoad.
-        // if (isMultiplay == false)
-        //     await LoadSceneInBackground(targetCanvas);
-        // else
+        strategy.ActivateLoadingCanvas(targetCanvas);
+        await strategy.LoadSceneInBackground(targetCanvas);
+        // foreach (ELoadingSceneType loadingSceneType in canvases.Keys)
         // {
-        //     string address = "Assets/01. Scenes/Game Mode - InGame Multiplay.unity";
-        //     
-        //     await LoadNetworkSceneInBackground(address);
+        //     if (targetCanvas == loadingSceneType)
+        //     {
+        //         canvases[loadingSceneType].ToggleCanvas(true);
+        //         
+        //         // subscribes a callback to turn off the enabled Canvas upon successful scene load.
+        //         OnCompleteLoad += () => canvases[loadingSceneType].ToggleCanvas(false);
+        //     }
+        //     else
+        //     {
+        //         canvases[loadingSceneType].ToggleCanvas(false);
+        //     }
         // }
-        
-        await LoadSceneInBackground(targetCanvas);
+        //
+        // await LoadSceneInBackground(targetCanvas);
         OnCompleteLoad?.Invoke();
     }
 
@@ -115,30 +111,30 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
     //         await OnSceneActivated.Invoke();
     // }
 
-    private async UniTask LoadSceneInBackground(ELoadingSceneType sceneType)
-    {
-        if (sceneHandle.IsValid())
-            await Addressables.UnloadSceneAsync(sceneHandle).ToUniTask();
-
-        sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive);
-        
-        await sceneHandle.ToUniTask();
-        await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
-
-        if (OnSceneActivated != null)
-            await OnSceneActivated.Invoke();
-    }
+    // private async UniTask LoadSceneInBackground(ELoadingSceneType sceneType)
+    // {
+    //     if (sceneHandle.IsValid())
+    //         await Addressables.UnloadSceneAsync(sceneHandle).ToUniTask();
+    //
+    //     sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive);
+    //     
+    //     await sceneHandle.ToUniTask();
+    //     await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
+    //
+    //     if (OnSceneActivated != null)
+    //         await OnSceneActivated.Invoke();
+    // }
     
-    private void OnDestroy()
-    {
-        if (sceneHandle.IsValid() == false)
-            return;
-
-        if (sceneHandle.IsDone)
-            Addressables.UnloadSceneAsync(sceneHandle);
-        else
-            Addressables.Release(sceneHandle);
-    }
+    // private void OnDestroy()
+    // {
+    //     if (sceneHandle.IsValid() == false)
+    //         return;
+    //
+    //     if (sceneHandle.IsDone)
+    //         Addressables.UnloadSceneAsync(sceneHandle);
+    //     else
+    //         Addressables.Release(sceneHandle);
+    // }
     
     public EBootstrapInstance GetInstanceType()
     {
