@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class MultiplaySessionContext : NetworkBehaviour, IBootstrapInstance
 {
-    [Networked]
-    private MultiplayStageDefinition SelectedDefinition { get; set; }
-
+    [Networked] private MultiplayStageDefinition SelectedDefinition { get; set; }
+    [Networked] public ELoadingSceneType LoadingSceneType { get; set; }
+    [Networked] public SceneRef SceneRef { get; set; }
+    
     public override void Spawned()
     {
         base.Spawned();

@@ -7,13 +7,16 @@ using UnityEngine.SceneManagement;
 
 public class NetworkSceneLoader : SceneLoadStrategyBase
 {
-    private ELoadingSceneType targetScene;
-    private SceneRef targetNetworkScene;
+    private SceneRef currentNetworkScene;
     private bool isDone;
 
     public override async UniTask LoadSceneInBackground(ELoadingSceneType sceneType)
     {
-        await BootstrapSceneInstance.Instance.NetworkRunner.LoadScene(targetNetworkScene, LoadSceneMode.Additive);
+        var multiplaySessionContext = 
+            BootstrapSceneInstance.Instance
+            .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
+        
+        await BootstrapSceneInstance.Instance.NetworkRunner.LoadScene(multiplaySessionContext.SceneRef, LoadSceneMode.Additive);
         await UniTask.WaitUntil(() => isDone);
 
         Debug.Log($"[NetworkSceneLoader] Load NetworkScene");
@@ -24,13 +27,17 @@ public class NetworkSceneLoader : SceneLoadStrategyBase
     {
         base.Init(sceneType);
 
-        targetScene = sceneType;
-        targetNetworkScene = SceneRef.FromPath(LoadingSceneManager.Canvases[sceneType].sceneAddress);
+        // targetNetworkScene = SceneRef.FromPath(LoadingSceneManager.Canvases[sceneType].sceneAddress);
     }
 
     private void OnSceneLoadStart(NetworkRunner runner)
     {
-        ActivateLoadingCanvas(targetScene);
+        MultiplaySessionContext sessionContext = BootstrapSceneInstance.Instance
+            .GetBootstrapInstance<MultiplaySessionContext>
+            (EBootstrapInstance.MultiplaySessionContext);
+        
+        ActivateLoadingCanvas(sessionContext.LoadingSceneType);
+        currentNetworkScene = sessionContext.SceneRef;
     }
 
     private async void OnSceneLoadDone(NetworkRunner runner)
@@ -43,13 +50,14 @@ public class NetworkSceneLoader : SceneLoadStrategyBase
         if (LoadingSceneManager.CurrentNetworkScene.IsValid)
             await runner.UnloadScene(LoadingSceneManager.CurrentNetworkScene);
 
-        LoadingSceneManager.CurrentNetworkScene = targetNetworkScene;
+        LoadingSceneManager.CurrentNetworkScene = currentNetworkScene;
         if (LoadingSceneManager.OnSceneActivated != null)
             await LoadingSceneManager.OnSceneActivated.Invoke();
 
         await UniTask.Delay(TimeSpan.FromSeconds(LoadingSceneManager.LoadDelay));
         isDone = true;
-        Debug.Log($"[NetworkSceneLoader] Set isDone True");
+        LoadingSceneManager.OnCompleteLoad?.Invoke();
+        Debug.Log($"[NetworkSceneLoader] LoadingSceneManager.OnCompleteLoad?.Invoke()");
     }
 
     public override void SubscribeNetworkSceneEvent()

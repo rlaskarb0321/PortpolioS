@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -41,4 +42,14 @@ public abstract class GameModeBase : MonoBehaviour
     /// 02. When all tasks are finished after activating the scene
     /// </summary>
     public abstract void OnSceneCompletelyLoaded();
+
+    private void OnDestroy()
+    {
+        var loadingSceneManager =
+            BootstrapSceneInstance.Instance
+            .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
+        
+        loadingSceneManager.OnSceneActivated -= OnSceneActivated;
+        loadingSceneManager.OnCompleteLoad -= OnSceneCompletelyLoaded;
+    }
 }

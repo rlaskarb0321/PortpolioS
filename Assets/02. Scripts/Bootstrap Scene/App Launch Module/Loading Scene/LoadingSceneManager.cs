@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Fusion;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using UnityEngine.SceneManagement;
 
 public enum ELoadingSceneType
 {
@@ -77,62 +75,26 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
         }
 
         SceneLoadStrategyBase strategy = sceneLoadStrategyDict[loadStrategy];
+
+        if (loadStrategy == ESceneLoadStrategy.NetworkSceneLoad)
+        {
+            var multiplaySessionContext = 
+                BootstrapSceneInstance.Instance
+                .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
+            
+            multiplaySessionContext.LoadingSceneType = targetCanvas;
+            multiplaySessionContext.SceneRef = SceneRef.FromPath(canvases[targetCanvas].sceneAddress);
+            // currentNetworkScene = multiplaySessionContext.SceneRef;
+        }
         
         OnSceneActivated = null;
         OnCompleteLoad = null;
         strategy.Init(targetCanvas);
-        // foreach (ELoadingSceneType loadingSceneType in canvases.Keys)
-        // {
-        //     if (targetCanvas == loadingSceneType)
-        //     {
-        //         canvases[loadingSceneType].ToggleCanvas(true);
-        //         
-        //         // subscribes a callback to turn off the enabled Canvas upon successful scene load.
-        //         OnCompleteLoad += () => canvases[loadingSceneType].ToggleCanvas(false);
-        //     }
-        //     else
-        //     {
-        //         canvases[loadingSceneType].ToggleCanvas(false);
-        //     }
-        // }
         
-        // await LoadSceneInBackground(targetCanvas);
         await strategy.LoadSceneInBackground(targetCanvas);
-        OnCompleteLoad?.Invoke();
+        // OnCompleteLoad?.Invoke();
     }
 
-    // private async UniTask LoadNetworkSceneInBackground(string address)
-    // {
-    //     var runner = BootstrapSceneInstance.Instance.NetworkRunner;
-    //     
-    //     if (networkScene.IsValid)
-    //         await runner.UnloadScene(networkScene);
-    //     if (sceneHandle.IsValid())
-    //         await Addressables.UnloadSceneAsync(sceneHandle).ToUniTask();
-    //
-    //     networkScene = SceneRef.FromPath(address);
-    //     
-    //     await runner.LoadScene(networkScene, LoadSceneMode.Additive);
-    //     await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
-    //     
-    //     if (OnSceneActivated != null)
-    //         await OnSceneActivated.Invoke();
-    // }
-
-    // private async UniTask LoadSceneInBackground(ELoadingSceneType sceneType)
-    // {
-    //     if (sceneHandle.IsValid())
-    //         await Addressables.UnloadSceneAsync(sceneHandle).ToUniTask();
-    //
-    //     sceneHandle = Addressables.LoadSceneAsync(scenes[(int)sceneType], LoadSceneMode.Additive);
-    //     
-    //     await sceneHandle.ToUniTask();
-    //     await UniTask.Delay(TimeSpan.FromSeconds(loadDelay));
-    //
-    //     if (OnSceneActivated != null)
-    //         await OnSceneActivated.Invoke();
-    // }
-    
     public EBootstrapInstance GetInstanceType()
     {
         return EBootstrapInstance.LoadingSceneManager;
