@@ -2663,32 +2663,43 @@ MonoBehaviour:
   sceneLoadStrategies:
   - {fileID: 1888522254}
   - {fileID: 1945398294}
-  loadingCanvases:
-  - {fileID: 960005819}
-  - {fileID: 189586132}
-  - {fileID: 1957842779}
-  - {fileID: 1826230744}
-  scenes:
-  - m_AssetGUID: e2f86b8bf2555414988614e25d690955
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: d6343c37f0c3d3741b1eddb34132c877
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 23ff797f793604242a67787935cd8246
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 02b37fe59eee5934d9ec7d0a16f2af53
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
+  sceneCatalogEntries:
+  - typeKey: 0
+    loadingCanvas: {fileID: 960005819}
+    addressableScene:
+      m_AssetGUID: e2f86b8bf2555414988614e25d690955
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    sceneAddress: 
+  - typeKey: 1
+    loadingCanvas: {fileID: 189586132}
+    addressableScene:
+      m_AssetGUID: d6343c37f0c3d3741b1eddb34132c877
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    sceneAddress: 
+  - typeKey: 2
+    loadingCanvas: {fileID: 1957842779}
+    addressableScene:
+      m_AssetGUID: 23ff797f793604242a67787935cd8246
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    sceneAddress: 
+  - typeKey: 3
+    loadingCanvas: {fileID: 1826230744}
+    addressableScene:
+      m_AssetGUID: 02b37fe59eee5934d9ec7d0a16f2af53
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    sceneAddress: Assets/01. Scenes/Game Mode - InGame Multiplay.unity
   loadDelay: 3
 --- !u!1 &1888522252
 GameObject:
@@ -2735,40 +2746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BootstrapScene::LocalSceneLoader
   loadStrategy: 0
-  loadingCanvases:
-  - {fileID: 960005819}
-  - {fileID: 189586132}
-  - {fileID: 1957842779}
-  - {fileID: 1826230744}
-  sceneCatalogEntries:
-  - addressableScene:
-      m_AssetGUID: e2f86b8bf2555414988614e25d690955
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-    sceneAddress: 
-  - addressableScene:
-      m_AssetGUID: d6343c37f0c3d3741b1eddb34132c877
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-    sceneAddress: 
-  - addressableScene:
-      m_AssetGUID: 23ff797f793604242a67787935cd8246
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-    sceneAddress: 
-  - addressableScene:
-      m_AssetGUID: 02b37fe59eee5934d9ec7d0a16f2af53
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-    sceneAddress: 
+  loadingSceneManager: {fileID: 1848436311}
 --- !u!1 &1945398292
 GameObject:
   m_ObjectHideFlags: 0
@@ -2814,12 +2792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BootstrapScene::NetworkSceneLoader
   loadStrategy: 1
-  loadingCanvases:
-  - {fileID: 960005819}
-  - {fileID: 189586132}
-  - {fileID: 1957842779}
-  - {fileID: 1826230744}
-  sceneCatalogEntries: []
+  loadingSceneManager: {fileID: 1848436311}
 --- !u!1 &1955849958
 GameObject:
   m_ObjectHideFlags: 0

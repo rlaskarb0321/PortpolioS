@@ -6,6 +6,8 @@ using UnityEngine.Serialization;
 
 public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
 {
+    public event Action OnRunnerCreated;
+    
     [Header("Network Runner")]
     [FormerlySerializedAs("networkRunner")]
     [SerializeField] private NetworkRunner networkRunnerPrefab;
@@ -31,6 +33,7 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
 
         networkRunnerInstance = Instantiate(networkRunnerPrefab);
         runnerController = networkRunnerInstance.GetComponent<NetworkRunnerController>();
+        OnRunnerCreated?.Invoke();
         return networkRunnerInstance;
     }
 

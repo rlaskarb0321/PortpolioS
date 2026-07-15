@@ -8,6 +8,7 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 {
     public event Action<NetworkRunner, PlayerRef> PlayerJoined;
     public event Action<NetworkRunner, PlayerRef> PlayerLeft;
+    // public event Action<int> SceneLoadStart;
     public event Action<NetworkRunner> SceneLoadStart;
     public event Action<NetworkRunner> SceneLoadDone;
     

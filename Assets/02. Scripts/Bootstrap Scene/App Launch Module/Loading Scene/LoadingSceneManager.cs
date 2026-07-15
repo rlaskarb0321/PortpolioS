@@ -25,26 +25,33 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
     [Header("Scene Load Strategies")]
     [SerializeField] private List<SceneLoadStrategyBase> sceneLoadStrategies;
     
-    [SerializeField] private LoadingCanvas[] loadingCanvases;
-    [SerializeField] private AssetReference[] scenes;
+    [Header("Loading Canvases & Scene Refers")]
+    [SerializeField] private SceneCatalogEntry[] sceneCatalogEntries;
     [SerializeField] private float loadDelay = 0.8f;
 
-    private Dictionary<ELoadingSceneType, LoadingCanvas> canvases;
+    private Dictionary<ELoadingSceneType, SceneCatalogEntry> canvases;
     private Dictionary<ESceneLoadStrategy, SceneLoadStrategyBase> sceneLoadStrategyDict;
-    // private AsyncOperationHandle<SceneInstance> sceneHandle;
-    
+    private AsyncOperationHandle<SceneInstance> currentSceneHandle; 
+    private SceneRef currentNetworkScene;                           
+
     public float LoadDelay { get => loadDelay; }
+    public IReadOnlyDictionary<ELoadingSceneType, SceneCatalogEntry> Canvases { get => canvases; }
+    public AsyncOperationHandle<SceneInstance> CurrentSceneHandle { get => currentSceneHandle; set => currentSceneHandle = value; }
+    public SceneRef CurrentNetworkScene { get => currentNetworkScene; set => currentNetworkScene = value; }
 
     public void Start()
     {
-        for (int i = 0; i < loadingCanvases.Length; i++)
-        {
-            canvases.Add(loadingCanvases[i].LoadingCanvasType, loadingCanvases[i]);
-        }
-
         for (int i = 0; i < sceneLoadStrategies.Count; i++)
         {
             sceneLoadStrategyDict.Add(sceneLoadStrategies[i].LoadStrategy, sceneLoadStrategies[i]);
+        }
+        
+        if (canvases.Count == 0)
+        {
+            for (int i = 0; i < sceneCatalogEntries.Length; i++)
+            {
+                canvases.Add(sceneCatalogEntries[i].loadingCanvas.LoadingCanvasType, sceneCatalogEntries[i]);
+            }
         }
 
         AllocateToBootstrapInstance();
@@ -54,6 +61,7 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
     public void Execute()
     {
         ActivateLoadingCanvas(ELoadingSceneType.SelectModeLoading).Forget();
+        BootstrapSceneInstance.Instance.OnRunnerCreated += OnNetworkRunnerCreated;
     }
 
     public async UniTask ActivateLoadingCanvas
@@ -72,8 +80,7 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
         
         OnSceneActivated = null;
         OnCompleteLoad = null;
-        strategy.ActivateLoadingCanvas(targetCanvas);
-        await strategy.LoadSceneInBackground(targetCanvas);
+        strategy.Init(targetCanvas);
         // foreach (ELoadingSceneType loadingSceneType in canvases.Keys)
         // {
         //     if (targetCanvas == loadingSceneType)
@@ -88,8 +95,9 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
         //         canvases[loadingSceneType].ToggleCanvas(false);
         //     }
         // }
-        //
+        
         // await LoadSceneInBackground(targetCanvas);
+        await strategy.LoadSceneInBackground(targetCanvas);
         OnCompleteLoad?.Invoke();
     }
 
@@ -125,17 +133,6 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
     //         await OnSceneActivated.Invoke();
     // }
     
-    // private void OnDestroy()
-    // {
-    //     if (sceneHandle.IsValid() == false)
-    //         return;
-    //
-    //     if (sceneHandle.IsDone)
-    //         Addressables.UnloadSceneAsync(sceneHandle);
-    //     else
-    //         Addressables.Release(sceneHandle);
-    // }
-    
     public EBootstrapInstance GetInstanceType()
     {
         return EBootstrapInstance.LoadingSceneManager;
@@ -154,7 +151,21 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
     
     private void Awake()
     {
-        canvases = new Dictionary<ELoadingSceneType, LoadingCanvas>();
+        canvases = new Dictionary<ELoadingSceneType, SceneCatalogEntry>();
         sceneLoadStrategyDict = new Dictionary<ESceneLoadStrategy, SceneLoadStrategyBase>();
+    }
+
+    private void OnNetworkRunnerCreated()
+    {
+        foreach (var strategy in sceneLoadStrategyDict.Values)
+        {
+            strategy.SubscribeNetworkSceneEvent();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (currentSceneHandle.IsValid())
+            currentSceneHandle.Release();
     }
 }
