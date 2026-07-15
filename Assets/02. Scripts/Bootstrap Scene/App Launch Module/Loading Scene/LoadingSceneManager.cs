@@ -21,20 +21,28 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
 {
     public Func<UniTask> OnSceneActivated;
     public Action OnCompleteLoad;
+
+    [Header("Scene Load Strategies")]
+    [SerializeField] private List<SceneLoadStrategyBase> sceneLoadStrategies;
     
     [SerializeField] private LoadingCanvas[] loadingCanvases;
     [SerializeField] private AssetReference[] scenes;
     [SerializeField] private float loadDelay = 0.8f;
 
     private Dictionary<ELoadingSceneType, LoadingCanvas> canvases;
+    private Dictionary<ESceneLoadStrategy, SceneLoadStrategyBase> sceneLoadStrategyDict;
     private AsyncOperationHandle<SceneInstance> sceneHandle;
-    private SceneRef networkScene;
 
     public void Start()
     {
         for (int i = 0; i < loadingCanvases.Length; i++)
         {
             canvases.Add(loadingCanvases[i].LoadingCanvasType, loadingCanvases[i]);
+        }
+
+        for (int i = 0; i < sceneLoadStrategies.Count; i++)
+        {
+            sceneLoadStrategyDict.Add(sceneLoadStrategies[i].LoadStrategy, sceneLoadStrategies[i]);
         }
 
         AllocateToBootstrapInstance();
@@ -46,7 +54,11 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
         ActivateLoadingCanvas(ELoadingSceneType.SelectModeLoading).Forget();
     }
 
-    public async UniTask ActivateLoadingCanvas(ELoadingSceneType targetCanvas, bool isMultiplay = false)
+    public async UniTask ActivateLoadingCanvas
+        (
+            ELoadingSceneType targetCanvas,
+            ESceneLoadStrategy loadStrategy = ESceneLoadStrategy.LocalSceneLoad
+        )
     {
         if (targetCanvas == ELoadingSceneType.Count)
         {
@@ -147,5 +159,6 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
     private void Awake()
     {
         canvases = new Dictionary<ELoadingSceneType, LoadingCanvas>();
+        sceneLoadStrategyDict = new Dictionary<ESceneLoadStrategy, SceneLoadStrategyBase>();
     }
 }
