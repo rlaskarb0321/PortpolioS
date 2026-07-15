@@ -14,7 +14,7 @@ public class MultiplayStageElementView : MonoBehaviour
 
     public void InitElementView(in MultiplayStageDefinition inDefinition)
     {
-        sessionName.text = inDefinition.sessionName;
+        sessionName.text = inDefinition.sessionName.ToString();
     }
     
     private void Awake()

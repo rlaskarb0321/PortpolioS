@@ -106,10 +106,10 @@ public interface IBootstrapInstance
 {
     public EBootstrapInstance GetInstanceType();
     public void AllocateToBootstrapInstance();
-    public void Start();
 }
 
 public interface IBootstrapLifecycle : IBootstrapInstance
 {
     public void Execute();
+    public void Start();
 }

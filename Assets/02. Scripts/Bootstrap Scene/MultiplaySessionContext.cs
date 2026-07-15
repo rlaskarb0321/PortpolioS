@@ -1,24 +1,27 @@
+using Fusion;
 using UnityEngine;
 
-public class MultiplaySessionContext : MonoBehaviour, IBootstrapInstance
+public class MultiplaySessionContext : NetworkBehaviour, IBootstrapInstance
 {
-    private MultiplayStageDefinition selectedDefinition;
-    
+    [Networked]
+    private MultiplayStageDefinition SelectedDefinition { get; set; }
+
+    public override void Spawned()
+    {
+        base.Spawned();
+        AllocateToBootstrapInstance();
+    }
+
     public void UpdateSelectedDefinition(MultiplayStageDefinition inSelectedDefinition)
     {
-        selectedDefinition = inSelectedDefinition;
+        SelectedDefinition = inSelectedDefinition;
     }
 
     public MultiplayStageDefinition GetSelectedDefinition()
     {
-        return selectedDefinition;
+        return SelectedDefinition;
     }
     
-    public void Start()
-    {
-        AllocateToBootstrapInstance();
-    }
-
     public EBootstrapInstance GetInstanceType()
     {
         return EBootstrapInstance.MultiplaySessionContext;

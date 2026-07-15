@@ -9,8 +9,9 @@ using UnityEngine.SceneManagement;
 
 public class MultiplayerScenePresenter : SubManagerBase
 {
-    [Header("LobbyStateManager")]
+    [Header("Networked Prefabs")]
     [SerializeField] private LobbyStateManager lobbyStateManagerPrefab;
+    [SerializeField] private MultiplaySessionContext multiplaySessionContextPrefab;
     
     [Header("Asset Address")]
     [SerializeField] private string loadAddress;
@@ -122,9 +123,7 @@ public class MultiplayerScenePresenter : SubManagerBase
 
     private async UniTask EnterInGameAsync()
     {
-        var multiplaySessionContext =
-            BootstrapSceneInstance.Instance
-            .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
+        var multiplaySessionContext = BootstrapSceneInstance.Instance.NetworkRunner.Spawn(multiplaySessionContextPrefab);
         var loadingSceneManager =
             BootstrapSceneInstance.Instance
             .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
@@ -140,7 +139,7 @@ public class MultiplayerScenePresenter : SubManagerBase
         
         createSessionView.SetState(ECreateSessionViewState.MatchMaking);
         BootstrapSceneInstance.Instance.CreateNetworkRunner();
-        isMatched = await matchMakingManager.JoinOrCreateSession(selectedDefinition.sessionName);
+        isMatched = await matchMakingManager.JoinOrCreateSession(selectedDefinition.sessionName.ToString());
 
         // Failed to Matching
         if (isMatched == false)

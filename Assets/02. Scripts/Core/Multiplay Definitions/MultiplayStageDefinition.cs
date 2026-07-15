@@ -1,9 +1,11 @@
-﻿[System.Serializable]
-public struct MultiplayStageDefinition
+﻿using Fusion;
+
+[System.Serializable]
+public struct MultiplayStageDefinition : INetworkStruct
 {
-    public string sessionName;
+    public NetworkString<_16> sessionName;
     public int stageIndex;
     public EMultiplayType multiplayMapType;
     public int multiplayMapTypeIndex;
-    public string bgmAddress;
+    public NetworkString<_16> bgmAddress;
 }

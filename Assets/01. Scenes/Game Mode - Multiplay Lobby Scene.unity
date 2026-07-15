@@ -163,7 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a02b369de482747a865d039aa8f9e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BootstrapScene::MultiplayerSceneGameMode
-  isDontDestroyOnLoad: 0
   gameMode: 2
   subManagers:
   - {fileID: 1955369820}
@@ -3231,6 +3230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Multiplayer::MultiplayerScenePresenter
   lobbyStateManagerPrefab: {fileID: 1768753687676037372, guid: 567743036d0a2834581d0dd8fe722372, type: 3}
+  multiplaySessionContextPrefab: {fileID: 4799595504477065647, guid: 5d9b2c9c57d253341ba796a2aeece58c, type: 3}
   loadAddress: Data/Definitions/Play Mode/Multi
   multiplaySceneAddress: Assets/01. Scenes/Game Mode - InGame Multiplay.unity
   elementViews:

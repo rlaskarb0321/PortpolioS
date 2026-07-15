@@ -46,7 +46,7 @@ public class CreateSessionView : MonoBehaviour
             case ECreateSessionViewState.MapSelected:
                 searchingMatchGroup.gameObject.SetActive(false);
                 selectedStageNameText.gameObject.SetActive(true);
-                selectedStageNameText.text = definition.sessionName;
+                selectedStageNameText.text = definition.sessionName.ToString();
                 startMatchText.gameObject.SetActive(true);
                 cancelReadyStateText.gameObject.SetActive(false);
                 readyStateText.gameObject.SetActive(false);
