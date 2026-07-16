@@ -9,21 +9,24 @@ using UnityEngine;
 )]
 public class PlayableCharacterInfoSO : ChartDataSOBase
 {
-    [SerializeField] private List<PlayableCharacterInfo> playableCharacterInfos;
     [SerializeField] private List<string> columIds;
+
+    private Dictionary<int, PlayableCharacterInfo> infos;
     
     protected override void DeserializeFlattenRows(LitJson.JsonData flattenRows)
     {
-        playableCharacterInfos.Clear();
-
+        if (infos == null) infos = new Dictionary<int, PlayableCharacterInfo>();
+        
+        infos.Clear();
         foreach (LitJson.JsonData gameData in flattenRows)
         {
             int colIndex = 0;
             PlayableCharacterInfo info = new PlayableCharacterInfo();
-            
+
+            info.index = int.Parse(gameData[colIndex++].ToString());
             info.name = gameData[columIds[colIndex++]].ToString();
             info.starCount = int.Parse(gameData[colIndex++].ToString());
-            playableCharacterInfos.Add(info);
+            infos.Add(info.index, info);
         }
     }
 }
