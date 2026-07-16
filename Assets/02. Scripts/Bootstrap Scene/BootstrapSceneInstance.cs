@@ -51,10 +51,7 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
     public T GetBootstrapInstance<T>(EBootstrapInstance type) where T : class, IBootstrapInstance
     {
         if (bootstrapInstances.TryGetValue(type, out var instance) == false)
-        {
-            Debug.LogError($"[BootstrapSceneInstance] {type} is not registered");
             return null;
-        }
 
         if (instance is not T casted)
         {
