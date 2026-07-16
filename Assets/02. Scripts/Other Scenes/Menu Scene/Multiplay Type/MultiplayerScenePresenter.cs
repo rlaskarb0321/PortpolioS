@@ -123,9 +123,7 @@ public class MultiplayerScenePresenter : SubManagerBase
 
     private async UniTask EnterInGameAsync()
     {
-        var multiplayContext =
-            BootstrapSceneInstance.Instance
-            .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
+        var multiplayContext = BootstrapSceneInstance.Instance.RunnerController.SessionContext;
         var loadingSceneManager =
             BootstrapSceneInstance.Instance
             .GetBootstrapInstance<LoadingSceneManager>(EBootstrapInstance.LoadingSceneManager);
@@ -135,6 +133,8 @@ public class MultiplayerScenePresenter : SubManagerBase
             
         multiplayContext = BootstrapSceneInstance.Instance.NetworkRunner.Spawn(multiplaySessionContextPrefab);
         multiplayContext.UpdateSelectedDefinition(selectedDefinition);
+        multiplayContext.LoadingSceneType = ELoadingSceneType.InGame_MultiplayLoading;
+        multiplayContext.SceneRef = loadingSceneManager.GetNetworkSceneRef(ELoadingSceneType.InGame_MultiplayLoading);
         await loadingSceneManager.ActivateLoadingCanvas
             (ELoadingSceneType.InGame_MultiplayLoading, ESceneLoadStrategy.NetworkSceneLoad);
     }

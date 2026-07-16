@@ -5,9 +5,9 @@
         "BootstrapScene",
         "UniTask",
         "Core",
-        "MultiplayEnumData",
         "Unity.Addressables",
-        "Unity.ResourceManager"
+        "Unity.ResourceManager",
+        "Multiplay Definitions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

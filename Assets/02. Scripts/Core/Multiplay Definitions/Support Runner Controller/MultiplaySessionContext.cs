@@ -1,16 +1,16 @@
 using Fusion;
 using UnityEngine;
 
-public class MultiplaySessionContext : NetworkBehaviour, IBootstrapInstance
+public class MultiplaySessionContext : NetworkBehaviour
 {
     [Networked] private MultiplayStageDefinition SelectedDefinition { get; set; }
     [Networked] public ELoadingSceneType LoadingSceneType { get; set; }
     [Networked] public SceneRef SceneRef { get; set; }
-    
+
     public override void Spawned()
     {
         base.Spawned();
-        AllocateToBootstrapInstance();
+        RegisterToRunnerController();
     }
 
     public void UpdateSelectedDefinition(MultiplayStageDefinition inSelectedDefinition)
@@ -22,20 +22,16 @@ public class MultiplaySessionContext : NetworkBehaviour, IBootstrapInstance
     {
         return SelectedDefinition;
     }
-    
-    public EBootstrapInstance GetInstanceType()
-    {
-        return EBootstrapInstance.MultiplaySessionContext;
-    }
 
-    public void AllocateToBootstrapInstance()
+    private void RegisterToRunnerController()
     {
-        if (BootstrapSceneInstance.Instance == null)
+        var runnerController = Runner.GetComponent<NetworkRunnerController>();
+        if (runnerController == null)
         {
-            Debug.LogError("[AppLaunchManager] Failed to assign to BootstrapSceneInstance");
+            Debug.LogError("[MultiplaySessionContext] NetworkRunnerController not found on the runner");
             return;
         }
-        
-        BootstrapSceneInstance.Instance.AllocateToBootstrapInstance(GetInstanceType(), this);
+
+        runnerController.SessionContext = this;
     }
 }

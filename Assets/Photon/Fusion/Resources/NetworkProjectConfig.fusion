@@ -69,7 +69,8 @@
         "Fusion.Addons.Physics",
         "Fusion.Addons.FSM",
         "Multiplayer",
-        "BootstrapScene"
+        "BootstrapScene",
+        "Multiplay Definitions"
     ],
     "UseSerializableDictionary": true,
     "NullChecksForNetworkedProperties": true,

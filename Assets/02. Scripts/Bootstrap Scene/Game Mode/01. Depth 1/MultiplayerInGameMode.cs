@@ -3,6 +3,15 @@ using UnityEngine;
 
 public class MultiplayerInGameMode : GameModeBase
 {
+    private Transform[] playerRespawnPoints;
+
+    public Transform[] PlayerRespawnPoints => playerRespawnPoints;
+
+    public void SetRespawnPoints(Transform[] inPlayerRespawnPoints)
+    {
+        playerRespawnPoints = inPlayerRespawnPoints;
+    }
+    
     public override async UniTask OnSceneActivated()
     {
         Debug.Log($"[MultiplayerInGameMode] OnSceneActivated");

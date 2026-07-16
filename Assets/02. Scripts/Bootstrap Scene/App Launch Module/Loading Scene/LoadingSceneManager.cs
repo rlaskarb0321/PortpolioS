@@ -6,15 +6,6 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-public enum ELoadingSceneType
-{
-    SelectModeLoading,
-    StageModeLoading,
-    MultiplayLobbyLoading,
-    InGame_MultiplayLoading,
-    Count
-}
-
 public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
 {
     public Func<UniTask> OnSceneActivated;
@@ -76,18 +67,13 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
 
         SceneLoadStrategyBase strategy = sceneLoadStrategyDict[loadStrategy];
 
-        if (loadStrategy == ESceneLoadStrategy.NetworkSceneLoad)
-        {
-            var multiplaySessionContext = 
-                BootstrapSceneInstance.Instance
-                .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
-            
-            multiplaySessionContext.LoadingSceneType = targetCanvas;
-            multiplaySessionContext.SceneRef = SceneRef.FromPath(canvases[targetCanvas].sceneAddress);
-        }
-        
         strategy.Init(targetCanvas);
         await strategy.LoadSceneInBackground(targetCanvas);
+    }
+
+    public SceneRef GetNetworkSceneRef(ELoadingSceneType targetCanvas)
+    {
+        return SceneRef.FromPath(canvases[targetCanvas].sceneAddress);
     }
 
     public void ClearSceneEvent()

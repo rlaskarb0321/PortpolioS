@@ -11,20 +11,15 @@ public class NetworkSceneLoader : SceneLoadStrategyBase
 
     public override async UniTask LoadSceneInBackground(ELoadingSceneType sceneType)
     {
-        var multiplaySessionContext = 
-            BootstrapSceneInstance.Instance
-            .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
-        
+        var multiplaySessionContext = BootstrapSceneInstance.Instance.RunnerController.SessionContext;
+
         await BootstrapSceneInstance.Instance.NetworkRunner.LoadScene(multiplaySessionContext.SceneRef, LoadSceneMode.Additive);
-        Debug.Log($"[NetworkSceneLoader] Load NetworkScene");
     }
 
     private void OnSceneLoadStart(NetworkRunner runner)
     {
-        MultiplaySessionContext sessionContext = BootstrapSceneInstance.Instance
-            .GetBootstrapInstance<MultiplaySessionContext>
-            (EBootstrapInstance.MultiplaySessionContext);
-        
+        MultiplaySessionContext sessionContext = BootstrapSceneInstance.Instance.RunnerController.SessionContext;
+
         ActivateLoadingCanvas(sessionContext.LoadingSceneType);
         currentNetworkScene = sessionContext.SceneRef;
     }
@@ -46,8 +41,6 @@ public class NetworkSceneLoader : SceneLoadStrategyBase
         await UniTask.Delay(TimeSpan.FromSeconds(LoadingSceneManager.LoadDelay));
         LoadingSceneManager.OnCompleteLoad?.Invoke();
         ClearLoadingSceneEvent();
-        
-        Debug.Log($"[NetworkSceneLoader] LoadingSceneManager.OnCompleteLoad?.Invoke()");
     }
 
     public override void SubscribeNetworkSceneEvent()

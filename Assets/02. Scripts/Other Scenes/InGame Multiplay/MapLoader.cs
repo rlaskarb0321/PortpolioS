@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Fusion;
 using UnityEngine;
@@ -8,21 +9,28 @@ public class MapLoader : SubManagerBase
 {
     [SerializeField] private string loadAddressTemplate;
 
-    private AsyncOperationHandle<GameObject> mapLoadHandle;
+    private AsyncOperationHandle<GameMap> mapLoadHandle;
     
     public override async UniTask DoInit()
     {
+        Debug.Log($"[MapLoader] MultiplaySessionContext is Null: " +
+                  $"{BootstrapSceneInstance.Instance.RunnerController.SessionContext == null}");
+        
         var selectedDefinition =
-            BootstrapSceneInstance.Instance.
-            GetBootstrapInstance<MultiplaySessionContext>
-            (EBootstrapInstance.MultiplaySessionContext).
-            GetSelectedDefinition();
+            BootstrapSceneInstance.Instance.RunnerController.SessionContext
+            .GetSelectedDefinition();
         string loadMapAddress = loadAddressTemplate + selectedDefinition.multiplayMapTypeIndex;
 
-        mapLoadHandle = Addressables.LoadAssetAsync<GameObject>(loadMapAddress);
+        mapLoadHandle = Addressables.LoadAssetAsync<GameMap>(loadMapAddress);
         await mapLoadHandle.Task;
         
-        GameObject loadedMap = mapLoadHandle.Result;
+        GameMap loadedMap = mapLoadHandle.Result;
         Instantiate(loadedMap, Vector3.zero, Quaternion.identity, transform);
+    }
+
+    private void OnDestroy()
+    {
+        if (mapLoadHandle.IsValid())
+            mapLoadHandle.Release();
     }
 }

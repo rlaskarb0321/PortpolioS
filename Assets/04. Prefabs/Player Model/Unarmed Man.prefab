@@ -525,6 +525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7455569369156954240}
   - component: {fileID: 1815012946051118795}
+  - component: {fileID: 2576831092997780184}
   m_Layer: 0
   m_Name: RPG-Character-Mesh
   m_TagString: Untagged
@@ -659,6 +660,29 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.05709879, y: 0.000004708767, z: 1.2833365}
     m_Extent: {x: 0.25237483, y: 1.4083419, z: 1.3028048}
   m_DirtyAABB: 0
+--- !u!136 &2576831092997780184
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2296859627935889429}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.43
+  m_Height: 2.79
+  m_Direction: 2
+  m_Center: {x: 0.00025488684, y: -0.055365905, z: 1.2833369}
 --- !u!1 &2550941653199180328
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,6 +1074,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8317373266222696941}
   - component: {fileID: 5420245229594255741}
+  - component: {fileID: 4820480784157870818}
   m_Layer: 0
   m_Name: Unarmed Man
   m_TagString: Untagged
@@ -1096,6 +1121,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4820480784157870818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927872288204639981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkObject
+  SortKey: 3834970031
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours: []
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &5208787965786218557
 GameObject:
   m_ObjectHideFlags: 0
