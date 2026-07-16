@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Local_Definitions
   m_GUID: b9f0a0c9c1ae84c4a95d9b947176febe
   m_SerializeEntries:
+  - m_GUID: 05ae4a57c8006604780be896d072ef81
+    m_Address: Data/Definitions/Playable Info
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Data/Definitions
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c5deb56f4ef1a6447aa8c0b6f0b637af
     m_Address: Data/Definitions/Play Mode/Multi
     m_ReadOnly: 0
