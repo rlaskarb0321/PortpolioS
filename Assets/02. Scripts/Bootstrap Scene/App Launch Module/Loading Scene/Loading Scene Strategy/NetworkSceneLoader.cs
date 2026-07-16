@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 public class NetworkSceneLoader : SceneLoadStrategyBase
 {
     private SceneRef currentNetworkScene;
-    private bool isDone;
 
     public override async UniTask LoadSceneInBackground(ELoadingSceneType sceneType)
     {
@@ -17,17 +16,7 @@ public class NetworkSceneLoader : SceneLoadStrategyBase
             .GetBootstrapInstance<MultiplaySessionContext>(EBootstrapInstance.MultiplaySessionContext);
         
         await BootstrapSceneInstance.Instance.NetworkRunner.LoadScene(multiplaySessionContext.SceneRef, LoadSceneMode.Additive);
-        await UniTask.WaitUntil(() => isDone);
-
         Debug.Log($"[NetworkSceneLoader] Load NetworkScene");
-        isDone = false;
-    }
-
-    public override void Init(ELoadingSceneType sceneType)
-    {
-        base.Init(sceneType);
-
-        // targetNetworkScene = SceneRef.FromPath(LoadingSceneManager.Canvases[sceneType].sceneAddress);
     }
 
     private void OnSceneLoadStart(NetworkRunner runner)
@@ -55,8 +44,9 @@ public class NetworkSceneLoader : SceneLoadStrategyBase
             await LoadingSceneManager.OnSceneActivated.Invoke();
 
         await UniTask.Delay(TimeSpan.FromSeconds(LoadingSceneManager.LoadDelay));
-        isDone = true;
         LoadingSceneManager.OnCompleteLoad?.Invoke();
+        ClearLoadingSceneEvent();
+        
         Debug.Log($"[NetworkSceneLoader] LoadingSceneManager.OnCompleteLoad?.Invoke()");
     }
 

@@ -84,15 +84,16 @@ public class LoadingSceneManager : MonoBehaviour, IBootstrapLifecycle
             
             multiplaySessionContext.LoadingSceneType = targetCanvas;
             multiplaySessionContext.SceneRef = SceneRef.FromPath(canvases[targetCanvas].sceneAddress);
-            // currentNetworkScene = multiplaySessionContext.SceneRef;
         }
         
+        strategy.Init(targetCanvas);
+        await strategy.LoadSceneInBackground(targetCanvas);
+    }
+
+    public void ClearSceneEvent()
+    {
         OnSceneActivated = null;
         OnCompleteLoad = null;
-        strategy.Init(targetCanvas);
-        
-        await strategy.LoadSceneInBackground(targetCanvas);
-        // OnCompleteLoad?.Invoke();
     }
 
     public EBootstrapInstance GetInstanceType()

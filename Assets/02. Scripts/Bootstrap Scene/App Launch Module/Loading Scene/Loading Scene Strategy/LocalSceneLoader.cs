@@ -26,5 +26,7 @@ public class LocalSceneLoader : SceneLoadStrategyBase
             await LoadingSceneManager.OnSceneActivated.Invoke();
 
         LoadingSceneManager.OnCompleteLoad?.Invoke();
+
+        ClearLoadingSceneEvent();
     }
 }

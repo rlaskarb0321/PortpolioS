@@ -41,6 +41,10 @@ public abstract class SceneLoadStrategyBase : MonoBehaviour
         }
     }
 
+    protected void ClearLoadingSceneEvent()
+    {
+        loadingSceneManager.ClearSceneEvent();
+    }
 }
 
 public enum ESceneLoadStrategy
