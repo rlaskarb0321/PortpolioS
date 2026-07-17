@@ -195,6 +195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e00381f7ea40e594f9dfc834ba379665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: InGameMultiplay::PlayerCharacterSpawner
+  playerAddressTemplate: Playable/{0}/Skin {1}
+  playableCharacterInfoDataAddress: Data/Definitions/Playable Info
 --- !u!1 &1141128086
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +290,6 @@ MonoBehaviour:
   subManagers:
   - {fileID: 1141128088}
   - {fileID: 653570447}
-  playerRespawnPoints: []
 --- !u!1 &1895087992
 GameObject:
   m_ObjectHideFlags: 0

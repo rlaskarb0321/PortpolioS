@@ -13,6 +13,8 @@ public class PlayableCharacterInfoSO : ChartDataSOBase
 
     private Dictionary<int, PlayableCharacterInfo> infos;
     
+    public IReadOnlyDictionary<int, PlayableCharacterInfo> Infos => infos;
+    
     protected override void DeserializeFlattenRows(LitJson.JsonData flattenRows)
     {
         if (infos == null) infos = new Dictionary<int, PlayableCharacterInfo>();

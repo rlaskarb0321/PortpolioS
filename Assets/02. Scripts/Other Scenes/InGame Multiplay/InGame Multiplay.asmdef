@@ -7,7 +7,8 @@
         "Core",
         "Unity.Addressables",
         "Unity.ResourceManager",
-        "Multiplay Definitions"
+        "Multiplay Definitions",
+        "BackendChart"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
