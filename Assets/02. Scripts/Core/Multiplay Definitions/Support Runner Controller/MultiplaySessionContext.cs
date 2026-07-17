@@ -3,13 +3,17 @@ using UnityEngine;
 
 public class MultiplaySessionContext : NetworkBehaviour
 {
+    // ──── Multiplay Setting ────
     [Networked] private MultiplayStageDefinition SelectedDefinition { get; set; }
     [Networked] public ELoadingSceneType LoadingSceneType { get; set; }
     [Networked] public SceneRef SceneRef { get; set; }
+    
+    // ─── User Setting ───
 
     public override void Spawned()
     {
         base.Spawned();
+        
         RegisterToRunnerController();
     }
 
