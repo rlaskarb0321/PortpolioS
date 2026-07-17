@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using LitJson;
 
-public class TheBackendUserDataLoader : AppLaunchModuleBase
+public class TheBackendUserDataLoader : AppLaunchModuleBase, IBootstrapInstance
 {
     private UserData userData;
     private string gameDataRowInDate;
@@ -45,16 +45,26 @@ public class TheBackendUserDataLoader : AppLaunchModuleBase
             gameDataRowInDate = gameDataJson[0]["inDate"].ToString();
             userData.mainCharacterIndex = int.Parse(gameDataJson[0]["mainCharacterIndex"].ToJson());
             userData.mainCharacterSkinIndex = int.Parse(gameDataJson[0]["mainCharacterSkinIndex"].ToJson());
+            AllocateToBootstrapInstance();
             uniTask.TrySetResult(bro);
         });
 
         await uniTask.Task;
     }
-}
 
-[System.Serializable]
-public class UserData
-{
-    public int mainCharacterIndex;
-    public int mainCharacterSkinIndex;
+    public EBootstrapInstance GetInstanceType()
+    {
+        return EBootstrapInstance.TheBackendUserDataLoader;
+    }
+
+    public void AllocateToBootstrapInstance()
+    {
+        if (BootstrapSceneInstance.Instance == null)
+        {
+            Debug.LogError("[LoadingSceneManager] Failed to assign to BootstrapSceneInstance");
+            return;
+        }
+        
+        BootstrapSceneInstance.Instance.AllocateToBootstrapInstance(GetInstanceType(), this);
+    }
 }

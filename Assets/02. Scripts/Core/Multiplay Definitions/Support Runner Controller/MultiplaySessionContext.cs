@@ -9,6 +9,7 @@ public class MultiplaySessionContext : NetworkBehaviour
     [Networked] public SceneRef SceneRef { get; set; }
     
     // ─── User Setting ───
+    [Networked] public UserData UserData { get; set; }
 
     public override void Spawned()
     {

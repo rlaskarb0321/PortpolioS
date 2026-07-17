@@ -95,6 +95,7 @@ public enum EBootstrapInstance
 {
     AppLaunchManager,
     LoadingSceneManager,
+    TheBackendUserDataLoader,
     Count
 }
 
