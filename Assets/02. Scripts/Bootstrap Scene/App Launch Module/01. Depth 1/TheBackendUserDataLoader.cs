@@ -28,24 +28,29 @@ public class TheBackendUserDataLoader : AppLaunchModuleBase, IBootstrapInstance
             JsonData gameDataJson = bro.FlattenRows(); 
             
             userData = new UserData();
+            AllocateToBootstrapInstance();
             if(gameDataJson.Count <= 0)
             {
                 // uniTask.TrySetException(new System.Exception("[TheBackendUserDataLoader] There is no USER_DATA"));
+                TheBackendUserInfoGetter infoGetter = new TheBackendUserInfoGetter();
                 Param param = new Param();
-                
+                string nickName = infoGetter.GetUserNickName();
+
+                param.Add("nickName", nickName);
                 param.Add("mainCharacterIndex", userData.mainCharacterIndex);
                 param.Add("mainCharacterSkinIndex", userData.mainCharacterSkinIndex);
-                
-                var insertBRO = Backend.GameData.Insert("USER_DATA", param);
-                
-                gameDataRowInDate = bro.GetInDate();
+
+                userData.nickName = nickName;
+                Backend.GameData.Insert("USER_DATA", param);
+                uniTask.TrySetResult(bro);
                 return;
             }
             
             gameDataRowInDate = gameDataJson[0]["inDate"].ToString();
+            userData.nickName = gameDataJson[0]["nickName"].ToString();
             userData.mainCharacterIndex = int.Parse(gameDataJson[0]["mainCharacterIndex"].ToJson());
             userData.mainCharacterSkinIndex = int.Parse(gameDataJson[0]["mainCharacterSkinIndex"].ToJson());
-            AllocateToBootstrapInstance();
+            
             uniTask.TrySetResult(bro);
         });
 

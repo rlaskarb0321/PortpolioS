@@ -9,23 +9,30 @@ public class MultiplaySessionContext : NetworkBehaviour
     [Networked] public SceneRef SceneRef { get; set; }
     
     // ─── User Setting ───
-    [Networked] public UserData UserData { get; set; }
+    [Networked, Capacity(3)] public NetworkArray<UserData> UserData => default;
 
     public override void Spawned()
     {
         base.Spawned();
-        
+
+        SetUserDatas();
         RegisterToRunnerController();
     }
 
-    public void UpdateSelectedDefinition(MultiplayStageDefinition inSelectedDefinition)
+    private void SetUserDatas()
     {
-        SelectedDefinition = inSelectedDefinition;
+        var userDataLoader = BootstrapSceneInstance.Instance
+            .GetBootstrapInstance<TheBackendUserDataLoader>(EBootstrapInstance.TheBackendUserDataLoader);
+        int index = Runner.LocalPlayer.PlayerId - 1;
+        UserData userData = userDataLoader.UserData;
+
+        RPC_UpdateUserDatas(userData, index);
     }
 
-    public MultiplayStageDefinition GetSelectedDefinition()
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void RPC_UpdateUserDatas(UserData userData, int index)
     {
-        return SelectedDefinition;
+        UserData.Set(index, userData);
     }
 
     private void RegisterToRunnerController()
@@ -38,5 +45,15 @@ public class MultiplaySessionContext : NetworkBehaviour
         }
 
         runnerController.SessionContext = this;
+    }
+
+    public void UpdateSelectedDefinition(MultiplayStageDefinition inSelectedDefinition)
+    {
+        SelectedDefinition = inSelectedDefinition;
+    }
+
+    public MultiplayStageDefinition GetSelectedDefinition()
+    {
+        return SelectedDefinition;
     }
 }
