@@ -9,7 +9,7 @@ public class MapLoader : SubManagerBase
 {
     [SerializeField] private string loadAddressTemplate;
 
-    private AsyncOperationHandle<GameMap> mapLoadHandle;
+    private AsyncOperationHandle<GameObject> mapLoadHandle;
     
     public override async UniTask DoInit()
     {
@@ -21,10 +21,10 @@ public class MapLoader : SubManagerBase
             .GetSelectedDefinition();
         string loadMapAddress = loadAddressTemplate + selectedDefinition.multiplayMapTypeIndex;
 
-        mapLoadHandle = Addressables.LoadAssetAsync<GameMap>(loadMapAddress);
+        mapLoadHandle = Addressables.LoadAssetAsync<GameObject>(loadMapAddress);
         await mapLoadHandle.Task;
         
-        GameMap loadedMap = mapLoadHandle.Result;
+        GameMap loadedMap = mapLoadHandle.Result.GetComponent<GameMap>();
         Instantiate(loadedMap, Vector3.zero, Quaternion.identity, transform);
     }
 

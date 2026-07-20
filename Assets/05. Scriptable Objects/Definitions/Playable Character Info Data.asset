@@ -17,3 +17,10 @@ MonoBehaviour:
   - Index
   - Name
   - StarCount
+  infos:
+  - index: 0
+    name:
+      _length: 11
+      _data:
+        Data: 550000006e00000061000000720000006d0000006500000064000000200000004d000000610000006e0000000000000000000000000000000000000000000000
+    starCount: 1

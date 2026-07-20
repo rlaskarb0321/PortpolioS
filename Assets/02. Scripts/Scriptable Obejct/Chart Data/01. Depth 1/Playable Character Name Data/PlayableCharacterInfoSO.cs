@@ -10,15 +10,14 @@ using UnityEngine;
 public class PlayableCharacterInfoSO : ChartDataSOBase
 {
     [SerializeField] private List<string> columIds;
+    [SerializeField] private List<PlayableCharacterInfo> infos;
 
-    private Dictionary<int, PlayableCharacterInfo> infos;
-    
-    public IReadOnlyDictionary<int, PlayableCharacterInfo> Infos => infos;
-    
+    public List<PlayableCharacterInfo> Infos => infos;
+
     protected override void DeserializeFlattenRows(LitJson.JsonData flattenRows)
     {
-        if (infos == null) infos = new Dictionary<int, PlayableCharacterInfo>();
-        
+        if (infos == null) infos = new List<PlayableCharacterInfo>();
+
         infos.Clear();
         foreach (LitJson.JsonData gameData in flattenRows)
         {
@@ -28,7 +27,9 @@ public class PlayableCharacterInfoSO : ChartDataSOBase
             info.index = int.Parse(gameData[colIndex++].ToString());
             info.name = gameData[columIds[colIndex++]].ToString();
             info.starCount = int.Parse(gameData[colIndex++].ToString());
-            infos.Add(info.index, info);
+            infos.Add(info);
         }
+        
+        Debug.Log($"[PlayableCharacterInfoSO] Playable Character Info Count: {infos.Count}");
     }
 }

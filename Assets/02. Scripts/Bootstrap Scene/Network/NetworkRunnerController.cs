@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 {
-    public event Action<NetworkRunner, PlayerRef> PlayerJoined;
-    public event Action<NetworkRunner, PlayerRef> PlayerLeft;
     // public event Action<int> SceneLoadStart;
     public event Action<NetworkRunner> SceneLoadStart;
     public event Action<NetworkRunner> SceneLoadDone;
@@ -28,12 +26,10 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        PlayerJoined?.Invoke(runner, player);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        PlayerLeft?.Invoke(runner, player);
     }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)

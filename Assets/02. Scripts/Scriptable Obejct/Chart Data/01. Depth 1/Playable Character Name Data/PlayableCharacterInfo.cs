@@ -1,5 +1,6 @@
 ﻿using Fusion;
 
+[System.Serializable]
 public struct PlayableCharacterInfo : INetworkStruct
 {
     public int index;
