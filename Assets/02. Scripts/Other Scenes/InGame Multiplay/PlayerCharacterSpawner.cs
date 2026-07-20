@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
+using Fusion;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -14,29 +16,39 @@ public class PlayerCharacterSpawner : SubManagerBase
     
     public override async UniTask DoInit()
     {
+        if (BootstrapSceneInstance.Instance.IsServer() == false)
+            return;
+        
         // Character Info Data SO
         infoHandle = Addressables.LoadAssetAsync<PlayableCharacterInfoSO>(playableCharacterInfoDataAddress);
         await infoHandle.Task;
 
-        // Which model needs to be loaded
-        string loadCharacterAddress = GetPlayerAddress(infoHandle.Result);
-        
-        playerModelHandle = Addressables.LoadAssetAsync<GameObject>(loadCharacterAddress);
-        await playerModelHandle.Task;
-        
-        // Runner.Spawn 은 Server Only 임. Client 는 생성권한이 없음
-        // var gameMode = BootstrapSceneInstance.Instance.GetCurrentGameMode<MultiplayerInGameMode>();
-        // var firstSpawnPoints = gameMode.PlayerRespawnPoints;
-        // int localIndex = BootstrapSceneInstance.Instance.NetworkRunner.LocalPlayer.PlayerId - 1;
-        // Transform spawnPos = firstSpawnPoints[localIndex];
-        //
-        // BootstrapSceneInstance.Instance.NetworkRunner.Spawn(playerModelHandle.Result, spawnPos.position);
+        var gameMode = BootstrapSceneInstance.Instance.GetCurrentGameMode<MultiplayerInGameMode>();
+        var firstSpawnPoints = gameMode.PlayerRespawnPoints;
+        for (int i = 0; i < BootstrapSceneInstance.Instance.NetworkRunner.ActivePlayers.Count(); i++)
+        {
+            // Which model needs to be loaded
+            string loadCharacterAddress = GetPlayerAddress(infoHandle.Result, i);
+            
+            playerModelHandle = Addressables.LoadAssetAsync<GameObject>(loadCharacterAddress);
+            await playerModelHandle.Task;
+            
+            Transform spawnPos = firstSpawnPoints[i];
+
+            await BootstrapSceneInstance.Instance.NetworkRunner.SpawnAsync
+            (
+                playerModelHandle.Result,
+                spawnPos.position,
+                inputAuthority: BootstrapSceneInstance.Instance.NetworkRunner.ActivePlayers.ElementAt(i)
+            );
+        }
+
+        await UniTask.Yield();
     }
 
-    private string GetPlayerAddress(PlayableCharacterInfoSO infoSO)
+    private string GetPlayerAddress(PlayableCharacterInfoSO infoSO, int localIndex)
     {
         var userDatas = BootstrapSceneInstance.Instance.RunnerController.SessionContext.UserData;
-        int localIndex = BootstrapSceneInstance.Instance.NetworkRunner.LocalPlayer.PlayerId - 1;
         var userData = userDatas[localIndex];
         string result = string.Format
         (

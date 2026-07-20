@@ -22,6 +22,11 @@ public class BootstrapSceneInstance : MonoSingleton<BootstrapSceneInstance>
     public NetworkRunner NetworkRunner { get => networkRunnerInstance; }
     public NetworkRunnerController RunnerController { get => runnerController; }
 
+    public bool IsServer()
+    {
+        return networkRunnerInstance.IsServer;
+    }
+    
     /// <summary>
     /// NetworkRunner is designed for single use, so a new instance must be created at the start of each session.
     /// If an existing instance remains, it is destroyed, and the prefab is instantiated anew.
