@@ -9,6 +9,7 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
     // public event Action<int> SceneLoadStart;
     public event Action<NetworkRunner> SceneLoadStart;
     public event Action<NetworkRunner> SceneLoadDone;
+    public event Action<NetworkRunner, NetworkInput> InputPolling;
 
     public MultiplaySessionContext SessionContext { get; set; }
     
@@ -58,6 +59,7 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        InputPolling?.Invoke(runner, input);
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)

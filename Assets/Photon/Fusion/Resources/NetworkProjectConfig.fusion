@@ -70,7 +70,9 @@
         "Fusion.Addons.FSM",
         "Multiplayer",
         "BootstrapScene",
-        "Multiplay Definitions"
+        "Multiplay Definitions",
+        "PlayerController",
+        "Fusion.AddOns.KCC"
     ],
     "UseSerializableDictionary": true,
     "NullChecksForNetworkedProperties": true,

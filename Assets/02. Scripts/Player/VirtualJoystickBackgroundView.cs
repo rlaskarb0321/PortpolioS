@@ -51,10 +51,5 @@ public class VirtualJoystickBackgroundView : MonoBehaviour, IDragHandler, IPoint
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-
-        OnInteractJoystick += arg0 =>
-        {
-            Debug.Log($"Dir: {arg0} (Length: {arg0.magnitude:F2})");
-        };
     }
 }
