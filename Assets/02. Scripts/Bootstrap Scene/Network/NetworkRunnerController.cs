@@ -10,10 +10,6 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
     public event Action<NetworkRunner> SceneLoadStart;
     public event Action<NetworkRunner> SceneLoadDone;
 
-    /// <summary>
-    /// The session-scoped networked context, owned by the runner it was spawned on.
-    /// Its lifetime matches this runner, so re-spawning simply overwrites the reference.
-    /// </summary>
     public MultiplaySessionContext SessionContext { get; set; }
     
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)

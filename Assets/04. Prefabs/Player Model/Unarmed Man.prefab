@@ -525,7 +525,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7455569369156954240}
   - component: {fileID: 1815012946051118795}
-  - component: {fileID: 2576831092997780184}
   m_Layer: 0
   m_Name: RPG-Character-Mesh
   m_TagString: Untagged
@@ -660,29 +659,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.05709879, y: 0.000004708767, z: 1.2833365}
     m_Extent: {x: 0.25237483, y: 1.4083419, z: 1.3028048}
   m_DirtyAABB: 0
---- !u!136 &2576831092997780184
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2296859627935889429}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.43
-  m_Height: 2.79
-  m_Direction: 2
-  m_Center: {x: 0.00025488684, y: -0.055365905, z: 1.2833369}
 --- !u!1 &2550941653199180328
 GameObject:
   m_ObjectHideFlags: 0
@@ -1074,10 +1050,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8317373266222696941}
   - component: {fileID: 5420245229594255741}
-  - component: {fileID: 4820480784157870818}
   - component: {fileID: 158656871960126716}
-  - component: {fileID: 7051584853766527902}
-  - component: {fileID: 6225182502500086642}
+  - component: {fileID: 4820480784157870818}
+  - component: {fileID: 4933831228916235053}
+  - component: {fileID: -7334040180816316606}
   m_Layer: 0
   m_Name: Unarmed Man
   m_TagString: Untagged
@@ -1124,25 +1100,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4820480784157870818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4927872288204639981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkObject
-  SortKey: 3834970031
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 7051584853766527902}
-  ForceRemoteRenderTimeframe: 0
 --- !u!54 &158656871960126716
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1170,7 +1127,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7051584853766527902
+--- !u!114 &4820480784157870818
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1179,21 +1136,56 @@ MonoBehaviour:
   m_GameObject: {fileID: 4927872288204639981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Fusion.Addons.Physics::Fusion.Addons.Physics.NetworkRigidbody3D
+  m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkObject
+  SortKey: 3834970031
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 4933831228916235053}
+  - {fileID: -7334040180816316606}
+  ForceRemoteRenderTimeframe: 0
+--- !u!114 &4933831228916235053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927872288204639981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f7684f04e649e84fb2ee1bc9fbee42d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Fusion.Addons.KCC.KCC
   _stateAuthorityChangeErrorCorrectionDelta: 0
-  SyncScale: 0
-  SyncParent: 1
-  _interpolationTarget: {fileID: 0}
-  UsePreciseRotation: 0
-  UseRenderSleepThresholds: 1
-  RenderThresholds:
-    UseEnergy: 1
-    Position: 0.01
-    Rotation: 0.01
-    Scale: 0.01
---- !u!114 &6225182502500086642
+  _settings:
+    Shape: 1
+    IsTrigger: 0
+    Radius: 0.35
+    Height: 2.61
+    Extent: 0.035
+    ColliderLayer: 0
+    CollisionLayerMask:
+      serializedVersion: 2
+      m_Bits: 1
+    Features: -1
+    InputAuthorityBehavior: 0
+    StateAuthorityBehavior: 0
+    ProxyInterpolationMode: 0
+    ForcePredictedLookRotation: 0
+    AllowClientTeleports: 0
+    Processors: []
+    MaxPenetrationSteps: 8
+    CCDRadiusMultiplier: 0.75
+    AntiJitterDistance: {x: 0.025, y: 0.01}
+    PredictionCorrectionSpeed: 30
+    NetworkedInteractions: 8
+    CompressNetworkPosition: 0
+    ForceSingleOverlapQuery: 0
+    SuppressConvexMeshColliders: 0
+--- !u!114 &-7334040180816316606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1202,14 +1194,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4927872288204639981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b5a1ff9dee264bfd829a39e6542dcbd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c4e9ebd916a2124f97a7cf7410be010, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Fusion.Addons.Physics::Fusion.Addons.Physics.RunnerSimulatePhysics3D
-  _physicsAuthority: 2
-  _physicsTiming: 3
-  ClientPhysicsSimulation: 0
-  DeltaTimeMultiplier: 1
-  SetUnityFixedTimestep: 0
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!1 &5208787965786218557
 GameObject:
   m_ObjectHideFlags: 0
