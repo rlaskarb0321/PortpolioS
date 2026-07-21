@@ -163,7 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da7ac53776ec5db40a1ef5fa40a471ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VirtualJoystick
-  joystickBackgroundView: {fileID: 0}
+  joystickBackgroundView: {fileID: 622209170}
+  joystickHandleView: {fileID: 1794359028}
 --- !u!1 &495563637
 GameObject:
   m_ObjectHideFlags: 0

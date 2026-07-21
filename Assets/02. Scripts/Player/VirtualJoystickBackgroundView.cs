@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class VirtualJoystickBackgroundView : MonoBehaviour, IDragHandler, IPointerDownHandler
+public class VirtualJoystickBackgroundView : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     public UnityAction<Vector2> OnInteractJoystick;
 
     private RectTransform rectTransform;
-    
+
     public void OnDrag(PointerEventData eventData)
     {
         OnInteractJoystick?.Invoke(CalculateLocalPosition(eventData));
@@ -17,6 +17,11 @@ public class VirtualJoystickBackgroundView : MonoBehaviour, IDragHandler, IPoint
     public void OnPointerDown(PointerEventData eventData)
     {
         OnInteractJoystick?.Invoke(CalculateLocalPosition(eventData));
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        OnInteractJoystick?.Invoke(Vector2.zero);
     }
 
     private Vector2 CalculateLocalPosition(PointerEventData eventData)
@@ -49,7 +54,7 @@ public class VirtualJoystickBackgroundView : MonoBehaviour, IDragHandler, IPoint
 
         OnInteractJoystick += arg0 =>
         {
-            Debug.Log($"방향 벡터: {arg0} (길이: {arg0.magnitude:F2})");
+            Debug.Log($"Dir: {arg0} (Length: {arg0.magnitude:F2})");
         };
     }
 }
