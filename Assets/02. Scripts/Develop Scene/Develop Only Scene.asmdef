@@ -1,3 +1,17 @@
 {
-	"name": "DevelopOnlyScene"
+    "name": "DevelopOnlyScene",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6926d453a1ed29545a4fd320ee44b8d0",
+        "GUID:1baf1ffff1031e948b3b228ab3453251"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
