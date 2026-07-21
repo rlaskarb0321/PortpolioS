@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AppLaunchManager : MonoBehaviour, IBootstrapLifecycle
 {
@@ -33,6 +34,15 @@ public class AppLaunchManager : MonoBehaviour, IBootstrapLifecycle
 
     public void Execute()
     {
+        #if UNITY_EDITOR
+        // 테스트 모드가 켜져 있으면 로그인·앱 초기화를 건너뛰고 Develop 씬으로 바로 진입한다.
+        if (GoTestSceneSettings.Enabled)
+        {
+            SceneManager.LoadScene("Develop Scene", LoadSceneMode.Additive);
+            return;
+        }
+        #endif
+
         LoadLoadingScene();
         ExecuteLaunchAsync(this.GetCancellationTokenOnDestroy()).Forget();
     }

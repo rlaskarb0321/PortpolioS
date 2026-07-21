@@ -1,0 +1,18 @@
+{
+    "name": "BootstrapScene.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d1f7c6c86a6e4b94aab0da9b39c90f47"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

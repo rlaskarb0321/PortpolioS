@@ -2,7 +2,7 @@ using System;
 using Fusion;
 using UnityEngine;
 
-public class DevelopSceneManager : MonoSingleton<DevelopSceneManager>
+public class DevelopSceneManager : MonoBehaviour
 {
     // [SerializeField] private NetworkRunner networkRunnerPrefab;
     //

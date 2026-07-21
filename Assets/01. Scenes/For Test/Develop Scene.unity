@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 150660904}
   - component: {fileID: 150660908}
   - component: {fileID: 150660907}
+  - component: {fileID: 150660909}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -291,6 +292,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &150660909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150660903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 191007946e3665e4f8b9cf3ca54cb5a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Core::SceneSingletonGuard
 --- !u!1 &159287393
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +349,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: DevelopOnlyScene::DevelopSceneManager
   isDontDestroyOnLoad: 0
-  networkRunnerPrefab: {fileID: 1723246796772642806, guid: fc412d55ff8039f448e3398ea2ed7215, type: 3}
 --- !u!1 &334482897
 GameObject:
   m_ObjectHideFlags: 0
