@@ -10,13 +10,13 @@ public class VirtualJoystickPresenter : MonoBehaviour
         joystickBackgroundView.OnInteractJoystick += HandleInteractJoystick;
     }
 
-    private void OnDisable()
-    {
-        joystickBackgroundView.OnInteractJoystick -= HandleInteractJoystick;
-    }
-
     private void HandleInteractJoystick(Vector2 normalizedDir)
     {
         joystickHandleView.SetPosition(normalizedDir);
+    }
+
+    private void OnDisable()
+    {
+        joystickBackgroundView.OnInteractJoystick -= HandleInteractJoystick;
     }
 }

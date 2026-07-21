@@ -1,16 +1,10 @@
 {
-    "name": "InGameMultiplay",
+    "name": "MultiplayInGameMode",
     "rootNamespace": "",
     "references": [
-        "BootstrapScene",
-        "UniTask",
-        "Core",
-        "Unity.Addressables",
-        "Unity.ResourceManager",
-        "Multiplay Definitions",
-        "BackendChart",
-        "Player",
-        "MultiplayInGameMode"
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:d1f7c6c86a6e4b94aab0da9b39c90f47",
+        "GUID:8169477c318944447a7ee6ef8f416aef"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
