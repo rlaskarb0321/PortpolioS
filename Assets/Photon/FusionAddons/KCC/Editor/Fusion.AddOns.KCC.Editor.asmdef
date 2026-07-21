@@ -1,11 +1,14 @@
 {
-    "name": "PlayerController",
+    "name": "Fusion.AddOns.KCC.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:92c0bb35dbd94db4c9aae46d29605953",
-        "GUID:1baf1ffff1031e948b3b228ab3453251"
+        "GUID:1baf1ffff1031e948b3b228ab3453251",
+        "GUID:4d449a4732e064d26a3069f2cfd88917"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": false,

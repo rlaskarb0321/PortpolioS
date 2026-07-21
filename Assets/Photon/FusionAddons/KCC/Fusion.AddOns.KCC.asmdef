@@ -1,8 +1,7 @@
 {
-    "name": "PlayerController",
+    "name": "Fusion.AddOns.KCC",
     "rootNamespace": "",
     "references": [
-        "GUID:92c0bb35dbd94db4c9aae46d29605953",
         "GUID:1baf1ffff1031e948b3b228ab3453251"
     ],
     "includePlatforms": [],
