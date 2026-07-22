@@ -14,11 +14,20 @@ public class PlayerCameraRig : NetworkBehaviour
         var listener = GetComponent<AudioListener>();
         if (listener != null)
             listener.enabled = HasInputAuthority;
-        
+
         if (HasInputAuthority == false)
             return;
-        
+
         vCam = Instantiate(followCamPrefab).GetComponent<CinemachineVirtualCamera>();
         vCam.Follow = transform;
+        vCam.LookAt = transform;
+    }
+
+    private void Update()
+    {
+        if (vCam == null)
+            return;
+
+        Debug.DrawRay(transform.position, vCam.transform.position - transform.position, Color.red);
     }
 }
