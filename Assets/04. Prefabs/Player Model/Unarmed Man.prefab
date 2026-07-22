@@ -1663,6 +1663,7 @@ GameObject:
   - component: {fileID: 5459376005608395402}
   - component: {fileID: 9131867974084121255}
   - component: {fileID: 8994860234793235624}
+  - component: {fileID: 3913711583543778656}
   m_Layer: 0
   m_Name: Unarmed Man
   m_TagString: Untagged
@@ -1816,7 +1817,21 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 5459376005608395402}
   - {fileID: 9131867974084121255}
+  - {fileID: 3913711583543778656}
   ForceRemoteRenderTimeframe: 0
+--- !u!114 &3913711583543778656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396420781652573518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d135fa0aaabbe4a92f1190d4273fc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PlayerController::PlayerCameraRig
+  followCamPrefab: {fileID: 1242680037063235512, guid: d67753d2676067e4b9411ca86d5b106f, type: 3}
 --- !u!1 &8606860126300804173
 GameObject:
   m_ObjectHideFlags: 0

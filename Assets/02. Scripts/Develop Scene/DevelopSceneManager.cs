@@ -11,7 +11,6 @@ public class DevelopSceneManager : MonoBehaviour
     [SerializeField] private DevelopSceneInitializer initializer;
 
     [Header("Player")]
-    [SerializeField] private PlayerCharacterSpawnFactory characterSpawnFactory;
     [SerializeField] private Transform[] playerSpawnPoses;
     [SerializeField] private string playerModelAddress;
 
@@ -70,18 +69,18 @@ public class DevelopSceneManager : MonoBehaviour
             playerModelHandle = Addressables.LoadAssetAsync<GameObject>(playerModelAddress);
         
             await playerModelHandle.Task;
-            await characterSpawnFactory.SpawnPlayerCharacter
-            (
-                playerModelHandle.Result,
-                spawnPos.position,
-                player
-            );
-            // await runner.SpawnAsync
+            // await characterSpawnFactory.SpawnPlayerCharacter
             // (
             //     playerModelHandle.Result,
             //     spawnPos.position,
-            //     inputAuthority: player
+            //     player
             // );
+            await runner.SpawnAsync
+            (
+                playerModelHandle.Result,
+                spawnPos.position,
+                inputAuthority: player
+            );
         }
         catch (Exception e)
         {

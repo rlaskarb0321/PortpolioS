@@ -10,8 +10,7 @@
         "Multiplay Definitions",
         "BackendChart",
         "Player",
-        "MultiplayInGameMode",
-        "Cinemachine"
+        "MultiplayInGameMode"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
