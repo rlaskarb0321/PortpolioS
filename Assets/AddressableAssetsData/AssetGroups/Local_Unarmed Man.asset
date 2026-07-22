@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: Local_Unarmed Man
   m_GUID: 2ae65cd577bd56c49a0d5308a25a8742
   m_SerializeEntries:
-  - m_GUID: 1e93b3118d44c2f46961686e42729a88
+  - m_GUID: 5b6ab6193311bf7499b4257a986e617b
     m_Address: Playable/Unarmed Man/Skin 0
     m_ReadOnly: 0
     m_SerializedLabels:

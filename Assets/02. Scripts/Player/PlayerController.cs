@@ -6,7 +6,13 @@ using UnityEngine;
 public class PlayerController : NetworkBehaviour
 {
     private KCC kcc;
-    
+
+    public override void Spawned()
+    {
+        base.Spawned();
+        
+    }
+
     public override void FixedUpdateNetwork()
     {
         if (Runner.TryGetInputForPlayer(Object.InputAuthority, out PlayerInput input) == true)

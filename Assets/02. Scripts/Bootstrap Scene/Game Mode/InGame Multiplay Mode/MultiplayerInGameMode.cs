@@ -3,13 +3,9 @@ using UnityEngine;
 
 public class MultiplayerInGameMode : GameModeBase
 {
-    [Header("Managers")]
-    [SerializeField] private VirtualJoystickBackgroundView joystickBackgroundView;
-    
     private Transform[] playerRespawnPoints;
 
     public Transform[] PlayerRespawnPoints => playerRespawnPoints;
-    public VirtualJoystickBackgroundView JoystickBackgroundView => joystickBackgroundView;
 
     public void SetRespawnPoints(Transform[] inPlayerRespawnPoints)
     {

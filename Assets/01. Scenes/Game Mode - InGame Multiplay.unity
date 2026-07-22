@@ -446,6 +446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 653570446}
   - component: {fileID: 653570447}
+  - component: {fileID: 653570448}
   m_Layer: 0
   m_Name: Player Character Spawner
   m_TagString: Untagged
@@ -482,6 +483,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: InGameMultiplay::PlayerCharacterSpawner
   playerAddressTemplate: Playable/{0}/Skin {1}
   playableCharacterInfoDataAddress: Data/Definitions/Playable Info
+--- !u!114 &653570448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653570445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1268ce10455ea14facb33796548b6ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: InGameMultiplay::PlayerCharacterSpawnFactory
+  cameraPrefab: {fileID: 1242680037063235512, guid: d67753d2676067e4b9411ca86d5b106f, type: 3}
 --- !u!1 &875390593
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,7 +702,6 @@ MonoBehaviour:
   subManagers:
   - {fileID: 1141128088}
   - {fileID: 653570447}
-  joystickBackgroundView: {fileID: 622209170}
 --- !u!1 &1794359024
 GameObject:
   m_ObjectHideFlags: 0
