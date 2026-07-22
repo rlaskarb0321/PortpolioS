@@ -10,6 +10,7 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
     public event Action<NetworkRunner> SceneLoadStart;
     public event Action<NetworkRunner> SceneLoadDone;
     public event Action<NetworkRunner, NetworkInput> InputPolling;
+    public event Action<NetworkRunner, PlayerRef> PlayerJoined;
 
     public MultiplaySessionContext SessionContext { get; set; }
     
@@ -23,6 +24,7 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        PlayerJoined?.Invoke(runner, player);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
