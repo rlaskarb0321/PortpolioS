@@ -1,11 +1,17 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class DevelopSceneInitializer : MonoBehaviour
 {
-    [SerializeField] private VirtualJoystickPresenter joystickPresenter;
-
+    [SerializeField] private UISceneLoader uiSceneLoader;
+    
     public void InitDevelopScene()
     {
-        joystickPresenter.gameObject.SetActive(true);
+        InitAsync().Forget();
+    }
+
+    private async UniTask InitAsync()
+    {
+        await uiSceneLoader.DoInit();
     }
 }
