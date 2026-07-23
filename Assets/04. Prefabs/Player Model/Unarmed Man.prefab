@@ -1664,6 +1664,8 @@ GameObject:
   - component: {fileID: 9131867974084121255}
   - component: {fileID: 8994860234793235624}
   - component: {fileID: 3913711583543778656}
+  - component: {fileID: 3483255042108457776}
+  - component: {fileID: 6194756515272357916}
   m_Layer: 0
   m_Name: Unarmed Man
   m_TagString: Untagged
@@ -1818,6 +1820,8 @@ MonoBehaviour:
   - {fileID: 5459376005608395402}
   - {fileID: 9131867974084121255}
   - {fileID: 3913711583543778656}
+  - {fileID: 3483255042108457776}
+  - {fileID: 6194756515272357916}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &3913711583543778656
 MonoBehaviour:
@@ -1832,6 +1836,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: PlayerController::PlayerCameraRig
   followCamPrefab: {fileID: 1242680037063235512, guid: d67753d2676067e4b9411ca86d5b106f, type: 3}
+--- !u!114 &3483255042108457776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396420781652573518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkMecanimAnimator
+  Animator: {fileID: 3780641052015387468}
+  ApplyTiming: 2
+  SyncSettings: 79
+  StateHashes: 000000008a18fce4b9abd9d3
+  TriggerHashes: 00000000
+  TotalWords: 1
+--- !u!114 &6194756515272357916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396420781652573518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74bb7bab4da98ff4ca372d838d5d584c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PlayerController::PlayerAnimatorNMA
+  animator: {fileID: 3780641052015387468}
+  dampTime: 0.1
+  maxSpeed: 5
 --- !u!1 &8606860126300804173
 GameObject:
   m_ObjectHideFlags: 0
