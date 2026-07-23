@@ -3,9 +3,11 @@ using Fusion;
 using Fusion.Addons.KCC;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerFSMController : NetworkBehaviour
 {
     private KCC kcc;
+    
+    [Networked] private NetworkButtons PreviousButtons { get; set; }
 
     public override void FixedUpdateNetwork()
     {
@@ -20,6 +22,14 @@ public class PlayerController : NetworkBehaviour
             {
                 kcc.SetInputDirection(Vector3.zero);       
             }
+
+            var pressed = input.buttons.GetPressed(PreviousButtons);
+            
+            PreviousButtons = input.buttons;
+            // if (pressed.IsSet(EPlayerButton.Dodge))    Dodge();
+            // if (pressed.IsSet(EPlayerButton.Expert))   Expert();
+            // if (pressed.IsSet(EPlayerButton.Ultimate)) Ultimate();
+            // if (pressed.IsSet(EPlayerButton.Interact)) Interact();
         }
     }
 
