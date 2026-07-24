@@ -10,9 +10,11 @@ public class PlayerCharacterSpawner : SubManagerBase
 {
     [SerializeField] private string playerAddressTemplate;
     [SerializeField] private string playableCharacterInfoDataAddress;
-
+    [SerializeField] private string combatConfigForm = "Data/Config/Combat/{0}";
+    
     private AsyncOperationHandle<PlayableCharacterInfoSO> infoHandle;
     private AsyncOperationHandle<GameObject> playerModelHandle;
+    private AsyncOperationHandle<CharacterCombatConfig> combatConfigHandle;
     
     public override async UniTask DoInit()
     {
@@ -35,12 +37,28 @@ public class PlayerCharacterSpawner : SubManagerBase
             
             Transform spawnPos = firstSpawnPoints[i];
 
+            // Spawn Player Character
             await BootstrapSceneInstance.Instance.NetworkRunner.SpawnAsync
             (
                 playerModelHandle.Result,
                 spawnPos.position,
                 inputAuthority: BootstrapSceneInstance.Instance.NetworkRunner.ActivePlayers.ElementAt(i)
             );
+
+            // Set Character Combat Config
+            var fsmController = playerModelHandle.Result.GetComponent<PlayerFSMController>();
+            if (fsmController == null)
+            {
+                Debug.LogError($"[PlayerCharacterSpawner] PlayerFSMController not found");
+                return;
+            }
+
+            string characterCombatConfig = GetCombatConfigAddress(infoHandle.Result, i);
+            
+            combatConfigHandle = Addressables.LoadAssetAsync<CharacterCombatConfig>(characterCombatConfig);
+            await combatConfigHandle.Task;
+            
+            fsmController.InitCharacterCombatConfig(combatConfigHandle.Result);
         }
 
         await UniTask.Yield();
@@ -57,6 +75,20 @@ public class PlayerCharacterSpawner : SubManagerBase
             userData.mainCharacterSkinIndex.ToString()
         );
             
+        Debug.Log(result);
+        return result;
+    }
+
+    private string GetCombatConfigAddress(PlayableCharacterInfoSO infoSO, int localIndex)
+    {
+        var userDatas = BootstrapSceneInstance.Instance.RunnerController.SessionContext.UserData;
+        var userData = userDatas[localIndex];
+        string result = string.Format
+        (
+            combatConfigForm,
+            infoSO.Infos[userData.mainCharacterIndex].name
+        );
+
         Debug.Log(result);
         return result;
     }

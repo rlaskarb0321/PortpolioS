@@ -12,6 +12,11 @@ public class NormalAttackState : PlayerStateBase
         
     }
 
+    public override bool CanExitState()
+    {
+        return true;
+    }
+
     public override void OnExitState()
     {
         base.OnExitState();

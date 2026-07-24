@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 0271e76b92f546d44831e254e3c77f7c
   m_currentHash:
     serializedVersion: 2
-    Hash: 0a98c4d1333660fd2122878f73a5849c
+    Hash: ed534a53e3ae2394a71425c125f7d270
   m_DisableWriteTypeTree: 0
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
@@ -65,6 +65,7 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: 8fe3e27f9f286c84ca3f9987861ea30e, type: 2}
   - {fileID: 11400000, guid: bafcf172a64f90f4c907b4bb4f5741c6, type: 2}
+  - {fileID: 11400000, guid: 1138ac3ecf8b80247a9c112efcc001c3, type: 2}
   - {fileID: 11400000, guid: 59245fddaf466bb43b94e357a2dc03d4, type: 2}
   - {fileID: 11400000, guid: c6265af138c3a584d8acd7d0bec70246, type: 2}
   - {fileID: 11400000, guid: c0f3e4e4f1154d54c812be42fe687591, type: 2}
@@ -146,6 +147,7 @@ MonoBehaviour:
     - Play Mode/Multi
     - Play Mode/Story
     - FusionScenes
+    - Data/Config
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1be0dc1b0e64ffd42a4a0947dad0bc47, type: 2}

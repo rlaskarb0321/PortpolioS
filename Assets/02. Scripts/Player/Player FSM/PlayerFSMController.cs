@@ -9,10 +9,14 @@ public class PlayerFSMController : NetworkBehaviour
 {
     private KCC kcc;
     private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
+    private CharacterCombatConfig combatConfig;
     
     // ─── Networked Properties ────────
     [Networked] private NetworkButtons PreviousButtons { get; set; }
     [Networked] private EPlayerStateType CurrentState { get; set; }
+    
+    // ─── Properties ────────
+    public CharacterCombatConfig CombatConfig => combatConfig;
 
     public override void FixedUpdateNetwork()
     {
@@ -43,9 +47,17 @@ public class PlayerFSMController : NetworkBehaviour
         base.Spawned();
         stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
     }
+
+    public void InitCharacterCombatConfig(CharacterCombatConfig inConfig)
+    {
+        combatConfig = inConfig;
+    }
     
     private void ConvertState(EPlayerStateType state)
     {
+        if (stateDict[CurrentState].CanExitState() == false)
+            return;
+        
         stateDict[CurrentState].OnExitState();
         stateDict[state].OnEnterState();
         CurrentState = state;

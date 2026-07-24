@@ -1901,7 +1901,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4e9ebd916a2124f97a7cf7410be010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  playerStates: -1
 --- !u!1 &8606860126300804173
 GameObject:
   m_ObjectHideFlags: 0
