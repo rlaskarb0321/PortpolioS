@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Fusion;
 using Fusion.Addons.KCC;
 using UnityEngine;
@@ -6,8 +8,11 @@ using UnityEngine;
 public class PlayerFSMController : NetworkBehaviour
 {
     private KCC kcc;
+    private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
     
+    // ─── Networked Properties ────────
     [Networked] private NetworkButtons PreviousButtons { get; set; }
+    [Networked] private EPlayerStateType CurrentState { get; set; }
 
     public override void FixedUpdateNetwork()
     {
@@ -33,8 +38,28 @@ public class PlayerFSMController : NetworkBehaviour
         }
     }
 
+    public override void Spawned()
+    {
+        base.Spawned();
+        stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
+    }
+    
+    private void ConvertState(EPlayerStateType state)
+    {
+        stateDict[CurrentState].OnExitState();
+        stateDict[state].OnEnterState();
+        CurrentState = state;
+    }
+
     private void Awake()
     {
         kcc = GetComponent<KCC>();
+        foreach (EPlayerStateType flag in Enum.GetValues(typeof(EPlayerStateType)))
+        {
+            if (flag == EPlayerStateType.None)
+                continue;
+
+            // stateDict.Add(flag, );
+        }
     }
 }
