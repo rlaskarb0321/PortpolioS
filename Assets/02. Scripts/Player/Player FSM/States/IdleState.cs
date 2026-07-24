@@ -8,12 +8,13 @@ public class IdleState : PlayerStateBase
     
     public override void OnEnterState()
     {
-
+        Kcc.SetInputDirection(Vector3.zero);
+        NetworkedAnimator.UpdateLocomotion();
     }
 
     public override void OnUpdateState(in PlayerInput input)
     {
-        Animator.UpdateLocomotion();
+        
     }
 
     public override bool CanEnterState()

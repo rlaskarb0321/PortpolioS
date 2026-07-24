@@ -1191,6 +1191,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VirtualJoystick
   joystickBackgroundView: {fileID: 1299695120}
   joystickHandleView: {fileID: 1234659994}
+  normalAttackButton: {fileID: 1004710289}
+  dodgeButton: {fileID: 391866604}
+  expertButton: {fileID: 1852456058}
+  ultimateButton: {fileID: 43309677}
+  interactButton: {fileID: 873776169}
 --- !u!1 &1852456056
 GameObject:
   m_ObjectHideFlags: 0

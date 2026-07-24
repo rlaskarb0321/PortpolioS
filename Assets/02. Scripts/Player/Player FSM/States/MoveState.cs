@@ -12,7 +12,7 @@ public class MoveState : PlayerStateBase
         Kcc.SetLookRotation(Quaternion.LookRotation(input.direction));
         Kcc.SetInputDirection(input.direction);
 
-        Animator.UpdateLocomotion();
+        NetworkedAnimator.UpdateLocomotion();
     }
 
     public override bool CanEnterState()

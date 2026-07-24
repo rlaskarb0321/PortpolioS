@@ -10,6 +10,10 @@ public class PlayerFSMController : NetworkBehaviour
     private PlayerFSMContext context;
     private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
     private CharacterCombatConfig combatConfig;
+
+#if UNITY_EDITOR
+    [SerializeField] private EPlayerStateType currentState;
+#endif
     
     // ─── Networked Properties ────────
     [Networked] private NetworkButtons PreviousButtons { get; set; }
@@ -76,7 +80,7 @@ public class PlayerFSMController : NetworkBehaviour
 
     private void Awake()
     {
-        var animator = GetComponent<PlayerAnimatorNMA>();
+        var animator = GetComponent<PlayerNetworkedAnimator>();
         var kcc = GetComponent<KCC>();
 
         context = new PlayerFSMContext(this, animator, kcc);
@@ -87,18 +91,25 @@ public class PlayerFSMController : NetworkBehaviour
     }
 
     private void AddState(PlayerStateBase state) => stateDict.Add(state.StateType, state);
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        currentState = CurrentState;
+    }
+#endif
 }
 
 public readonly struct PlayerFSMContext
 {
     public readonly PlayerFSMController controller;
-    public readonly PlayerAnimatorNMA animator;
+    public readonly PlayerNetworkedAnimator NetworkedAnimator;
     public readonly KCC kcc;
 
-    public PlayerFSMContext(PlayerFSMController inController, PlayerAnimatorNMA inAnimator, KCC inKcc)
+    public PlayerFSMContext(PlayerFSMController inController, PlayerNetworkedAnimator inNetworkedAnimator, KCC inKcc)
     {
         this.controller = inController;
-        this.animator = inAnimator;
+        this.NetworkedAnimator = inNetworkedAnimator;
         this.kcc = inKcc;
     }
 }

@@ -8,7 +8,7 @@ public abstract class PlayerStateBase
     // ──── Properties ────────────
     public abstract EPlayerStateType StateType { get; }
     public PlayerFSMController Controller => context.controller;
-    public PlayerAnimatorNMA Animator => context.animator;
+    public PlayerNetworkedAnimator NetworkedAnimator => context.NetworkedAnimator;
     public KCC Kcc => context.kcc;
 
     // ──── Constructor ────────────

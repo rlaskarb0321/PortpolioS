@@ -1693,7 +1693,6 @@ GameObject:
   - component: {fileID: 514962895857696557}
   - component: {fileID: 5459376005608395402}
   - component: {fileID: 8994860234793235624}
-  - component: {fileID: 3483255042108457776}
   - component: {fileID: 3913711583543778656}
   - component: {fileID: 6194756515272357916}
   - component: {fileID: 9131867974084121255}
@@ -1838,29 +1837,10 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 5459376005608395402}
-  - {fileID: 3483255042108457776}
   - {fileID: 3913711583543778656}
   - {fileID: 6194756515272357916}
   - {fileID: 9131867974084121255}
   ForceRemoteRenderTimeframe: 0
---- !u!114 &3483255042108457776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8396420781652573518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkMecanimAnimator
-  Animator: {fileID: 3780641052015387468}
-  ApplyTiming: 2
-  SyncSettings: 79
-  StateHashes: 000000008a18fce4b9abd9d3
-  TriggerHashes: 00000000
-  TotalWords: 1
 --- !u!114 &3913711583543778656
 MonoBehaviour:
   m_ObjectHideFlags: 0
