@@ -12,8 +12,18 @@ public class MoveState : PlayerStateBase
         
     }
 
+    public override bool CanEnterState()
+    {
+        return true;
+    }
+
     public override bool CanExitState()
     {
         return true;
+    }
+    
+    public override void OnExitState()
+    {
+        base.OnExitState();
     }
 }

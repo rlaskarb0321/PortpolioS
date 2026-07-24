@@ -9,10 +9,21 @@ public class IdleState : PlayerStateBase
     
     public override void OnEnterState()
     {
+        
+    }
+
+    public override bool CanEnterState()
+    {
+        return true;
     }
 
     public override bool CanExitState()
     {
         return true;
+    }
+
+    public override void OnExitState()
+    {
+        base.OnExitState();
     }
 }

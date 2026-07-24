@@ -22,30 +22,35 @@ public class PlayerFSMController : NetworkBehaviour
     {
         if (Runner.TryGetInputForPlayer(Object.InputAuthority, out PlayerInput input) == true)
         {
-            if (input.direction.sqrMagnitude > Mathf.Epsilon)
-            {
-                kcc.SetLookRotation(Quaternion.LookRotation(input.direction));
-                kcc.SetInputDirection(input.direction);  
-            }
-            else
-            {
-                kcc.SetInputDirection(Vector3.zero);       
-            }
-
             var pressed = input.buttons.GetPressed(PreviousButtons);
-            
             PreviousButtons = input.buttons;
-            // if (pressed.IsSet(EPlayerButton.Dodge))    Dodge();
-            // if (pressed.IsSet(EPlayerButton.Expert))   Expert();
-            // if (pressed.IsSet(EPlayerButton.Ultimate)) Ultimate();
-            // if (pressed.IsSet(EPlayerButton.Interact)) Interact();
+
+            EPlayerStateType desired = ResolveDesiredState(input, pressed);
+            ConvertState(desired);
         }
+    }
+
+    private EPlayerStateType ResolveDesiredState(in PlayerInput input, NetworkButtons pressed)
+    {
+        if (pressed.IsSet(EPlayerButton.Ultimate))     return EPlayerStateType.Ultimate;
+        if (pressed.IsSet(EPlayerButton.Expert))       return EPlayerStateType.Expert;
+        if (pressed.IsSet(EPlayerButton.Dodge))        return EPlayerStateType.Dodge;
+        if (pressed.IsSet(EPlayerButton.NormalAttack)) return EPlayerStateType.NormalAttack;
+        if (pressed.IsSet(EPlayerButton.Interact))     return EPlayerStateType.Interact;
+
+        if (input.direction.sqrMagnitude > Mathf.Epsilon) return EPlayerStateType.Move;
+
+        return EPlayerStateType.Idle;
     }
 
     public override void Spawned()
     {
         base.Spawned();
-        stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
+
+        if (HasStateAuthority)
+            CurrentState = EPlayerStateType.Idle;
+
+        stateDict[EPlayerStateType.Idle].OnEnterState();
     }
 
     public void InitCharacterCombatConfig(CharacterCombatConfig inConfig)
@@ -66,12 +71,13 @@ public class PlayerFSMController : NetworkBehaviour
     private void Awake()
     {
         kcc = GetComponent<KCC>();
-        foreach (EPlayerStateType flag in Enum.GetValues(typeof(EPlayerStateType)))
-        {
-            if (flag == EPlayerStateType.None)
-                continue;
+        var animator = GetComponent<PlayerAnimatorNMA>();
 
-            // stateDict.Add(flag, );
-        }
+        stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
+        AddState(new IdleState(this, animator));
+        AddState(new MoveState(this, animator));
+        AddState(new NormalAttackState(this, animator));
     }
+
+    private void AddState(PlayerStateBase state) => stateDict.Add(state.StateType, state);
 }

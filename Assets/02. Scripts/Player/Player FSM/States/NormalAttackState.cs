@@ -12,6 +12,11 @@ public class NormalAttackState : PlayerStateBase
         
     }
 
+    public override bool CanEnterState()
+    {
+        return true;
+    }
+
     public override bool CanExitState()
     {
         return true;

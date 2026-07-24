@@ -20,6 +20,8 @@ public abstract class PlayerStateBase
     // ──── Abstract Methods ────────────
     public abstract void OnEnterState();
 
+    public abstract bool CanEnterState();
+
     public abstract bool CanExitState();
     
     // ──── Virtual Methods ────────────
