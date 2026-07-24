@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class PlayerFSMController : NetworkBehaviour
 {
-    private KCC kcc;
+    private PlayerFSMContext context;
     private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
     private CharacterCombatConfig combatConfig;
     
@@ -27,6 +27,8 @@ public class PlayerFSMController : NetworkBehaviour
 
             EPlayerStateType desired = ResolveDesiredState(input, pressed);
             ConvertState(desired);
+
+            stateDict[CurrentState].OnUpdateState(input);
         }
     }
 
@@ -58,26 +60,45 @@ public class PlayerFSMController : NetworkBehaviour
         combatConfig = inConfig;
     }
     
-    private void ConvertState(EPlayerStateType state)
+    private void ConvertState(EPlayerStateType newState)
     {
+        if (newState == CurrentState)
+            return;
         if (stateDict[CurrentState].CanExitState() == false)
+            return;
+        if (stateDict[newState].CanEnterState() == false)
             return;
         
         stateDict[CurrentState].OnExitState();
-        stateDict[state].OnEnterState();
-        CurrentState = state;
+        stateDict[newState].OnEnterState();
+        CurrentState = newState;
     }
 
     private void Awake()
     {
-        kcc = GetComponent<KCC>();
         var animator = GetComponent<PlayerAnimatorNMA>();
+        var kcc = GetComponent<KCC>();
 
+        context = new PlayerFSMContext(this, animator, kcc);
         stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
-        AddState(new IdleState(this, animator));
-        AddState(new MoveState(this, animator));
-        AddState(new NormalAttackState(this, animator));
+        AddState(new IdleState(context));
+        AddState(new MoveState(context));
+        AddState(new NormalAttackState(context));
     }
 
     private void AddState(PlayerStateBase state) => stateDict.Add(state.StateType, state);
+}
+
+public readonly struct PlayerFSMContext
+{
+    public readonly PlayerFSMController controller;
+    public readonly PlayerAnimatorNMA animator;
+    public readonly KCC kcc;
+
+    public PlayerFSMContext(PlayerFSMController inController, PlayerAnimatorNMA inAnimator, KCC inKcc)
+    {
+        this.controller = inController;
+        this.animator = inAnimator;
+        this.kcc = inKcc;
+    }
 }

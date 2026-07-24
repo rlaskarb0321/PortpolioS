@@ -20,11 +20,8 @@ public class PlayerAnimatorNMA : NetworkBehaviour
         networkMecanimAnimator = GetComponent<NetworkMecanimAnimator>();
     }
 
-    public override void FixedUpdateNetwork()
+    public void UpdateLocomotion()
     {
-        if (HasStateAuthority == false && HasInputAuthority == false)
-            return;
-
         var horizontal = kcc.Data.RealVelocity;
         horizontal.y = 0.0f;
 

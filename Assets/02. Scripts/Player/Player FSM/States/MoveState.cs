@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
+using Fusion.Addons.KCC;
 
 public class MoveState : PlayerStateBase
 {
-    public MoveState(PlayerFSMController inController, PlayerAnimatorNMA inAnimator) 
-        : base(inController, inAnimator) { }
+    public MoveState(in PlayerFSMContext context) : base(context) { }
 
     public override EPlayerStateType StateType { get => EPlayerStateType.Move; }
-    
-    public override void OnEnterState()
+
+    public override void OnUpdateState(in PlayerInput input)
     {
-        
+        Kcc.SetLookRotation(Quaternion.LookRotation(input.direction));
+        Kcc.SetInputDirection(input.direction);
+
+        Animator.UpdateLocomotion();
     }
 
     public override bool CanEnterState()

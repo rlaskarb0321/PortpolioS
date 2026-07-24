@@ -1,30 +1,30 @@
 using UnityEngine;
+using Fusion.Addons.KCC;
 
 public abstract class PlayerStateBase
 {
-    private PlayerFSMController controller;
-    private PlayerAnimatorNMA animator;
-    
+    private readonly PlayerFSMContext context;
+
     // ──── Properties ────────────
     public abstract EPlayerStateType StateType { get; }
-    public PlayerFSMController Controller => controller;
-    public PlayerAnimatorNMA Animator => animator;
+    public PlayerFSMController Controller => context.controller;
+    public PlayerAnimatorNMA Animator => context.animator;
+    public KCC Kcc => context.kcc;
 
     // ──── Constructor ────────────
-    public PlayerStateBase(PlayerFSMController inController, PlayerAnimatorNMA inAnimator)
+    public PlayerStateBase(in PlayerFSMContext inContext)
     {
-        controller = inController;
-        animator = inAnimator;
+        context = inContext;
     }
     
     // ──── Abstract Methods ────────────
-    public abstract void OnEnterState();
 
     public abstract bool CanEnterState();
-
     public abstract bool CanExitState();
     
     // ──── Virtual Methods ────────────
+    public virtual void OnEnterState() {}
+    public virtual void OnUpdateState(in PlayerInput input) {}
     public virtual void OnExitState() {}
     
     // ──── Normal Methods ────────────
