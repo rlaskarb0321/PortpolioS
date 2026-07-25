@@ -1696,6 +1696,7 @@ GameObject:
   - component: {fileID: 3913711583543778656}
   - component: {fileID: 6194756515272357916}
   - component: {fileID: 9131867974084121255}
+  - component: {fileID: 574197844463420265}
   m_Layer: 0
   m_Name: Unarmed Man
   m_TagString: Untagged
@@ -1808,7 +1809,7 @@ MonoBehaviour:
     ForcePredictedLookRotation: 0
     AllowClientTeleports: 0
     Processors:
-    - {fileID: 4219866145273439913, guid: 1ab62523487a65745ab7ee9663ad9025, type: 3}
+    - {fileID: 574197844463420265}
     - {fileID: 561824206424634091, guid: 68c4081a63f1dfd469da9c95bea22158, type: 3}
     - {fileID: 8306782452827789390, guid: 6d976f9777012db4aa55e7e6b1991afe, type: 3}
     MaxPenetrationSteps: 8
@@ -1867,8 +1868,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: PlayerController::PlayerAnimatorNMA
   animator: {fileID: 3780641052015387468}
-  dampTime: 0.1
-  maxSpeed: 5
 --- !u!114 &9131867974084121255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1881,6 +1880,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4e9ebd916a2124f97a7cf7410be010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  currentState: 0
+--- !u!114 &574197844463420265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396420781652573518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 264c0f9c9a7bf4a4a927334fa1712bf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fusion.AddOns.KCC::Fusion.Addons.KCC.EnvironmentProcessor
+  KinematicSpeed: 8
+  JumpMultiplier: 1
+  Gravity: {x: 0, y: 0, z: 0}
+  RelativePriority: 0
+  MaxGroundAngle: 60
+  DynamicGroundFriction: 20
+  KinematicGroundAcceleration: 50
+  KinematicGroundFriction: 35
+  DynamicAirFriction: 2
+  KinematicAirAcceleration: 5
+  KinematicAirFriction: 2
 --- !u!1 &8606860126300804173
 GameObject:
   m_ObjectHideFlags: 0

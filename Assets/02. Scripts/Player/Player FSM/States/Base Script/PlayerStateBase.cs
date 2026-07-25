@@ -4,14 +4,13 @@ using Fusion.Addons.KCC;
 public abstract class PlayerStateBase
 {
     private readonly PlayerFSMContext context;
-    private RawCombatOutput rawCombatOutput;
 
     // ──── Properties ────────────
     public abstract EPlayerStateType StateType { get; }
     public PlayerFSMController Controller => context.controller;
     public PlayerNetworkedAnimator NetworkedAnimator => context.NetworkedAnimator;
     public KCC Kcc => context.kcc;
-    public ref readonly RawCombatOutput RawCombatOutput => ref rawCombatOutput;
+    public CharacterCombatConfig Config => Controller.Config;
 
     // ──── Constructor ────────────
     public PlayerStateBase(in PlayerFSMContext inContext)

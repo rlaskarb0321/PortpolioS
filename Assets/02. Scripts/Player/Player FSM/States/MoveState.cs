@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Fusion.Addons.KCC;
 
 public class MoveState : PlayerStateBase
@@ -12,7 +12,11 @@ public class MoveState : PlayerStateBase
         Kcc.SetLookRotation(Quaternion.LookRotation(input.direction));
         Kcc.SetInputDirection(input.direction);
 
-        NetworkedAnimator.UpdateLocomotion();
+        // 원시 속도를 Config(SSOT)로 정제해서 Animator 에 직접 전달
+        var horizontal = Kcc.Data.RealVelocity;
+        horizontal.y = 0f;
+        float normalized = Mathf.Clamp01(horizontal.magnitude / Controller.Config.MaxMoveSpeed);
+        NetworkedAnimator.SetLocomotionSpeed(normalized);
     }
 
     public override bool CanEnterState()
@@ -24,7 +28,7 @@ public class MoveState : PlayerStateBase
     {
         return true;
     }
-    
+
     public override void OnExitState()
     {
         base.OnExitState();

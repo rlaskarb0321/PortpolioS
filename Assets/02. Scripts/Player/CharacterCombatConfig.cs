@@ -8,6 +8,9 @@ using UnityEngine;
 )]
 public class CharacterCombatConfig : ScriptableObject
 {
-    public int normalAttackMaxCombo;
-    public float maxMoveSpeed;
+    [SerializeField] private int   normalAttackMaxCombo;
+    [SerializeField] private float maxMoveSpeed;
+
+    public int   NormalAttackMaxCombo => normalAttackMaxCombo;
+    public float MaxMoveSpeed         => maxMoveSpeed;
 }

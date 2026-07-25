@@ -11,16 +11,15 @@ public class PlayerFSMController : NetworkBehaviour
     private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
     private CharacterCombatConfig combatConfig;
 
+    public CharacterCombatConfig Config => combatConfig;
+
 #if UNITY_EDITOR
     [SerializeField] private EPlayerStateType currentState;
 #endif
-    
+
     // ─── Networked Properties ────────
     [Networked] private NetworkButtons PreviousButtons { get; set; }
     [Networked] private EPlayerStateType CurrentState { get; set; }
-    
-    // ─── Properties ────────
-    public CharacterCombatConfig CombatConfig => combatConfig;
 
     public override void FixedUpdateNetwork()
     {
@@ -34,19 +33,6 @@ public class PlayerFSMController : NetworkBehaviour
 
             stateDict[CurrentState].OnUpdateState(input);
         }
-    }
-
-    private EPlayerStateType ResolveDesiredState(in PlayerInput input, NetworkButtons pressed)
-    {
-        if (pressed.IsSet(EPlayerButton.Ultimate))     return EPlayerStateType.Ultimate;
-        if (pressed.IsSet(EPlayerButton.Expert))       return EPlayerStateType.Expert;
-        if (pressed.IsSet(EPlayerButton.Dodge))        return EPlayerStateType.Dodge;
-        if (pressed.IsSet(EPlayerButton.NormalAttack)) return EPlayerStateType.NormalAttack;
-        if (pressed.IsSet(EPlayerButton.Interact))     return EPlayerStateType.Interact;
-
-        if (input.direction.sqrMagnitude > Mathf.Epsilon) return EPlayerStateType.Move;
-
-        return EPlayerStateType.Idle;
     }
 
     public override void Spawned()
@@ -63,7 +49,7 @@ public class PlayerFSMController : NetworkBehaviour
     {
         combatConfig = inConfig;
     }
-    
+
     private void ConvertState(EPlayerStateType newState)
     {
         if (newState == CurrentState)
@@ -72,10 +58,23 @@ public class PlayerFSMController : NetworkBehaviour
             return;
         if (stateDict[newState].CanEnterState() == false)
             return;
-        
+
         stateDict[CurrentState].OnExitState();
         stateDict[newState].OnEnterState();
         CurrentState = newState;
+    }
+
+    private EPlayerStateType ResolveDesiredState(in PlayerInput input, NetworkButtons pressed)
+    {
+        if (pressed.IsSet(EPlayerButton.Ultimate))     return EPlayerStateType.Ultimate;
+        if (pressed.IsSet(EPlayerButton.Expert))       return EPlayerStateType.Expert;
+        if (pressed.IsSet(EPlayerButton.Dodge))        return EPlayerStateType.Dodge;
+        if (pressed.IsSet(EPlayerButton.NormalAttack)) return EPlayerStateType.NormalAttack;
+        if (pressed.IsSet(EPlayerButton.Interact))     return EPlayerStateType.Interact;
+
+        if (input.direction.sqrMagnitude > Mathf.Epsilon) return EPlayerStateType.Move;
+
+        return EPlayerStateType.Idle;
     }
 
     private void Awake()
@@ -88,6 +87,11 @@ public class PlayerFSMController : NetworkBehaviour
         AddState(new IdleState(context));
         AddState(new MoveState(context));
         AddState(new NormalAttackState(context));
+    }
+
+    private void Start()
+    {
+        GetComponent<EnvironmentProcessor>().KinematicSpeed = combatConfig.MaxMoveSpeed;
     }
 
     private void AddState(PlayerStateBase state) => stateDict.Add(state.StateType, state);
@@ -112,9 +116,4 @@ public readonly struct PlayerFSMContext
         this.NetworkedAnimator = inNetworkedAnimator;
         this.kcc = inKcc;
     }
-}
-
-public struct RawCombatOutput
-{
-    
 }
