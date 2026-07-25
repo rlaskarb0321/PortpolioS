@@ -113,3 +113,8 @@ public readonly struct PlayerFSMContext
         this.kcc = inKcc;
     }
 }
+
+public struct RawCombatOutput
+{
+    
+}
