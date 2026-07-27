@@ -1697,6 +1697,7 @@ GameObject:
   - component: {fileID: 6194756515272357916}
   - component: {fileID: 9131867974084121255}
   - component: {fileID: 574197844463420265}
+  - component: {fileID: 5228201480996376976}
   m_Layer: 0
   m_Name: Unarmed Man
   m_TagString: Untagged
@@ -1868,6 +1869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: PlayerController::PlayerAnimatorNMA
   animator: {fileID: 3780641052015387468}
+  dampTime: 0.1
 --- !u!114 &9131867974084121255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1880,6 +1882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4e9ebd916a2124f97a7cf7410be010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  combatConfigForm: Data/Config/Combat/{0}
   currentState: 0
 --- !u!114 &574197844463420265
 MonoBehaviour:
@@ -1904,6 +1907,18 @@ MonoBehaviour:
   DynamicAirFriction: 2
   KinematicAirAcceleration: 5
   KinematicAirFriction: 2
+--- !u!114 &5228201480996376976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396420781652573518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2113dda2626d3a4479114efe68271148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PlayerController::ComboAttackableComponent
 --- !u!1 &8606860126300804173
 GameObject:
   m_ObjectHideFlags: 0

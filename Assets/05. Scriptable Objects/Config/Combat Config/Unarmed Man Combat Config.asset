@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Unarmed Man Combat Config
   m_EditorClassIdentifier: Assembly-CSharp::CharacterCombatConfig
   normalAttackMaxCombo: 3
-  maxMoveSpeed: 1
+  maxMoveSpeed: 3

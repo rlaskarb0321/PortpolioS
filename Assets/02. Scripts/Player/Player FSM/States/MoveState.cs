@@ -12,7 +12,6 @@ public class MoveState : PlayerStateBase
         Kcc.SetLookRotation(Quaternion.LookRotation(input.direction));
         Kcc.SetInputDirection(input.direction);
 
-        // 원시 속도를 Config(SSOT)로 정제해서 Animator 에 직접 전달
         var horizontal = Kcc.Data.RealVelocity;
         horizontal.y = 0f;
         
