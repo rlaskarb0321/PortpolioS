@@ -15,6 +15,29 @@ public abstract class PlayerAnimationStrategyBase
     }
 
     public abstract EPlayerStateType StrategyType { get; }
+    public abstract ERenderStrategyType RenderStrategyType { get; }
 
-    public abstract void RenderStrategy();
+    public void RenderStrategy()
+    {
+        switch (RenderStrategyType)
+        {
+            case ERenderStrategyType.Continuous:
+                RenderContinuous();
+                break;
+            
+            case ERenderStrategyType.OneShot:
+                RenderOneShot();
+                break;
+        }
+    }
+
+    public virtual bool CanEnterStrategy() { return true; }
+    protected virtual void RenderContinuous() {}
+    protected virtual void RenderOneShot() {}
+}
+
+public enum ERenderStrategyType
+{
+    Continuous,
+    OneShot
 }

@@ -1,20 +1,22 @@
+using System;
 using UnityEngine;
 
 public class ComboAttackableComponent : MonoBehaviour
 {
+    public event Action ComboInput;
+    
     [SerializeField] private EComboInputtableState canInputState = EComboInputtableState.None;
     [SerializeField] private EComboInputState currentInputState = EComboInputState.None;
+
+    private bool isComboEnd;
     
     public EComboInputtableState CanInput => canInputState;
     public EComboInputState CurrentInputState => currentInputState;
+    public bool IsComboEnd => isComboEnd;
 
     public void HandleComboInput()
     {
-        if (currentInputState != EComboInputState.InputReceived)
-        {
-                        
-            return;
-        }
+        ComboInput?.Invoke();
     }
     
     public void SetCanInput()
@@ -37,6 +39,12 @@ public class ComboAttackableComponent : MonoBehaviour
 
     public void InitComboInputState()
     {
+        currentInputState = EComboInputState.InputNonReceived;
+    }
+
+    public void SetComboEnd()
+    {
+        isComboEnd = true;
         currentInputState = EComboInputState.InputNonReceived;
     }
 }

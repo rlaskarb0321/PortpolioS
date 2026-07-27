@@ -8,8 +8,9 @@ public class LocomotionStrategy : PlayerAnimationStrategyBase
         : base(inOwner, inAnimator) { }
 
     public override EPlayerStateType StrategyType { get => EPlayerStateType.Idle | EPlayerStateType.Move; }
+    public override ERenderStrategyType RenderStrategyType { get => ERenderStrategyType.Continuous; }
 
-    public override void RenderStrategy()
+    protected override void RenderContinuous()
     {
         Animator.SetFloat(hashSpeed, Data.locomotionSpeed, 0.1f, Time.deltaTime);
     }

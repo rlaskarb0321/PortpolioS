@@ -19,6 +19,8 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
     {
         if (AnimatorState == EPlayerStateType.None)
             return;
+        if (strategies[AnimatorState].CanEnterStrategy() == false)
+            return;
         
         strategies[AnimatorState].RenderStrategy();
     }
@@ -38,4 +40,5 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
 public struct PlayerNetworkedAnimatorData : INetworkStruct
 {
     public float locomotionSpeed;
+    public int normalComboCount;
 }

@@ -17,6 +17,7 @@ public class PlayerFSMController : NetworkBehaviour
     private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
     private CharacterCombatConfig combatConfig;
     private AsyncOperationHandle<CharacterCombatConfig> combatConfigHandle;
+    private bool isInitialized;
 
     public CharacterCombatConfig Config => combatConfig;
 
@@ -27,16 +28,13 @@ public class PlayerFSMController : NetworkBehaviour
     // ─── Networked Properties ────────
     [Networked] private NetworkButtons PreviousButtons { get; set; }
     [Networked] private EPlayerStateType CurrentState { get; set; }
-    // config 에셋은 복제 불가 → 캐릭터 이름만 복제하고 각 피어가 스스로 로드.
-    // 스폰 시 한 번만 세팅/전송되므로 지속 대역폭 비용은 사실상 0.
     [Networked] private NetworkString<_32> CharacterName { get; set; }
 
-    // onBeforeSpawned(StateAuthority) 시점에 스포너가 호출 → 모든 피어로 복제됨
     public void SetCharacterName(string inName) => CharacterName = inName;
 
     public override void FixedUpdateNetwork()
     {
-        if (combatConfig == null)
+        if (isInitialized == false)
             return;
 
         if (Runner.TryGetInputForPlayer(Object.InputAuthority, out PlayerInput input) == true)
@@ -54,13 +52,6 @@ public class PlayerFSMController : NetworkBehaviour
     public override void Spawned()
     {
         base.Spawned();
-
-        if (HasStateAuthority)
-            ConvertState(EPlayerStateType.Idle);
-
-        stateDict[EPlayerStateType.Idle].OnEnterState();
-
-        // config 에셋은 복제 불가 → 각 피어가 프리팹에 박힌 정보로 스스로 로드
         LoadCombatConfig().Forget();
     }
 
@@ -85,11 +76,21 @@ public class PlayerFSMController : NetworkBehaviour
 
         combatConfig = combatConfigHandle.Result;
         GetComponent<EnvironmentProcessor>().KinematicSpeed = combatConfig.MaxMoveSpeed;
-    }
+        
+        var animator = GetComponent<PlayerNetworkedAnimatorController>();
+        var kcc = GetComponent<KCC>();
 
-    public void ResetToIdleState()
-    {
-        ConvertState(EPlayerStateType.Idle);
+        context = new PlayerFSMContext(this, animator, kcc);
+        stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
+        stateDict.Add(EPlayerStateType.Idle, new IdleState(context));
+        stateDict.Add(EPlayerStateType.Move, new MoveState(context));
+        stateDict.Add(EPlayerStateType.NormalAttack, new NormalAttackState(context));
+        
+        if (HasStateAuthority)
+            ConvertState(EPlayerStateType.Idle);
+
+        stateDict[EPlayerStateType.Idle].OnEnterState();
+        isInitialized = true;
     }
 
     private void ConvertState(EPlayerStateType newState)
@@ -124,14 +125,7 @@ public class PlayerFSMController : NetworkBehaviour
 
     private void Awake()
     {
-        var animator = GetComponent<PlayerNetworkedAnimatorController>();
-        var kcc = GetComponent<KCC>();
-
-        context = new PlayerFSMContext(this, animator, kcc);
-        stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
-        stateDict.Add(EPlayerStateType.Idle, new IdleState(context));
-        stateDict.Add(EPlayerStateType.Move, new MoveState(context));
-        stateDict.Add(EPlayerStateType.NormalAttack, new NormalAttackState(context));
+        
     }
 
 #if UNITY_EDITOR
