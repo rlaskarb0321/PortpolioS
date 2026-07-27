@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class PlayerNetworkedAnimatorController : NetworkBehaviour
 {
-    [SerializeField] private Animator animator;
-    [SerializeField] private float dampTime = 0.1f;
-
+    private Animator animator;
+    private ComboAttackableComponent comboAttackableComponent;
     private Dictionary<EPlayerStateType, PlayerAnimationStrategyBase> strategies;
 
+    [Header("Network Strategies")]
+    [Networked] public EPlayerStateType AnimatorState { get; set; }
     [Networked] public PlayerNetworkedAnimatorData AnimatorData { get; set; }
-    [Networked] private EPlayerStateType AnimatorState { get; set; }
 
     public void SetAnimatorState(EPlayerStateType state) => AnimatorState = state;
 
@@ -25,11 +25,16 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         strategies = new Dictionary<EPlayerStateType, PlayerAnimationStrategyBase>();
 
         strategies.Add(EPlayerStateType.Idle, new LocomotionStrategy(this, animator));
         strategies.Add(EPlayerStateType.Move, new LocomotionStrategy(this, animator));
-        strategies.Add(EPlayerStateType.NormalAttack, new NormalAttackStrategy(this, animator));
+        strategies.Add
+        (
+            EPlayerStateType.NormalAttack,
+            new NormalAttackStrategy(this, animator, comboAttackableComponent)
+        );
     }
 }
 
