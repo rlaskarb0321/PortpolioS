@@ -9,11 +9,14 @@ public class IdleState : PlayerStateBase
     public override void OnEnterState()
     {
         Kcc.SetInputDirection(Vector3.zero);
+        
+        var data = NetworkedAnimatorController.AnimatorData;
+        data.locomotionSpeed = 0f;
+        NetworkedAnimatorController.AnimatorData = data;
     }
 
     public override void OnUpdateState(in PlayerInput input)
     {
-        NetworkedAnimator.SetLocomotionSpeed(0f);
     }
 
     public override bool CanEnterState()

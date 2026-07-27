@@ -56,7 +56,7 @@ public class PlayerFSMController : NetworkBehaviour
         base.Spawned();
 
         if (HasStateAuthority)
-            CurrentState = EPlayerStateType.Idle;
+            ConvertState(EPlayerStateType.Idle);
 
         stateDict[EPlayerStateType.Idle].OnEnterState();
 
@@ -103,7 +103,9 @@ public class PlayerFSMController : NetworkBehaviour
 
         stateDict[CurrentState].OnExitState();
         stateDict[newState].OnEnterState();
+        
         CurrentState = newState;
+        context.NetworkedAnimatorController.SetAnimatorState(CurrentState);
     }
 
     private EPlayerStateType ResolveDesiredState(in PlayerInput input, NetworkButtons pressed)
@@ -121,7 +123,7 @@ public class PlayerFSMController : NetworkBehaviour
 
     private void Awake()
     {
-        var animator = GetComponent<PlayerNetworkedAnimator>();
+        var animator = GetComponent<PlayerNetworkedAnimatorController>();
         var kcc = GetComponent<KCC>();
 
         context = new PlayerFSMContext(this, animator, kcc);
@@ -144,13 +146,13 @@ public class PlayerFSMController : NetworkBehaviour
 public readonly struct PlayerFSMContext
 {
     public readonly PlayerFSMController controller;
-    public readonly PlayerNetworkedAnimator NetworkedAnimator;
+    public readonly PlayerNetworkedAnimatorController NetworkedAnimatorController;
     public readonly KCC kcc;
 
-    public PlayerFSMContext(PlayerFSMController inController, PlayerNetworkedAnimator inNetworkedAnimator, KCC inKcc)
+    public PlayerFSMContext(PlayerFSMController inController, PlayerNetworkedAnimatorController inNetworkedAnimatorController, KCC inKcc)
     {
         this.controller = inController;
-        this.NetworkedAnimator = inNetworkedAnimator;
+        this.NetworkedAnimatorController = inNetworkedAnimatorController;
         this.kcc = inKcc;
     }
 }

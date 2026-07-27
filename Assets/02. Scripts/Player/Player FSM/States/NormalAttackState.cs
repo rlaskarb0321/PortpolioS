@@ -8,7 +8,7 @@ public class NormalAttackState : PlayerStateBase
     
     public override void OnEnterState()
     {
-        NetworkedAnimator.SetNormalAttackTrigger();
+        // NetworkedAnimator.SetNormalAttackTrigger();
     }
 
     public override bool CanEnterState()

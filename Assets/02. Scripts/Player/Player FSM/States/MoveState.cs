@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Fusion;
 using UnityEngine;
 
 public class MoveState : PlayerStateBase
@@ -16,7 +17,10 @@ public class MoveState : PlayerStateBase
         horizontal.y = 0f;
         
         float normalized = Mathf.Clamp01(horizontal.magnitude / Controller.Config.MaxMoveSpeed);
-        NetworkedAnimator.SetLocomotionSpeed(normalized);
+        var data = NetworkedAnimatorController.AnimatorData;
+
+        data.locomotionSpeed = normalized;
+        NetworkedAnimatorController.AnimatorData = data;
     }
 
     public override bool CanEnterState()
