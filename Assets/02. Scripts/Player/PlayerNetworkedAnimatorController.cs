@@ -30,11 +30,7 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
 
         strategies.Add(EPlayerStateType.Idle, new LocomotionStrategy(this, animator));
         strategies.Add(EPlayerStateType.Move, new LocomotionStrategy(this, animator));
-        strategies.Add
-        (
-            EPlayerStateType.NormalAttack,
-            new NormalAttackStrategy(this, animator, comboAttackableComponent)
-        );
+        strategies.Add(EPlayerStateType.NormalAttack, new NormalAttackStrategy(this, animator));
     }
 }
 

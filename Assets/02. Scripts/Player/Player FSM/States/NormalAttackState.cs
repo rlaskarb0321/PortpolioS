@@ -2,13 +2,23 @@ using UnityEngine;
 
 public class NormalAttackState : PlayerStateBase
 {
-    public NormalAttackState(in PlayerFSMContext context) : base(context) { }
+    private ComboAttackableComponent comboAttackable;
+    
+    public NormalAttackState(in PlayerFSMContext context) : base(context)
+    {
+        comboAttackable = context.NetworkedAnimatorController.GetComponent<ComboAttackableComponent>();
+    }
 
     public override EPlayerStateType StateType { get => EPlayerStateType.NormalAttack; }
     
     public override void OnEnterState()
     {
-        // NetworkedAnimator.SetNormalAttackTrigger();
+        
+    }
+
+    public override void OnUpdateState(in PlayerInput input)
+    {
+        
     }
 
     public override bool CanEnterState()

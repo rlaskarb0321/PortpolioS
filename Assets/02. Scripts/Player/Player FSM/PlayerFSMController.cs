@@ -129,12 +129,10 @@ public class PlayerFSMController : NetworkBehaviour
 
         context = new PlayerFSMContext(this, animator, kcc);
         stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
-        AddState(new IdleState(context));
-        AddState(new MoveState(context));
-        AddState(new NormalAttackState(context));
+        stateDict.Add(EPlayerStateType.Idle, new IdleState(context));
+        stateDict.Add(EPlayerStateType.Move, new MoveState(context));
+        stateDict.Add(EPlayerStateType.NormalAttack, new NormalAttackState(context));
     }
-
-    private void AddState(PlayerStateBase state) => stateDict.Add(state.StateType, state);
 
 #if UNITY_EDITOR
     private void Update()
