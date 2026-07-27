@@ -13,8 +13,10 @@ public class PlayerNetworkedAnimator : NetworkBehaviour
     [Networked] private float LocomotionSpeed { get; set; }
 
     private readonly int hashSpeed = Animator.StringToHash("Speed");
+    private readonly int hashNormalAttackTrigger = Animator.StringToHash("Normal Trigger");
 
-    // ─── State 가 정제한 값을 직접 수신 ────────
+    public void SetNormalAttackTrigger() => animator.SetTrigger(hashNormalAttackTrigger);
+    
     public void SetLocomotionSpeed(float normalized) => LocomotionSpeed = normalized;
 
     public override void Render()

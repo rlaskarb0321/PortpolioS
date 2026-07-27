@@ -13,6 +13,7 @@ public class DevelopSceneManager : MonoBehaviour
     [Header("Player")]
     [SerializeField] private Transform[] playerSpawnPoses;
     [SerializeField] private string playerModelAddress;
+    [SerializeField] private string characterName;
 
     private NetworkRunner runner;
     private NetworkRunnerController runnerController;
@@ -79,7 +80,15 @@ public class DevelopSceneManager : MonoBehaviour
             (
                 playerModelHandle.Result,
                 spawnPos.position,
-                inputAuthority: player
+                inputAuthority: player,
+                onBeforeSpawned: (spawnedRunner, obj) =>
+                {
+                    var fsmController = obj.GetComponent<PlayerFSMController>();
+                    if (fsmController != null)
+                        fsmController.SetCharacterName(characterName);
+                    else
+                        Debug.LogError($"[DevelopSceneManager] PlayerFSMController를 찾을 수 없습니다: {obj.name}");
+                }
             );
         }
         catch (Exception e)

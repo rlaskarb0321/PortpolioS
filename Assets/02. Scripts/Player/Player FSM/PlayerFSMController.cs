@@ -1,15 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Fusion;
 using Fusion.Addons.KCC;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class PlayerFSMController : NetworkBehaviour
 {
+    [Header("Combat Config")]
+    [SerializeField] private string combatConfigForm = "Data/Config/Combat/{0}";
+
     private PlayerFSMContext context;
     private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
     private CharacterCombatConfig combatConfig;
+    private AsyncOperationHandle<CharacterCombatConfig> combatConfigHandle;
 
     public CharacterCombatConfig Config => combatConfig;
 
@@ -20,9 +27,18 @@ public class PlayerFSMController : NetworkBehaviour
     // ─── Networked Properties ────────
     [Networked] private NetworkButtons PreviousButtons { get; set; }
     [Networked] private EPlayerStateType CurrentState { get; set; }
+    // config 에셋은 복제 불가 → 캐릭터 이름만 복제하고 각 피어가 스스로 로드.
+    // 스폰 시 한 번만 세팅/전송되므로 지속 대역폭 비용은 사실상 0.
+    [Networked] private NetworkString<_32> CharacterName { get; set; }
+
+    // onBeforeSpawned(StateAuthority) 시점에 스포너가 호출 → 모든 피어로 복제됨
+    public void SetCharacterName(string inName) => CharacterName = inName;
 
     public override void FixedUpdateNetwork()
     {
+        if (combatConfig == null)
+            return;
+
         if (Runner.TryGetInputForPlayer(Object.InputAuthority, out PlayerInput input) == true)
         {
             var pressed = input.buttons.GetPressed(PreviousButtons);
@@ -43,11 +59,37 @@ public class PlayerFSMController : NetworkBehaviour
             CurrentState = EPlayerStateType.Idle;
 
         stateDict[EPlayerStateType.Idle].OnEnterState();
+
+        // config 에셋은 복제 불가 → 각 피어가 프리팹에 박힌 정보로 스스로 로드
+        LoadCombatConfig().Forget();
     }
 
-    public void InitCharacterCombatConfig(CharacterCombatConfig inConfig)
+    public override void Despawned(NetworkRunner runner, bool hasState)
     {
-        combatConfig = inConfig;
+        if (combatConfigHandle.IsValid())
+            Addressables.Release(combatConfigHandle);
+    }
+
+    private async UniTaskVoid LoadCombatConfig()
+    {
+        string address = string.Format(combatConfigForm, CharacterName.ToString());
+
+        combatConfigHandle = Addressables.LoadAssetAsync<CharacterCombatConfig>(address);
+        await combatConfigHandle.Task;
+
+        if (combatConfigHandle.Status != AsyncOperationStatus.Succeeded || combatConfigHandle.Result == null)
+        {
+            Debug.LogError($"[PlayerFSMController] CombatConfig 로드 실패: {address}");
+            return;
+        }
+
+        combatConfig = combatConfigHandle.Result;
+        GetComponent<EnvironmentProcessor>().KinematicSpeed = combatConfig.MaxMoveSpeed;
+    }
+
+    public void ResetToIdleState()
+    {
+        ConvertState(EPlayerStateType.Idle);
     }
 
     private void ConvertState(EPlayerStateType newState)
@@ -87,11 +129,6 @@ public class PlayerFSMController : NetworkBehaviour
         AddState(new IdleState(context));
         AddState(new MoveState(context));
         AddState(new NormalAttackState(context));
-    }
-
-    private void Start()
-    {
-        GetComponent<EnvironmentProcessor>().KinematicSpeed = combatConfig.MaxMoveSpeed;
     }
 
     private void AddState(PlayerStateBase state) => stateDict.Add(state.StateType, state);

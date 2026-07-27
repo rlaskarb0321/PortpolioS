@@ -1,5 +1,5 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
-using Fusion.Addons.KCC;
 
 public class MoveState : PlayerStateBase
 {
@@ -15,6 +15,7 @@ public class MoveState : PlayerStateBase
         // 원시 속도를 Config(SSOT)로 정제해서 Animator 에 직접 전달
         var horizontal = Kcc.Data.RealVelocity;
         horizontal.y = 0f;
+        
         float normalized = Mathf.Clamp01(horizontal.magnitude / Controller.Config.MaxMoveSpeed);
         NetworkedAnimator.SetLocomotionSpeed(normalized);
     }
