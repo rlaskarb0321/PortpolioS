@@ -11,6 +11,6 @@ public class LocomotionStrategy : PlayerAnimationStrategyBase
 
     public override void RenderStrategy()
     {
-        Animator.SetFloat(hashSpeed, Data.locomotionSpeed, 1.0f, Time.deltaTime);
+        Animator.SetFloat(hashSpeed, Data.locomotionSpeed, 0.1f, Time.deltaTime);
     }
 }

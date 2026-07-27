@@ -232,7 +232,7 @@ MonoBehaviour:
   - {fileID: 242699831}
   - {fileID: 8345748}
   playerModelAddress: Playable/Unarmed Man/Skin 0
-  combatConfig: {fileID: 11400000, guid: cefdd692da71c2346943387f6befc639, type: 2}
+  characterName: Unarmed Man
 --- !u!1 &242699830
 GameObject:
   m_ObjectHideFlags: 0

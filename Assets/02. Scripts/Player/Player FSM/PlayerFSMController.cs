@@ -96,14 +96,15 @@ public class PlayerFSMController : NetworkBehaviour
     {
         if (newState == CurrentState)
             return;
-        if (stateDict[CurrentState].CanExitState() == false)
+        if (CurrentState != EPlayerStateType.None && stateDict[CurrentState].CanExitState() == false)
             return;
         if (stateDict[newState].CanEnterState() == false)
             return;
 
-        stateDict[CurrentState].OnExitState();
-        stateDict[newState].OnEnterState();
+        if (CurrentState != EPlayerStateType.None)
+            stateDict[CurrentState].OnExitState();
         
+        stateDict[newState].OnEnterState();
         CurrentState = newState;
         context.NetworkedAnimatorController.SetAnimatorState(CurrentState);
     }

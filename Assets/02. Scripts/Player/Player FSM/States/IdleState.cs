@@ -15,10 +15,6 @@ public class IdleState : PlayerStateBase
         NetworkedAnimatorController.AnimatorData = data;
     }
 
-    public override void OnUpdateState(in PlayerInput input)
-    {
-    }
-
     public override bool CanEnterState()
     {
         return true;
