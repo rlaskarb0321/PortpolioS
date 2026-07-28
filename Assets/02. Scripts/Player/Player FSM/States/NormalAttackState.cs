@@ -1,28 +1,13 @@
 using Fusion;
 using UnityEngine;
 
-/// <summary>
-/// 노멀 콤보 공격 상태.
-///
-/// 콤보 진행에 필요한 모든 판정은 CharacterCombatConfig 에 구워진 타이밍(초)과
-/// NormalComboComponent 의 SwingStartTick 을 이용한 파생 계산으로 이뤄진다.
-/// 애니메이션 이벤트에는 일절 의존하지 않는다 — Render 도메인이라 클라이언트마다 타이밍이 달라
-/// 시뮬레이션 판정에 쓰면 결정론이 깨지기 때문.
-///
-/// 상태를 저장하지 않고 매번 계산하므로 CanExitState / OnUpdateState 의 호출 순서와 무관하게
-/// 항상 같은 답이 나오고, 재시뮬레이션에서도 안전하다.
-/// </summary>
 public class NormalAttackState : PlayerStateBase
 {
     public NormalAttackState(in PlayerFSMContext context) : base(context) { }
 
     public override EPlayerStateType StateType { get => EPlayerStateType.NormalAttack; }
-
-    /// <summary>현재 콤보 타수. 1-based, 0 = 미공격.</summary>
-    private int ComboIndex => NetworkedAnimatorController.AnimatorData.normalComboIndex;
-
-    /// <summary>현재 타의 타이밍 데이터.</summary>
-    private NormalComboStep CurrentStep => Config.GetComboStep(ComboIndex - 1);
+    private int ComboIndex { get => NetworkedAnimatorController.AnimatorData.normalComboIndex; }
+    private NormalComboStep CurrentStep { get => Config.GetComboStep(ComboIndex - 1); }
 
     public override void OnEnterState()
     {
@@ -58,13 +43,11 @@ public class NormalAttackState : PlayerStateBase
 
     public override bool CanExitState()
     {
-        // 저장된 플래그가 아니라 파생 계산이라 호출 순서와 무관하다.
         if (ComboIndex == 0)
             return true;
 
         var step = CurrentStep;
 
-        // 판정 시점 전에는 스윙을 끊을 수 없다.
         if (NormalCombo.Elapsed < step.comboDecisionTime)
             return false;
 
