@@ -1,3 +1,4 @@
+using Fusion;
 using UnityEngine;
 
 public class NormalAttackState : PlayerStateBase
@@ -20,19 +21,22 @@ public class NormalAttackState : PlayerStateBase
     {
         var data = NetworkedAnimatorController.AnimatorData;
         
-        data.normalComboCount = ++currentCombo % maxComboCount;
+        data.normalComboCount = ++currentCombo % (maxComboCount + 1);
         NetworkedAnimatorController.AnimatorData = data;
         comboAttackable.InitComboInputState();
+        Debug.Log("[NormalAttackState] OnEnterState");
     }
 
-    public override void OnUpdateState(in PlayerInput input)
+    public override void OnUpdateState(in PlayerInput input, NetworkButtons pressed = default)
     {
         if (comboAttackable.CanInput == EComboInputtableState.CannotInput)
             return;
         if (comboAttackable.CurrentInputState == EComboInputState.InputReceived)
             return;
+        if (pressed.IsSet(EPlayerButton.NormalAttack) == false)
+            return;
         
-        Debug.Log("Normal Attack Button Pressed");
+        Debug.Log("[NormalAttackState] Input Received");
         comboAttackable.SetComboReceived();
     }
 
@@ -48,6 +52,7 @@ public class NormalAttackState : PlayerStateBase
 
     public override void OnExitState()
     {
+        Debug.Log("[NormalAttackState] OnExitState");
         currentCombo = 0;
         
         var data = NetworkedAnimatorController.AnimatorData;
@@ -58,6 +63,7 @@ public class NormalAttackState : PlayerStateBase
 
     private void HandleComboInput()
     {
+        Debug.Log("[NormalAttackState] HandleComboInput");
         if (comboAttackable.CurrentInputState != EComboInputState.InputReceived)
         {
             comboAttackable.SetComboEnd();
@@ -66,7 +72,7 @@ public class NormalAttackState : PlayerStateBase
         
         var data = NetworkedAnimatorController.AnimatorData;
         
-        data.normalComboCount = ++currentCombo % maxComboCount;
+        data.normalComboCount = ++currentCombo % (maxComboCount + 1);
         NetworkedAnimatorController.AnimatorData = data;
         comboAttackable.InitComboInputState();
     }

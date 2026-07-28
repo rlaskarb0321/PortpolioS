@@ -8,7 +8,7 @@ public class MoveState : PlayerStateBase
 
     public override EPlayerStateType StateType { get => EPlayerStateType.Move; }
 
-    public override void OnUpdateState(in PlayerInput input)
+    public override void OnUpdateState(in PlayerInput input, NetworkButtons pressed = default)
     {
         Kcc.SetLookRotation(Quaternion.LookRotation(input.direction));
         Kcc.SetInputDirection(input.direction);

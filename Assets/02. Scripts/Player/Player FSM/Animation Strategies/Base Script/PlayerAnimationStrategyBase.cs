@@ -34,6 +34,7 @@ public abstract class PlayerAnimationStrategyBase
     public virtual bool CanEnterStrategy() { return true; }
     protected virtual void RenderContinuous() {}
     protected virtual void RenderOneShot() {}
+    public virtual void OnExitStrategy() {}
 }
 
 public enum ERenderStrategyType

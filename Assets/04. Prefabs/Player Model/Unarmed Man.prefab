@@ -1868,8 +1868,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74bb7bab4da98ff4ca372d838d5d584c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: PlayerController::PlayerAnimatorNMA
-  animator: {fileID: 3780641052015387468}
-  dampTime: 0.1
+  _AnimatorState: 1
+  _AnimatorData:
+    locomotionSpeed: 0
+    normalComboCount: 0
 --- !u!114 &9131867974084121255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1919,6 +1921,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2113dda2626d3a4479114efe68271148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: PlayerController::ComboAttackableComponent
+  canInputState: 0
+  currentInputState: 0
 --- !u!1 &8606860126300804173
 GameObject:
   m_ObjectHideFlags: 0

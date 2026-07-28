@@ -1,3 +1,4 @@
+using Fusion;
 using UnityEngine;
 using Fusion.Addons.KCC;
 
@@ -25,7 +26,7 @@ public abstract class PlayerStateBase
     
     // ──── Virtual Methods ────────────
     public virtual void OnEnterState() {}
-    public virtual void OnUpdateState(in PlayerInput input) {}
+    public virtual void OnUpdateState(in PlayerInput input, NetworkButtons pressed = default) {}
     public virtual void OnExitState() {}
     
     // ──── Normal Methods ────────────

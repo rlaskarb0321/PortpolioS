@@ -45,7 +45,7 @@ public class PlayerFSMController : NetworkBehaviour
             EPlayerStateType desired = ResolveDesiredState(input, pressed);
             ConvertState(desired);
 
-            stateDict[CurrentState].OnUpdateState(input);
+            stateDict[CurrentState].OnUpdateState(input, pressed);
         }
     }
 
@@ -85,11 +85,8 @@ public class PlayerFSMController : NetworkBehaviour
         stateDict.Add(EPlayerStateType.Idle, new IdleState(context));
         stateDict.Add(EPlayerStateType.Move, new MoveState(context));
         stateDict.Add(EPlayerStateType.NormalAttack, new NormalAttackState(context));
+        context.NetworkedAnimatorController.SetAnimatorState(CurrentState);
         
-        if (HasStateAuthority)
-            ConvertState(EPlayerStateType.Idle);
-
-        stateDict[EPlayerStateType.Idle].OnEnterState();
         isInitialized = true;
     }
 
@@ -121,11 +118,6 @@ public class PlayerFSMController : NetworkBehaviour
         if (input.direction.sqrMagnitude > Mathf.Epsilon) return EPlayerStateType.Move;
 
         return EPlayerStateType.Idle;
-    }
-
-    private void Awake()
-    {
-        
     }
 
 #if UNITY_EDITOR

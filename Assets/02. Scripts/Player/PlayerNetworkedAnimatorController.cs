@@ -8,6 +8,7 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
     private Animator animator;
     private ComboAttackableComponent comboAttackableComponent;
     private Dictionary<EPlayerStateType, PlayerAnimationStrategyBase> strategies;
+    private EPlayerStateType currentState;
 
     [Header("Network Strategies")]
     [Networked] public EPlayerStateType AnimatorState { get; set; }
@@ -17,6 +18,14 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
 
     public override void Render()
     {
+        if (currentState != AnimatorState)
+        {
+            if (currentState != EPlayerStateType.None)
+                strategies[currentState].OnExitStrategy();
+            
+            currentState = AnimatorState;
+        }
+        
         if (AnimatorState == EPlayerStateType.None)
             return;
         if (strategies[AnimatorState].CanEnterStrategy() == false)

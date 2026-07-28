@@ -26,7 +26,7 @@ public class ComboAttackableComponent : MonoBehaviour
     
     public void SetCannotInput()
     {
-        canInputState =  EComboInputtableState.CannotInput;
+        canInputState = EComboInputtableState.CannotInput;
     }
 
     public void SetComboReceived()
@@ -39,6 +39,8 @@ public class ComboAttackableComponent : MonoBehaviour
 
     public void InitComboInputState()
     {
+        isComboEnd = false;
+        canInputState = EComboInputtableState.CannotInput;
         currentInputState = EComboInputState.InputNonReceived;
     }
 
