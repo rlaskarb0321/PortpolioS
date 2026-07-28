@@ -7,7 +7,6 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
 {
     private Animator animator;
     private PlayerFSMController controller;
-    private ComboAttackableComponent comboAttackableComponent;
     private Dictionary<EPlayerStateType, PlayerAnimationStrategyBase> strategies;
     private EPlayerStateType currentState;
 
@@ -47,9 +46,15 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
     }
 }
 
+/// <summary>
+/// Render 가 소비하는 애니메이션 파라미터. 시뮬레이션이 쓰고 Render 가 읽는다.
+/// 시뮬레이션 전용 상태(SwingStartTick, QueuedNext 등)는 여기 넣지 않는다 — NormalComboComponent 소관.
+/// </summary>
 [System.Serializable]
 public struct PlayerNetworkedAnimatorData : INetworkStruct
 {
     public float locomotionSpeed;
-    public int normalComboCount;
+
+    /// <summary>현재 노멀 콤보 타수. 1-based, 0 = 미공격.</summary>
+    public int normalComboIndex;
 }

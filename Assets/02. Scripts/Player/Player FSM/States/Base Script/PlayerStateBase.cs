@@ -11,6 +11,7 @@ public abstract class PlayerStateBase
     public PlayerFSMController Controller => context.controller;
     public PlayerNetworkedAnimatorController NetworkedAnimatorController => context.NetworkedAnimatorController;
     public KCC Kcc => context.kcc;
+    public NormalComboComponent NormalCombo => context.normalCombo;
     public CharacterCombatConfig Config => Controller.Config;
 
     // ──── Constructor ────────────

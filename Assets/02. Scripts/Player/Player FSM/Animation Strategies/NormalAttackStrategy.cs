@@ -14,9 +14,9 @@ public class NormalAttackStrategy : PlayerAnimationStrategyBase
 
     protected override void RenderOneShot()
     {
-        lastComboCount = Data.normalComboCount;
-        Animator.SetInteger(hashNormalCombo, Data.normalComboCount);
-        Debug.Log($"[NormalAttackStrategy] RenderStrategy combo={Data.normalComboCount}");
+        lastComboCount = Data.normalComboIndex;
+        Animator.SetInteger(hashNormalCombo, Data.normalComboIndex);
+        Debug.Log($"[NormalAttackStrategy] RenderStrategy combo={Data.normalComboIndex}");
     }
 
     public override void OnExitStrategy()
@@ -27,6 +27,6 @@ public class NormalAttackStrategy : PlayerAnimationStrategyBase
 
     public override bool CanEnterStrategy()
     {
-        return lastComboCount != Data.normalComboCount;
+        return lastComboCount != Data.normalComboIndex;
     }
 }

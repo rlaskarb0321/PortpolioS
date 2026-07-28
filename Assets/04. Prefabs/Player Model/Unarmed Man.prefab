@@ -1842,6 +1842,7 @@ MonoBehaviour:
   - {fileID: 3913711583543778656}
   - {fileID: 6194756515272357916}
   - {fileID: 9131867974084121255}
+  - {fileID: 5228201480996376976}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &3913711583543778656
 MonoBehaviour:
@@ -1868,10 +1869,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74bb7bab4da98ff4ca372d838d5d584c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: PlayerController::PlayerAnimatorNMA
-  _AnimatorState: 1
   _AnimatorData:
     locomotionSpeed: 0
-    normalComboCount: 0
+    normalComboIndex: 0
 --- !u!114 &9131867974084121255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1886,6 +1886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   combatConfigForm: Data/Config/Combat/{0}
   currentState: 0
+  _CurrentState: 0
 --- !u!114 &574197844463420265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1921,8 +1922,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2113dda2626d3a4479114efe68271148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: PlayerController::ComboAttackableComponent
-  canInputState: 0
-  currentInputState: 0
+  _SwingStartTick: 0
+  _QueuedNext:
+    _value: 0
 --- !u!1 &8606860126300804173
 GameObject:
   m_ObjectHideFlags: 0

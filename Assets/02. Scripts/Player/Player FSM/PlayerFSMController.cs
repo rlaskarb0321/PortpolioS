@@ -79,8 +79,9 @@ public class PlayerFSMController : NetworkBehaviour
         
         var animator = GetComponent<PlayerNetworkedAnimatorController>();
         var kcc = GetComponent<KCC>();
+        var normalCombo = GetComponent<NormalComboComponent>();
 
-        context = new PlayerFSMContext(this, animator, kcc);
+        context = new PlayerFSMContext(this, animator, kcc, normalCombo);
         stateDict = new Dictionary<EPlayerStateType, PlayerStateBase>();
         stateDict.Add(EPlayerStateType.Idle, new IdleState(context));
         stateDict.Add(EPlayerStateType.Move, new MoveState(context));
@@ -131,11 +132,13 @@ public readonly struct PlayerFSMContext
     public readonly PlayerFSMController controller;
     public readonly PlayerNetworkedAnimatorController NetworkedAnimatorController;
     public readonly KCC kcc;
+    public readonly NormalComboComponent normalCombo;
 
-    public PlayerFSMContext(PlayerFSMController inController, PlayerNetworkedAnimatorController inNetworkedAnimatorController, KCC inKcc)
+    public PlayerFSMContext(PlayerFSMController inController, PlayerNetworkedAnimatorController inNetworkedAnimatorController, KCC inKcc, NormalComboComponent inNormalCombo)
     {
         this.controller = inController;
         this.NetworkedAnimatorController = inNetworkedAnimatorController;
         this.kcc = inKcc;
+        this.normalCombo = inNormalCombo;
     }
 }
