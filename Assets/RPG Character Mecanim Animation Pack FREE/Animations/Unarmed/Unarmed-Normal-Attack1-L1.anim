@@ -28609,15 +28609,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.7724292
-    functionName: SetCannotInput
+  - time: 0.7
+    functionName: HandleComboInput
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.79933333
-    functionName: HandleComboInput
+  - time: 0.7
+    functionName: SetCannotInput
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

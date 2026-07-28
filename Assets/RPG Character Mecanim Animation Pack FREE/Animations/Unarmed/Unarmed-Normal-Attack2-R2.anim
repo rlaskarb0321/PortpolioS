@@ -35089,14 +35089,14 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.66019416
+  - time: 0.6333333
     functionName: SetCannotInput
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.79858786
+  - time: 0.6333333
     functionName: HandleComboInput
     data: 
     objectReferenceParameter: {fileID: 0}

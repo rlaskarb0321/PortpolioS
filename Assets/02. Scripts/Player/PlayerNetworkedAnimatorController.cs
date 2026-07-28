@@ -6,37 +6,39 @@ using UnityEngine;
 public class PlayerNetworkedAnimatorController : NetworkBehaviour
 {
     private Animator animator;
+    private PlayerFSMController controller;
     private ComboAttackableComponent comboAttackableComponent;
     private Dictionary<EPlayerStateType, PlayerAnimationStrategyBase> strategies;
     private EPlayerStateType currentState;
 
     [Header("Network Strategies")]
-    [Networked] public EPlayerStateType AnimatorState { get; set; }
     [Networked] public PlayerNetworkedAnimatorData AnimatorData { get; set; }
-
-    public void SetAnimatorState(EPlayerStateType state) => AnimatorState = state;
 
     public override void Render()
     {
-        if (currentState != AnimatorState)
+        // 애니메이터 상태의 진실의 원천은 FSM의 CurrentState (SSOT) — 별도로 복제하지 않고 직접 읽는다.
+        EPlayerStateType animatorState = controller.CurrentState;
+
+        if (currentState != animatorState)
         {
             if (currentState != EPlayerStateType.None)
                 strategies[currentState].OnExitStrategy();
-            
-            currentState = AnimatorState;
+
+            currentState = animatorState;
         }
-        
-        if (AnimatorState == EPlayerStateType.None)
+
+        if (animatorState == EPlayerStateType.None)
             return;
-        if (strategies[AnimatorState].CanEnterStrategy() == false)
+        if (strategies[animatorState].CanEnterStrategy() == false)
             return;
-        
-        strategies[AnimatorState].RenderStrategy();
+
+        strategies[animatorState].RenderStrategy();
     }
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        controller = GetComponent<PlayerFSMController>();
         strategies = new Dictionary<EPlayerStateType, PlayerAnimationStrategyBase>();
 
         strategies.Add(EPlayerStateType.Idle, new LocomotionStrategy(this, animator));

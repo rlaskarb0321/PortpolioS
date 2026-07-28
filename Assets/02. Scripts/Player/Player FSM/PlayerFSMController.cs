@@ -27,7 +27,7 @@ public class PlayerFSMController : NetworkBehaviour
 
     // ─── Networked Properties ────────
     [Networked] private NetworkButtons PreviousButtons { get; set; }
-    [Networked] private EPlayerStateType CurrentState { get; set; }
+    [Networked] public EPlayerStateType CurrentState { get; private set; }
     [Networked] private NetworkString<_32> CharacterName { get; set; }
 
     public void SetCharacterName(string inName) => CharacterName = inName;
@@ -85,8 +85,7 @@ public class PlayerFSMController : NetworkBehaviour
         stateDict.Add(EPlayerStateType.Idle, new IdleState(context));
         stateDict.Add(EPlayerStateType.Move, new MoveState(context));
         stateDict.Add(EPlayerStateType.NormalAttack, new NormalAttackState(context));
-        context.NetworkedAnimatorController.SetAnimatorState(CurrentState);
-        
+
         isInitialized = true;
     }
 
@@ -104,7 +103,6 @@ public class PlayerFSMController : NetworkBehaviour
         
         stateDict[newState].OnEnterState();
         CurrentState = newState;
-        context.NetworkedAnimatorController.SetAnimatorState(CurrentState);
     }
 
     private EPlayerStateType ResolveDesiredState(in PlayerInput input, NetworkButtons pressed)
