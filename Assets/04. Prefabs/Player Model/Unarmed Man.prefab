@@ -1698,6 +1698,7 @@ GameObject:
   - component: {fileID: 9131867974084121255}
   - component: {fileID: 574197844463420265}
   - component: {fileID: 5228201480996376976}
+  - component: {fileID: -8039819288465948942}
   m_Layer: 0
   m_Name: Unarmed Man
   m_TagString: Untagged
@@ -1922,9 +1923,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2113dda2626d3a4479114efe68271148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: PlayerController::ComboAttackableComponent
-  _SwingStartTick: 0
   _QueuedNext:
     _value: 0
+--- !u!114 &-8039819288465948942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396420781652573518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dde604ab9922d04695f77e214eb5d2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PlayerController::AnimationMarkerReceiver
 --- !u!1 &8606860126300804173
 GameObject:
   m_ObjectHideFlags: 0

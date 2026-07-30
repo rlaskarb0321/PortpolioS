@@ -12,21 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cfc43519d6eac2468d8941da6367088, type: 3}
   m_Name: Unarmed Man Combat Config
   m_EditorClassIdentifier: Assembly-CSharp::CharacterCombatConfig
-  normalAttackMaxCombo: 3
   maxMoveSpeed: 7
   normalComboSteps:
   - clip: {fileID: 7400000, guid: 079d01e89cbcd0e47aa882ed7a3dff13, type: 2}
     clipLength: 0.8000001
-    inputWindowStart: 0.1
-    inputWindowEnd: 0.7
-    comboDecisionTime: 0.7
+    markers:
+    - tag: 1
+      start: 0.1
+      end: 0.7
+      note: 
+    - tag: 2
+      start: 0.7
+      end: 0.7
+      note: 
   - clip: {fileID: 7400000, guid: f79772bae0af8484296386520662effb, type: 2}
     clipLength: 0.8000001
-    inputWindowStart: 0.06666667
-    inputWindowEnd: 0.6333333
-    comboDecisionTime: 0.6333333
+    markers:
+    - tag: 1
+      start: 0.06666667
+      end: 0.6333333
+      note: 
+    - tag: 2
+      start: 0.6333333
+      end: 0.6333333
+      note: 
   - clip: {fileID: 7400000, guid: b5778a46fd704ed4a9096f01ec8a8476, type: 2}
     clipLength: 0.8000001
-    inputWindowStart: -1
-    inputWindowEnd: -1
-    comboDecisionTime: 0.7
+    markers:
+    - tag: 2
+      start: 0.7
+      end: 0.7
+      note: 

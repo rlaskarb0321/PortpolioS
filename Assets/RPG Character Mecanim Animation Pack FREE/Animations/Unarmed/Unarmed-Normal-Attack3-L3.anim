@@ -34201,8 +34201,8 @@ AnimationClip:
   m_HasMotionFloatCurves: 1
   m_Events:
   - time: 0.7
-    functionName: HandleComboInput
-    data: 
+    functionName: EventTiming
+    data: ComboDecision
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

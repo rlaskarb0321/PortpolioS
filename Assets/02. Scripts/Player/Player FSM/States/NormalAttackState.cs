@@ -7,7 +7,7 @@ public class NormalAttackState : PlayerStateBase
 
     public override EPlayerStateType StateType { get => EPlayerStateType.NormalAttack; }
     private int ComboIndex { get => NetworkedAnimatorController.AnimatorData.normalComboIndex; }
-    private NormalComboStep CurrentStep { get => Config.GetComboStep(ComboIndex - 1); }
+    private AnimationTimeline CurrentStep { get => Config.GetComboStep(ComboIndex - 1); }
 
     public override void OnEnterState()
     {
@@ -23,11 +23,11 @@ public class NormalAttackState : PlayerStateBase
         float elapsed = NormalCombo.Elapsed;
 
         // 입력창 안에서 공격 버튼을 누르면 다음 타를 예약한다.
-        if (IsWindowOpen(step, elapsed) == true && pressed.IsSet(EPlayerButton.NormalAttack) == true)
+        if (step.IsActive(EAnimMarker.ComboInput, elapsed) == true && pressed.IsSet(EPlayerButton.NormalAttack) == true)
             NormalCombo.QueuedNext = true;
 
         // 판정 시점 전이면 아직 스윙 중.
-        if (elapsed < step.comboDecisionTime)
+        if (step.HasPassed(EAnimMarker.ComboDecision, elapsed) == false)
             return;
 
         if (CanChain(step) == true)
@@ -48,7 +48,7 @@ public class NormalAttackState : PlayerStateBase
 
         var step = CurrentStep;
 
-        if (NormalCombo.Elapsed < step.comboDecisionTime)
+        if (step.HasPassed(EAnimMarker.ComboDecision, NormalCombo.Elapsed) == false)
             return false;
 
         // 이어갈 타가 남아 있으면 여기서 나가지 않고 다음 타로 넘어간다.
@@ -76,20 +76,12 @@ public class NormalAttackState : PlayerStateBase
         NormalCombo.QueuedNext = false;
     }
 
-    /// <summary>다음 타로 이어갈 수 있는가. inputWindowStart 가 음수면 더 못 잇는 마지막 타.</summary>
-    private bool CanChain(in NormalComboStep step)
+    /// <summary>다음 타로 이어갈 수 있는가. ComboInput 마커가 없는 클립이면 더 못 잇는 마지막 타.</summary>
+    private bool CanChain(in AnimationTimeline step)
     {
-        return step.inputWindowStart >= 0f
+        return step.Has(EAnimMarker.ComboInput) == true
             && NormalCombo.QueuedNext
             && ComboIndex < Config.NormalComboStepCount;
-    }
-
-    private bool IsWindowOpen(in NormalComboStep step, float elapsed)
-    {
-        if (step.inputWindowStart < 0f)
-            return false;
-
-        return step.inputWindowStart <= elapsed && elapsed < step.inputWindowEnd;
     }
 
     private void SetComboIndex(int index)

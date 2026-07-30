@@ -28603,22 +28603,22 @@ AnimationClip:
   m_HasMotionFloatCurves: 1
   m_Events:
   - time: 0.1
-    functionName: SetCanInput
-    data: 
+    functionName: EventTiming
+    data: ComboInput.Open
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.7
-    functionName: HandleComboInput
-    data: 
+    functionName: EventTiming
+    data: ComboDecision
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.7
-    functionName: SetCannotInput
-    data: 
+    functionName: EventTiming
+    data: ComboInput.Close
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
