@@ -17,9 +17,14 @@ public class CharacterCombatConfig : ScriptableObject
     [Header("Dodge Anim Step")]
     [SerializeField] private AnimationTimeline[] dodgeComboSteps;
 
-    public float MaxMoveSpeed => maxMoveSpeed;
+    [Header("Dodge Movement")]
+    [SerializeField] private AnimationCurve dodgeSpeedCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+    [SerializeField] private float dodgeSpeedMultiplier = 8f;
 
+    public float MaxMoveSpeed => maxMoveSpeed;
     public int NormalComboStepCount => normalComboSteps != null ? normalComboSteps.Length : 0;
+    public AnimationCurve DodgeSpeedCurve => dodgeSpeedCurve;
+    public float DodgeSpeedMultiplier => dodgeSpeedMultiplier;
 
     public AnimationTimeline GetComboStep(int index)
     {

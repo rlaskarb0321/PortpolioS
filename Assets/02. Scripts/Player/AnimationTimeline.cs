@@ -65,12 +65,22 @@ public struct AnimationTimeline
     [Tooltip("베이크 소스가 되는 애니메이션 클립")]
     public AnimationClip clip;
 
+    [Tooltip("이 클립이 걸린 Animator State 의 Speed 값과 반드시 동일하게 맞출 것 (Bake 대상 아님, 수동 입력).\n" +
+             "AnimationClip 은 자기가 어느 State 에서 몇 배속으로 쓰이는지 모르기 때문에 Bake 로 자동 채울 수 없다.")]
+    public float playbackSpeed;
+
     [Header("Baked (Bake 버튼으로 자동 채움 · 직접 수정 금지)")]
-    [Tooltip("clip.length (초)")]
+    [Tooltip("clip.length (초). Animator State Speed 배수는 반영되지 않은 원본 길이다.")]
     public float clipLength;
 
     [Tooltip("start 오름차순으로 정렬되어 굽힌다")]
     public AnimationMarker[] markers;
+
+    /// <summary>
+    /// playbackSpeed 를 반영한 실제 재생 시간(초). CanExitState 등 실시간(Action.Elapsed) 기준 판정에는 clipLength 대신 이 값을 써야 한다.
+    /// playbackSpeed 가 0 이하면(필드 추가 전에 구워둔 기존 데이터라 값이 비어있는 경우 포함) 1배속으로 취급해 0 나누기를 피한다.
+    /// </summary>
+    public float EffectiveClipLength => clipLength / (playbackSpeed > 0f ? playbackSpeed : 1f);
 
     // ─── Queries ────────
 
