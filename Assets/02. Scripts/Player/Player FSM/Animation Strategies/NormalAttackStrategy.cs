@@ -16,7 +16,6 @@ public class NormalAttackStrategy : PlayerAnimationStrategyBase
     {
         lastComboCount = Data.normalComboIndex;
         Animator.SetInteger(hashNormalCombo, Data.normalComboIndex);
-        Debug.Log($"[NormalAttackStrategy] RenderStrategy combo={Data.normalComboIndex}");
     }
 
     public override void OnExitStrategy()

@@ -14,7 +14,17 @@ using UnityEngine;
 [CustomEditor(typeof(CharacterCombatConfig))]
 public class CharacterCombatConfigEditor : Editor
 {
-    private const string StepsProperty = "normalComboSteps";
+    /// <summary>
+    /// 베이크 대상 AnimationTimeline[] 필드 목록.
+    /// RequiredMarker 는 그 타임라인이 반드시 가져야 하는 점 마커 — 없으면 clipLength 로 폴백해 굽는다.
+    /// (없으면 HasPassed 가 영원히 false 라서 그 마커로 전이를 판정하는 스테이트가 못 빠져나간다)
+    /// 그런 전이 판정이 없는 타임라인(Dodge 등)은 null 로 둔다.
+    /// </summary>
+    private static readonly (string PropertyName, EAnimMarker? RequiredMarker, string Label)[] TimelineGroups =
+    {
+        ("normalComboSteps", EAnimMarker.ComboDecision, "Normal Combo Steps"),
+        ("dodgeComboSteps",  null,                       "Dodge Combo Steps"),
+    };
 
     private const string FieldClip       = "clip";
     private const string FieldClipLength = "clipLength";
@@ -28,10 +38,6 @@ public class CharacterCombatConfigEditor : Editor
     {
         DrawDefaultInspector();
 
-        var stepsProp = serializedObject.FindProperty(StepsProperty);
-        if (stepsProp == null)
-            return;
-
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Timing Marker Bake", EditorStyles.boldLabel);
         EditorGUILayout.HelpBox
@@ -41,27 +47,83 @@ public class CharacterCombatConfigEditor : Editor
             $"· 구간 마커 : {AnimationMarkerReceiver.EventFunctionName}(\"{EAnimMarker.ComboInput}{AnimationMarkerReceiver.OpenSuffix}\")" +
             $" + {AnimationMarkerReceiver.EventFunctionName}(\"{EAnimMarker.ComboInput}{AnimationMarkerReceiver.CloseSuffix}\")\n" +
             $"다른 이름의 이벤트는 무시하므로 연출용 이벤트와 같은 클립에 공존할 수 있습니다.\n" +
-            $"태그 오타 · 짝 안 맞음 등은 에러로 보고되고 해당 원소는 기존 값을 유지합니다.",
+            $"태그 오타 · 짝 안 맞음 등은 에러로 보고되고 해당 원소는 기존 값을 유지합니다.\n" +
+            $"아래 버튼 하나로 {string.Join(", ", GetGroupLabels())} 를 한 번에 굽습니다.",
             MessageType.Info
         );
 
-        using (new EditorGUI.DisabledScope(stepsProp.arraySize == 0))
+        int totalElements = 0;
+        bool anyGroupFound = false;
+
+        foreach (var group in TimelineGroups)
         {
-            if (GUILayout.Button("클립에서 타이밍 마커 굽기 (Bake)"))
-                BakeTimelines(stepsProp);
+            var stepsProp = serializedObject.FindProperty(group.PropertyName);
+            if (stepsProp == null)
+                continue;
+
+            anyGroupFound = true;
+            totalElements += stepsProp.arraySize;
         }
 
-        if (stepsProp.arraySize == 0)
-            EditorGUILayout.HelpBox("Normal Combo Steps 배열이 비어 있습니다.", MessageType.Warning);
+        using (new EditorGUI.DisabledScope(totalElements == 0))
+        {
+            if (GUILayout.Button("클립에서 타이밍 마커 굽기 (Bake)"))
+                BakeAll();
+        }
+
+        if (anyGroupFound == false)
+        {
+            EditorGUILayout.HelpBox("베이크 대상 필드를 찾지 못했습니다. CharacterCombatConfig 의 필드명이 바뀌었다면 CharacterCombatConfigEditor.TimelineGroups 도 함께 갱신하세요.", MessageType.Warning);
+            return;
+        }
+
+        foreach (var group in TimelineGroups)
+        {
+            var stepsProp = serializedObject.FindProperty(group.PropertyName);
+
+            if (stepsProp != null && stepsProp.arraySize == 0)
+                EditorGUILayout.HelpBox($"{group.Label} 배열이 비어 있습니다.", MessageType.Warning);
+        }
+    }
+
+    private static IEnumerable<string> GetGroupLabels()
+    {
+        foreach (var group in TimelineGroups)
+            yield return group.Label;
     }
 
     // ─── Bake ────────
 
-    private void BakeTimelines(SerializedProperty stepsProp)
+    private void BakeAll()
     {
         var log = new StringBuilder();
         log.AppendLine($"[CharacterCombatConfig] '{target.name}' 타이밍 마커 베이크 결과");
 
+        int totalFailed = 0;
+
+        foreach (var group in TimelineGroups)
+        {
+            var stepsProp = serializedObject.FindProperty(group.PropertyName);
+            if (stepsProp == null)
+                continue;
+
+            log.AppendLine($" [{group.Label}]");
+            totalFailed += BakeTimelines(stepsProp, group.RequiredMarker, log);
+        }
+
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
+        AssetDatabase.SaveAssetIfDirty(target);
+
+        if (totalFailed > 0)
+            log.AppendLine($"  → 총 {totalFailed}개 실패. 해당 원소는 기존 값을 유지했습니다. 위의 에러 로그를 확인하세요.");
+
+        Debug.Log(log.ToString(), target);
+    }
+
+    /// <summary>배열 하나를 굽는다. 실패한 원소 개수를 반환한다.</summary>
+    private int BakeTimelines(SerializedProperty stepsProp, EAnimMarker? requiredMarker, StringBuilder log)
+    {
         int failed = 0;
 
         for (int i = 0; i < stepsProp.arraySize; ++i)
@@ -82,7 +144,8 @@ public class CharacterCombatConfigEditor : Editor
                 continue;
             }
 
-            EnsureComboDecision(clip, i, markers);
+            if (requiredMarker.HasValue == true)
+                EnsureRequiredMarker(clip, i, markers, requiredMarker.Value);
 
             // HasPassed 의 "가장 이른 것 기준" 의미와 note 보존이 모두 이 정렬 순서에 기댄다.
             markers.Sort((a, b) => a.start.CompareTo(b.start));
@@ -96,14 +159,7 @@ public class CharacterCombatConfigEditor : Editor
                 log.AppendLine($"    · {Describe(marker)}");
         }
 
-        serializedObject.ApplyModifiedProperties();
-        EditorUtility.SetDirty(target);
-        AssetDatabase.SaveAssetIfDirty(target);
-
-        if (failed > 0)
-            log.AppendLine($"  → {failed}개 실패. 해당 원소는 기존 값을 유지했습니다. 위의 에러 로그를 확인하세요.");
-
-        Debug.Log(log.ToString(), target);
+        return failed;
     }
 
     /// <summary>클립의 EventTiming 이벤트를 마커 목록으로 번역한다. 오써링이 잘못됐으면 false.</summary>
@@ -215,27 +271,27 @@ public class CharacterCombatConfigEditor : Editor
     }
 
     /// <summary>
-    /// ComboDecision 이 없으면 clipLength 를 판정 시점으로 폴백한다.
-    /// 없는 채로 두면 HasPassed 가 영원히 false 라서 공격 스테이트에서 못 나온다.
+    /// requiredMarker 가 없으면 clipLength 를 그 시점으로 폴백한다.
+    /// 없는 채로 두면 HasPassed 가 영원히 false 라서 그 마커로 전이를 판정하는 스테이트가 못 빠져나간다.
     /// </summary>
-    private void EnsureComboDecision(AnimationClip clip, int index, List<AnimationMarker> markers)
+    private void EnsureRequiredMarker(AnimationClip clip, int index, List<AnimationMarker> markers, EAnimMarker requiredMarker)
     {
         foreach (var marker in markers)
         {
-            if (marker.tag == EAnimMarker.ComboDecision)
+            if (marker.tag == requiredMarker)
                 return;
         }
 
         markers.Add(new AnimationMarker
         {
-            tag   = EAnimMarker.ComboDecision,
+            tag   = requiredMarker,
             start = clip.length,
             end   = clip.length,
         });
 
         Debug.LogWarning
         (
-            $"[CharacterCombatConfig] Step {index} ({clip.name}): '{EAnimMarker.ComboDecision}' 마커가 없어 " +
+            $"[CharacterCombatConfig] Step {index} ({clip.name}): '{requiredMarker}' 마커가 없어 " +
             $"clipLength({clip.length:F3}s) 를 판정 시점으로 사용합니다.",
             target
         );

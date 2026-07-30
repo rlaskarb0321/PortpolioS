@@ -24,7 +24,7 @@ public class NormalAttackState : PlayerStateBase
 
         // 입력창 안에서 공격 버튼을 누르면 다음 타를 예약한다.
         if (step.IsActive(EAnimMarker.ComboInput, elapsed) == true && pressed.IsSet(EPlayerButton.NormalAttack) == true)
-            Action.QueuedNext = true;
+            Action.SetNextQueued(true);
 
         // 판정 시점 전이면 아직 스윙 중.
         if (step.HasPassed(EAnimMarker.ComboDecision, elapsed) == false)
@@ -73,14 +73,14 @@ public class NormalAttackState : PlayerStateBase
     private void EndCombo()
     {
         SetComboIndex(0);
-        Action.QueuedNext = false;
+        Action.SetNextQueued(false);
     }
 
     /// <summary>다음 타로 이어갈 수 있는가. ComboInput 마커가 없는 클립이면 더 못 잇는 마지막 타.</summary>
     private bool CanChain(in AnimationTimeline step)
     {
         return step.Has(EAnimMarker.ComboInput) == true
-            && Action.QueuedNext
+            && Action.IsNextQueued()
             && ComboIndex < Config.NormalComboStepCount;
     }
 

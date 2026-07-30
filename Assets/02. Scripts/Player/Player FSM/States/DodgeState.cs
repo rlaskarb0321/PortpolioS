@@ -10,6 +10,8 @@ public class DodgeState : PlayerStateBase
     public override void OnEnterState()
     {
         Debug.Log($"[DodgeState] OnEnterState");
+        Action.Begin();
+        SetRollData(true);
     }
 
     public override void OnUpdateState(in PlayerInput input, NetworkButtons pressed = default)
@@ -20,15 +22,34 @@ public class DodgeState : PlayerStateBase
     public override void OnExitState()
     {
         Debug.Log($"[DodgeState] OnExitState");
+        Action.SetNextQueued(false);
+        SetRollData(false);
     }
 
     public override bool CanEnterState()
     {
+        Debug.Log($"[DodgeState] CanEnterState {NetworkedAnimatorController.AnimatorData.isRoll}");
+        if (NetworkedAnimatorController.AnimatorData.isRoll)
+            return false;
+        
         return true;
     }
 
     public override bool CanExitState()
     {
-        return true;
+        bool finished = Action.Elapsed >= Config.GetDodgeComboStep().clipLength;
+        Debug.Log($"[DodgeState] CanExitState {finished}");
+
+        return finished;
+    }
+    
+    // ──── Private Methods ────────
+
+    private void SetRollData(bool isRoll)
+    {
+        var data = NetworkedAnimatorController.AnimatorData;
+
+        data.isRoll = isRoll;
+        NetworkedAnimatorController.AnimatorData = data;
     }
 }

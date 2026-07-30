@@ -9,14 +9,23 @@ public class ActionComponent : NetworkBehaviour
 {
     // ─── Networked Properties ────────
     [Networked] private int ActionStartTick { get; set; }
-    [Networked] public NetworkBool QueuedNext { get; set; }
+    [Networked] private NetworkBool QueuedNext { get; set; }
 
-    /// <summary>액션 시작 이후 경과 시간. 시간을 재지 않고 틱 차이로 계산해 리심에 안전하다.</summary>
     public float Elapsed => ((int)Runner.Tick - ActionStartTick) * Runner.DeltaTime;
 
     public void Begin()
     {
         ActionStartTick = (int)Runner.Tick;
         QueuedNext      = false;
+    }
+
+    public bool IsNextQueued()
+    {
+        return QueuedNext;
+    }
+
+    public void SetNextQueued(bool queued)
+    {
+        QueuedNext = queued;
     }
 }

@@ -43,3 +43,11 @@ MonoBehaviour:
       start: 0.7
       end: 0.7
       note: 
+  dodgeComboSteps:
+  - clip: {fileID: 7400000, guid: 6fdfa9253e13cbe45a3fad05928bc7e9, type: 2}
+    clipLength: 1.2
+    markers:
+    - tag: 3
+      start: 0
+      end: 1.199599
+      note: 
