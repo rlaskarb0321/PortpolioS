@@ -43,18 +43,18 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
         strategies.Add(EPlayerStateType.Idle, new LocomotionStrategy(this, animator));
         strategies.Add(EPlayerStateType.Move, new LocomotionStrategy(this, animator));
         strategies.Add(EPlayerStateType.NormalAttack, new NormalAttackStrategy(this, animator));
+        strategies.Add(EPlayerStateType.Dodge, new DodgeStrategy(this, animator));
     }
 }
 
 /// <summary>
 /// Render 가 소비하는 애니메이션 파라미터. 시뮬레이션이 쓰고 Render 가 읽는다.
-/// 시뮬레이션 전용 상태(SwingStartTick, QueuedNext 등)는 여기 넣지 않는다 — NormalComboComponent 소관.
+/// 시뮬레이션 전용 상태(ActionStartTick, QueuedNext 등)는 여기 넣지 않는다 — ActionComponent 소관.
 /// </summary>
 [System.Serializable]
 public struct PlayerNetworkedAnimatorData : INetworkStruct
 {
-    public float locomotionSpeed;
-
-    /// <summary>현재 노멀 콤보 타수. 1-based, 0 = 미공격.</summary>
-    public int normalComboIndex;
+    public float locomotionSpeed;           // 이동속도 관련 스피드
+    public int normalComboIndex;            // 현재 노멀 콤보 타수. 1-based, 0 = 미공격
+    public NetworkBool isRoll;              // 구르기 동작 여부
 }

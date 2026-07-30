@@ -20,11 +20,11 @@ public class NormalAttackState : PlayerStateBase
             return;
 
         var step = CurrentStep;
-        float elapsed = NormalCombo.Elapsed;
+        float elapsed = Action.Elapsed;
 
         // 입력창 안에서 공격 버튼을 누르면 다음 타를 예약한다.
         if (step.IsActive(EAnimMarker.ComboInput, elapsed) == true && pressed.IsSet(EPlayerButton.NormalAttack) == true)
-            NormalCombo.QueuedNext = true;
+            Action.QueuedNext = true;
 
         // 판정 시점 전이면 아직 스윙 중.
         if (step.HasPassed(EAnimMarker.ComboDecision, elapsed) == false)
@@ -48,7 +48,7 @@ public class NormalAttackState : PlayerStateBase
 
         var step = CurrentStep;
 
-        if (step.HasPassed(EAnimMarker.ComboDecision, NormalCombo.Elapsed) == false)
+        if (step.HasPassed(EAnimMarker.ComboDecision, Action.Elapsed) == false)
             return false;
 
         // 이어갈 타가 남아 있으면 여기서 나가지 않고 다음 타로 넘어간다.
@@ -67,20 +67,20 @@ public class NormalAttackState : PlayerStateBase
     private void StartSwing(int index)
     {
         SetComboIndex(index);
-        NormalCombo.BeginSwing();
+        Action.Begin();
     }
 
     private void EndCombo()
     {
         SetComboIndex(0);
-        NormalCombo.QueuedNext = false;
+        Action.QueuedNext = false;
     }
 
     /// <summary>다음 타로 이어갈 수 있는가. ComboInput 마커가 없는 클립이면 더 못 잇는 마지막 타.</summary>
     private bool CanChain(in AnimationTimeline step)
     {
         return step.Has(EAnimMarker.ComboInput) == true
-            && NormalCombo.QueuedNext
+            && Action.QueuedNext
             && ComboIndex < Config.NormalComboStepCount;
     }
 

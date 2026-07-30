@@ -1,34 +1,15 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// 애니메이션 타임라인에 찍히는 마커의 종류.
-///
-/// 오써링은 클립의 애니메이션 이벤트로 한다.
-/// · 점   마커 → EventTiming("ComboDecision")
-/// · 구간 마커 → EventTiming("ComboInput.Open") + EventTiming("ComboInput.Close")
-///
-/// 문자열은 클립(에디터)에만 존재하고, Bake 가 이 enum 으로 번역·검증해서 굽는다.
-/// 런타임 코드는 문자열을 보지 않고 이 enum 으로만 조회한다.
-/// </summary>
 public enum EAnimMarker
 {
     None = 0,
-
-    /// <summary>구간 · 다음 콤보를 예약할 수 있는 입력창</summary>
     ComboInput,
-
-    /// <summary>점 · 콤보 분기 판정 시점</summary>
     ComboDecision,
-
-    /// <summary>구간 · 무적</summary>
     Invincible,
-
-    /// <summary>구간 · 히트박스 활성</summary>
     Hitbox,
 }
 
-/// <summary>마커가 한 순간인지 구간인지.</summary>
 public enum EMarkerKind
 {
     Point,
@@ -78,13 +59,6 @@ public struct AnimationMarker
     public bool IsPoint => Mathf.Approximately(start, end);
 }
 
-/// <summary>
-/// 클립 하나의 타이밍 데이터.
-/// clip 필드만 지정하고, 나머지는 인스펙터의 "Bake" 버튼이 클립의 애니메이션 이벤트에서 채운다.
-///
-/// 오써링은 애니메이션 이벤트로(디자이너 친화적), 런타임 판정은 구워진 수치로(결정론적).
-/// 클립 이벤트를 수정한 뒤 Bake 를 다시 누르면 갱신된다.
-/// </summary>
 [Serializable]
 public struct AnimationTimeline
 {
@@ -120,10 +94,6 @@ public struct AnimationTimeline
 
     /// <summary>
     /// elapsed 가 해당 태그의 구간 안에 있는가.
-    ///
-    /// 같은 태그가 여러 번 나오면(다단 히트, 입력창이 두 번 열리는 공격 등) 구간들의 합집합으로 판정한다.
-    /// 그래서 태그가 일치해도 조기 리턴하지 않고 끝까지 스캔한다 — 여기서 조기 리턴하면
-    /// 두 번째 이후의 구간을 영원히 못 본다.
     /// </summary>
     public bool IsActive(EAnimMarker tag, float elapsed)
     {
