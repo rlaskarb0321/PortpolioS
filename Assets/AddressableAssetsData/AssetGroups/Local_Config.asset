@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Local_Config
   m_GUID: 442a36a4841e9134b94644def6f6e6b8
   m_SerializeEntries:
+  - m_GUID: 2f595fc93164cd542b8b18d00a1cc1f0
+    m_Address: Data/Config/Stat/Unarmed Man
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Data/Config
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cefdd692da71c2346943387f6befc639
     m_Address: Data/Config/Combat/Unarmed Man
     m_ReadOnly: 0

@@ -10,6 +10,7 @@ public class ActionComponent : NetworkBehaviour
     // ─── Networked Properties ────────
     [Networked] private int ActionStartTick { get; set; }
     [Networked] private NetworkBool QueuedNext { get; set; }
+    [Networked] public PlayerCurrentStatData CurrentStat { get; set; }
 
     public float Elapsed => ((int)Runner.Tick - ActionStartTick) * Runner.DeltaTime;
 
@@ -28,4 +29,15 @@ public class ActionComponent : NetworkBehaviour
     {
         QueuedNext = queued;
     }
+}
+
+/// <summary>
+/// 전투 중 변하는 캐릭터 현재값. 최대치·회복량 등 고정 튜닝값 SO(CharacterStatConfig)
+/// 값을 기준으로 매 순간 바뀌는 실제 수치만 담는다.
+/// </summary>
+[System.Serializable]
+public struct PlayerCurrentStatData : INetworkStruct
+{
+    public float currentHp;
+    public float currentEnergy;
 }

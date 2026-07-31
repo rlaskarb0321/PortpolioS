@@ -22,8 +22,10 @@ public class CharacterCombatConfigEditor : Editor
     /// </summary>
     private static readonly (string PropertyName, EAnimMarker? RequiredMarker, string Label)[] TimelineGroups =
     {
-        ("normalComboSteps", EAnimMarker.ComboDecision, "Normal Combo Steps"),
-        ("dodgeComboSteps",  null,                       "Dodge Combo Steps"),
+        ("normalComboSteps",    EAnimMarker.ComboDecision, "Normal Combo Steps"),
+        ("dodgeComboSteps",     null,                       "Dodge Combo Steps"),
+        ("normalExpertSteps",   null,                       "Normal Expert Steps"),
+        ("enhancedExpertSteps", null,                       "Enhanced Expert Steps"),
     };
 
     private const string FieldClip       = "clip";

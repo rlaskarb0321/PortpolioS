@@ -87,6 +87,7 @@ public class PlayerFSMController : NetworkBehaviour
         stateDict.Add(EPlayerStateType.Move, new MoveState(context));
         stateDict.Add(EPlayerStateType.NormalAttack, new NormalAttackState(context));
         stateDict.Add(EPlayerStateType.Dodge, new DodgeState(context));
+        stateDict.Add(EPlayerStateType.Expert, new ExpertState(context));
 
         isInitialized = true;
     }

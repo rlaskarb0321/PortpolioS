@@ -55,6 +55,24 @@ MonoBehaviour:
       start: 0
       end: 1.199599
       note: 
+  normalExpertSteps:
+  - clip: {fileID: 7400000, guid: b4b27930afd835d44aabe535ac578c9d, type: 2}
+    playbackSpeed: 0
+    clipLength: 0.8000001
+    markers:
+    - tag: 5
+      start: 0.3341379
+      end: 0.3341379
+      note: 
+  enhancedExpertSteps:
+  - clip: {fileID: 7400000, guid: b3c84d17d3c4dd342bc5f3cd4b378d18, type: 2}
+    playbackSpeed: 0
+    clipLength: 0.8000001
+    markers:
+    - tag: 5
+      start: 0.34385857
+      end: 0.34385857
+      note: 
   dodgeSpeedCurve:
     serializedVersion: 2
     m_Curve:

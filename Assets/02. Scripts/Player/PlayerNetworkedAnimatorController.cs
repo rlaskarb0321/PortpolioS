@@ -44,6 +44,7 @@ public class PlayerNetworkedAnimatorController : NetworkBehaviour
         strategies.Add(EPlayerStateType.Move, new LocomotionStrategy(this, animator));
         strategies.Add(EPlayerStateType.NormalAttack, new NormalAttackStrategy(this, animator));
         strategies.Add(EPlayerStateType.Dodge, new DodgeStrategy(this, animator));
+        strategies.Add(EPlayerStateType.Expert, new ExpertStrategy(this, animator));
     }
 }
 

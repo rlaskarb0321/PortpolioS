@@ -8,6 +8,7 @@ public enum EAnimMarker
     ComboDecision,
     Invincible,
     Hitbox,
+    Trigger,
 }
 
 public enum EMarkerKind
@@ -31,6 +32,7 @@ public static class AnimMarkerInfo
             case EAnimMarker.Hitbox:     return EMarkerKind.Range;
 
             case EAnimMarker.ComboDecision: return EMarkerKind.Point;
+            case EAnimMarker.Trigger:       return EMarkerKind.Point;
 
             // 태그를 추가하면 위에 명시할 것.
             default: return EMarkerKind.Point;

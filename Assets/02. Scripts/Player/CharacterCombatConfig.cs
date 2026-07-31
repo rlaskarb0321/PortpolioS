@@ -17,6 +17,12 @@ public class CharacterCombatConfig : ScriptableObject
     [Header("Dodge Anim Step")]
     [SerializeField] private AnimationTimeline[] dodgeComboSteps;
 
+    [Header("Normal Expert Step")]
+    [SerializeField] private AnimationTimeline[] normalExpertSteps;
+    
+    [Header("Enhanced Expert Step")]
+    [SerializeField] private AnimationTimeline[] enhancedExpertSteps;
+
     [Header("Dodge Movement")]
     [SerializeField] private AnimationCurve dodgeSpeedCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
     [SerializeField] private float dodgeSpeedMultiplier = 8f;
