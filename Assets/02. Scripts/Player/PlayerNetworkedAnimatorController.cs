@@ -58,4 +58,6 @@ public struct PlayerNetworkedAnimatorData : INetworkStruct
     public float locomotionSpeed;           // 이동속도 관련 스피드
     public int normalComboIndex;            // 현재 노멀 콤보 타수. 1-based, 0 = 미공격
     public NetworkBool isRoll;              // 구르기 동작 여부
+    public NetworkBool isEnhancedExpert;    // 강화된 특수 공격 여부
+    public NetworkBool isNormalExpert;      // 일반 특수 공격 여부
 }

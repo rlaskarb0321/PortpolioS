@@ -14,19 +14,9 @@ using UnityEngine;
 [CustomEditor(typeof(CharacterCombatConfig))]
 public class CharacterCombatConfigEditor : Editor
 {
-    /// <summary>
-    /// 베이크 대상 AnimationTimeline[] 필드 목록.
-    /// RequiredMarker 는 그 타임라인이 반드시 가져야 하는 점 마커 — 없으면 clipLength 로 폴백해 굽는다.
-    /// (없으면 HasPassed 가 영원히 false 라서 그 마커로 전이를 판정하는 스테이트가 못 빠져나간다)
-    /// 그런 전이 판정이 없는 타임라인(Dodge 등)은 null 로 둔다.
-    /// </summary>
-    private static readonly (string PropertyName, EAnimMarker? RequiredMarker, string Label)[] TimelineGroups =
-    {
-        ("normalComboSteps",    EAnimMarker.ComboDecision, "Normal Combo Steps"),
-        ("dodgeComboSteps",     null,                       "Dodge Combo Steps"),
-        ("normalExpertSteps",   null,                       "Normal Expert Steps"),
-        ("enhancedExpertSteps", null,                       "Enhanced Expert Steps"),
-    };
+    private const string FieldStepGroups = "stepGroups";
+    private const string FieldKey        = "key";
+    private const string FieldSteps      = "steps";
 
     private const string FieldClip       = "clip";
     private const string FieldClipLength = "clipLength";
@@ -50,67 +40,69 @@ public class CharacterCombatConfigEditor : Editor
             $" + {AnimationMarkerReceiver.EventFunctionName}(\"{EAnimMarker.ComboInput}{AnimationMarkerReceiver.CloseSuffix}\")\n" +
             $"다른 이름의 이벤트는 무시하므로 연출용 이벤트와 같은 클립에 공존할 수 있습니다.\n" +
             $"태그 오타 · 짝 안 맞음 등은 에러로 보고되고 해당 원소는 기존 값을 유지합니다.\n" +
-            $"아래 버튼 하나로 {string.Join(", ", GetGroupLabels())} 를 한 번에 굽습니다.",
+            $"아래 버튼 하나로 '{FieldStepGroups}' 의 모든 그룹을 한 번에 굽습니다.",
             MessageType.Info
         );
 
-        int totalElements = 0;
-        bool anyGroupFound = false;
+        var stepGroupsProp = serializedObject.FindProperty(FieldStepGroups);
 
-        foreach (var group in TimelineGroups)
-        {
-            var stepsProp = serializedObject.FindProperty(group.PropertyName);
-            if (stepsProp == null)
-                continue;
-
-            anyGroupFound = true;
-            totalElements += stepsProp.arraySize;
-        }
-
-        using (new EditorGUI.DisabledScope(totalElements == 0))
+        using (new EditorGUI.DisabledScope(stepGroupsProp == null || stepGroupsProp.arraySize == 0))
         {
             if (GUILayout.Button("클립에서 타이밍 마커 굽기 (Bake)"))
                 BakeAll();
         }
 
-        if (anyGroupFound == false)
+        if (stepGroupsProp == null)
         {
-            EditorGUILayout.HelpBox("베이크 대상 필드를 찾지 못했습니다. CharacterCombatConfig 의 필드명이 바뀌었다면 CharacterCombatConfigEditor.TimelineGroups 도 함께 갱신하세요.", MessageType.Warning);
+            EditorGUILayout.HelpBox($"'{FieldStepGroups}' 필드를 찾지 못했습니다. CharacterCombatConfig 의 필드명이 바뀌었다면 이 에디터도 함께 갱신하세요.", MessageType.Warning);
             return;
         }
 
-        foreach (var group in TimelineGroups)
+        for (int i = 0; i < stepGroupsProp.arraySize; ++i)
         {
-            var stepsProp = serializedObject.FindProperty(group.PropertyName);
+            var groupProp = stepGroupsProp.GetArrayElementAtIndex(i);
+            var stepsProp = groupProp.FindPropertyRelative(FieldSteps);
 
             if (stepsProp != null && stepsProp.arraySize == 0)
-                EditorGUILayout.HelpBox($"{group.Label} 배열이 비어 있습니다.", MessageType.Warning);
+            {
+                var key = (EAnimStepKey)groupProp.FindPropertyRelative(FieldKey).intValue;
+                EditorGUILayout.HelpBox($"{key} 배열이 비어 있습니다.", MessageType.Warning);
+            }
         }
     }
 
-    private static IEnumerable<string> GetGroupLabels()
-    {
-        foreach (var group in TimelineGroups)
-            yield return group.Label;
-    }
-
     // ─── Bake ────────
+
+    /// <summary>
+    /// key 별로 반드시 가져야 하는 점 마커 — 없으면 clipLength 로 폴백해 굽는다.
+    /// (없으면 HasPassed 가 영원히 false 라서 그 마커로 전이를 판정하는 스테이트가 못 빠져나간다)
+    /// 그런 전이 판정이 없는 key(Dodge, Expert 등)는 null.
+    /// </summary>
+    private static EAnimMarker? RequiredMarkerFor(EAnimStepKey key)
+    {
+        switch (key)
+        {
+            case EAnimStepKey.NormalCombo: return EAnimMarker.ComboDecision;
+            default:                       return null;
+        }
+    }
 
     private void BakeAll()
     {
         var log = new StringBuilder();
         log.AppendLine($"[CharacterCombatConfig] '{target.name}' 타이밍 마커 베이크 결과");
 
+        var stepGroupsProp = serializedObject.FindProperty(FieldStepGroups);
         int totalFailed = 0;
 
-        foreach (var group in TimelineGroups)
+        for (int i = 0; i < stepGroupsProp.arraySize; ++i)
         {
-            var stepsProp = serializedObject.FindProperty(group.PropertyName);
-            if (stepsProp == null)
-                continue;
+            var groupProp = stepGroupsProp.GetArrayElementAtIndex(i);
+            var key       = (EAnimStepKey)groupProp.FindPropertyRelative(FieldKey).intValue;
+            var stepsProp = groupProp.FindPropertyRelative(FieldSteps);
 
-            log.AppendLine($" [{group.Label}]");
-            totalFailed += BakeTimelines(stepsProp, group.RequiredMarker, log);
+            log.AppendLine($" [{key}]");
+            totalFailed += BakeTimelines(stepsProp, RequiredMarkerFor(key), log);
         }
 
         serializedObject.ApplyModifiedProperties();

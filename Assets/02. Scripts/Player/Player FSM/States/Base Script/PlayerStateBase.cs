@@ -8,6 +8,9 @@ public abstract class PlayerStateBase
 
     // ──── Properties ────────────
     public abstract EPlayerStateType StateType { get; }
+
+    /// <summary>OnEnterState 가 확정한 애니메이션 스텝. "재생 중인 스텝" 개념이 없는 state(Idle, Move 등)는 override 하지 않는다.</summary>
+    public virtual AnimationTimeline CurrentStep => default;
     protected PlayerFSMController Controller => context.controller;
     protected PlayerNetworkedAnimatorController NetworkedAnimatorController => context.NetworkedAnimatorController;
     protected KCC Kcc => context.kcc;

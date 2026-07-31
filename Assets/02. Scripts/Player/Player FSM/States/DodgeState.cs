@@ -6,6 +6,7 @@ public class DodgeState : PlayerStateBase
     public DodgeState(in PlayerFSMContext inContext) : base(in inContext) { }
 
     public override EPlayerStateType StateType { get => EPlayerStateType.Dodge; }
+    public override AnimationTimeline CurrentStep => CombatConfig.GetStep(EAnimStepKey.Dodge);
 
     public override void OnEnterState()
     {
@@ -17,7 +18,7 @@ public class DodgeState : PlayerStateBase
 
     public override void OnUpdateState(in PlayerInput input, NetworkButtons pressed = default)
     {
-        AnimationTimeline animation = CombatConfig.GetDodgeComboStep();
+        AnimationTimeline animation = CurrentStep;
         float t = Mathf.Clamp01(Action.Elapsed / animation.EffectiveClipLength);
         float speed = CombatConfig.DodgeSpeedCurve.Evaluate(t) * CombatConfig.DodgeSpeedMultiplier * animation.playbackSpeed;
         Vector3 direction = Kcc.Data.TransformDirection;
@@ -43,7 +44,7 @@ public class DodgeState : PlayerStateBase
 
     public override bool CanExitState()
     {
-        bool finished = Action.Elapsed >= CombatConfig.GetDodgeComboStep().EffectiveClipLength;
+        bool finished = Action.Elapsed >= CurrentStep.EffectiveClipLength;
         Debug.Log($"[DodgeState] CanExitState {finished}");
 
         return finished;

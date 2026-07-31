@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu
@@ -10,35 +11,60 @@ public class CharacterCombatConfig : ScriptableObject
 {
     [SerializeField] private float maxMoveSpeed;
 
-    [Header("Normal Combo Step")]
-    [Tooltip("배열 순서가 콤보 순서다. 원소마다 clip 만 지정하고 Bake 로 마커를 굽는다")]
-    [SerializeField] private AnimationTimeline[] normalComboSteps;
-
-    [Header("Dodge Anim Step")]
-    [SerializeField] private AnimationTimeline[] dodgeComboSteps;
-
-    [Header("Normal Expert Step")]
-    [SerializeField] private AnimationTimeline[] normalExpertSteps;
-    
-    [Header("Enhanced Expert Step")]
-    [SerializeField] private AnimationTimeline[] enhancedExpertSteps;
+    [Header("Animation Steps")]
+    [Tooltip("Key 별로 스텝 배열을 묶는다. 새 상태의 애니메이션이 필요하면 여기 원소를 추가")]
+    [SerializeField] private AnimationStepGroup[] stepGroups;
 
     [Header("Dodge Movement")]
     [SerializeField] private AnimationCurve dodgeSpeedCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
     [SerializeField] private float dodgeSpeedMultiplier = 8f;
 
+    private Dictionary<EAnimStepKey, AnimationTimeline[]> stepMap;
+
     public float MaxMoveSpeed => maxMoveSpeed;
-    public int NormalComboStepCount => normalComboSteps != null ? normalComboSteps.Length : 0;
     public AnimationCurve DodgeSpeedCurve => dodgeSpeedCurve;
     public float DodgeSpeedMultiplier => dodgeSpeedMultiplier;
 
-    public AnimationTimeline GetComboStep(int index)
+    public int GetStepCount(EAnimStepKey key)
     {
-        return normalComboSteps[index];
+        return BuildStepMap().TryGetValue(key, out AnimationTimeline[] steps) == true ? steps.Length : 0;
     }
 
-    public AnimationTimeline GetDodgeComboStep(int index = 0)
+    public AnimationTimeline GetStep(EAnimStepKey key, int index = 0)
     {
-        return dodgeComboSteps[index];
+        return BuildStepMap()[key][index];
     }
+
+    private Dictionary<EAnimStepKey, AnimationTimeline[]> BuildStepMap()
+    {
+        if (stepMap == null)
+        {
+            stepMap = new Dictionary<EAnimStepKey, AnimationTimeline[]>();
+
+            if (stepGroups != null)
+            {
+                foreach (var group in stepGroups)
+                    stepMap[group.key] = group.steps;
+            }
+        }
+
+        return stepMap;
+    }
+}
+
+public enum EAnimStepKey
+{
+    NormalCombo,
+    Dodge,
+    ExpertNormal,
+    ExpertEnhanced,
+}
+
+[System.Serializable]
+public struct AnimationStepGroup
+{
+    public EAnimStepKey key;
+
+    [Tooltip("배열 순서가 콤보 순서다 (콤보가 아니면 0번 원소만 쓴다). 원소마다 clip 만 지정하고 Bake 로 마커를 굽는다")]
+    public AnimationTimeline[] steps;
 }

@@ -7,7 +7,7 @@ public class NormalAttackState : PlayerStateBase
 
     public override EPlayerStateType StateType { get => EPlayerStateType.NormalAttack; }
     private int ComboIndex { get => NetworkedAnimatorController.AnimatorData.normalComboIndex; }
-    private AnimationTimeline CurrentStep { get => CombatConfig.GetComboStep(ComboIndex - 1); }
+    public override AnimationTimeline CurrentStep => CombatConfig.GetStep(EAnimStepKey.NormalCombo, ComboIndex - 1);
 
     public override void OnEnterState()
     {
@@ -81,7 +81,7 @@ public class NormalAttackState : PlayerStateBase
     {
         return step.Has(EAnimMarker.ComboInput) == true
             && Action.IsNextQueued()
-            && ComboIndex < CombatConfig.NormalComboStepCount;
+            && ComboIndex < CombatConfig.GetStepCount(EAnimStepKey.NormalCombo);
     }
 
     private void SetComboIndex(int index)
