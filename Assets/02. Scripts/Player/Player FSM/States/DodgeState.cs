@@ -17,9 +17,9 @@ public class DodgeState : PlayerStateBase
 
     public override void OnUpdateState(in PlayerInput input, NetworkButtons pressed = default)
     {
-        AnimationTimeline animation = Config.GetDodgeComboStep();
+        AnimationTimeline animation = CombatConfig.GetDodgeComboStep();
         float t = Mathf.Clamp01(Action.Elapsed / animation.EffectiveClipLength);
-        float speed = Config.DodgeSpeedCurve.Evaluate(t) * Config.DodgeSpeedMultiplier * animation.playbackSpeed;
+        float speed = CombatConfig.DodgeSpeedCurve.Evaluate(t) * CombatConfig.DodgeSpeedMultiplier * animation.playbackSpeed;
         Vector3 direction = Kcc.Data.TransformDirection;
 
         Kcc.SetDynamicVelocity(direction * speed);
@@ -43,7 +43,7 @@ public class DodgeState : PlayerStateBase
 
     public override bool CanExitState()
     {
-        bool finished = Action.Elapsed >= Config.GetDodgeComboStep().EffectiveClipLength;
+        bool finished = Action.Elapsed >= CombatConfig.GetDodgeComboStep().EffectiveClipLength;
         Debug.Log($"[DodgeState] CanExitState {finished}");
 
         return finished;

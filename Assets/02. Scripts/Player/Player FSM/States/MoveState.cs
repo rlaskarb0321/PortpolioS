@@ -16,7 +16,7 @@ public class MoveState : PlayerStateBase
         var horizontal = Kcc.Data.RealVelocity;
         horizontal.y = 0f;
         
-        float normalized = Mathf.Clamp01(horizontal.magnitude / Controller.Config.MaxMoveSpeed);
+        float normalized = Mathf.Clamp01(horizontal.magnitude / Controller.CombatConfig.MaxMoveSpeed);
         var data = NetworkedAnimatorController.AnimatorData;
 
         data.locomotionSpeed = normalized;

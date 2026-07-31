@@ -1,5 +1,8 @@
+using Cysharp.Threading.Tasks;
 using Fusion;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>
 /// 현재 진행 중인 액션(노멀 공격, 회피, 스킬 등)의 시뮬레이션 상태.
@@ -7,6 +10,14 @@ using UnityEngine;
 /// </summary>
 public class ActionComponent : NetworkBehaviour
 {
+    [Header("Stat Config")]
+    [SerializeField] private string statConfigForm = "Data/Config/Stat/{0}";
+
+    private CharacterStatConfig statConfig;
+    private AsyncOperationHandle<CharacterStatConfig> statConfigHandle;
+
+    public CharacterStatConfig StatConfig => statConfig;
+
     // ─── Networked Properties ────────
     [Networked] private int ActionStartTick { get; set; }
     [Networked] private NetworkBool QueuedNext { get; set; }
@@ -28,6 +39,36 @@ public class ActionComponent : NetworkBehaviour
     public void SetNextQueued(bool queued)
     {
         QueuedNext = queued;
+    }
+
+    // ──── Private Methods ────────
+
+    private async UniTaskVoid LoadStatConfig()
+    {
+        string address = string.Format(statConfigForm, GetComponent<PlayerFSMController>().CharacterName.ToString());
+
+        statConfigHandle = Addressables.LoadAssetAsync<CharacterStatConfig>(address);
+        await statConfigHandle.Task;
+
+        if (statConfigHandle.Status != AsyncOperationStatus.Succeeded || statConfigHandle.Result == null)
+        {
+            Debug.LogError($"[ActionComponent] StatConfig 로드 실패: {address}");
+            return;
+        }
+
+        statConfig = statConfigHandle.Result;
+    }
+    
+    public override void Spawned()
+    {
+        base.Spawned();
+        LoadStatConfig().Forget();
+    }
+
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        if (statConfigHandle.IsValid())
+            Addressables.Release(statConfigHandle);
     }
 }
 

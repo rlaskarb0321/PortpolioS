@@ -8,11 +8,13 @@ public abstract class PlayerStateBase
 
     // ──── Properties ────────────
     public abstract EPlayerStateType StateType { get; }
-    public PlayerFSMController Controller => context.controller;
-    public PlayerNetworkedAnimatorController NetworkedAnimatorController => context.NetworkedAnimatorController;
-    public KCC Kcc => context.kcc;
-    public ActionComponent Action => context.action;
-    public CharacterCombatConfig Config => Controller.Config;
+    protected PlayerFSMController Controller => context.controller;
+    protected PlayerNetworkedAnimatorController NetworkedAnimatorController => context.NetworkedAnimatorController;
+    protected KCC Kcc => context.kcc;
+    protected ActionComponent Action => context.action;
+    protected CharacterCombatConfig CombatConfig => Controller.CombatConfig;
+    protected CharacterStatConfig StatConfig => Action.StatConfig;
+    protected PlayerCurrentStatData CurrentStat => Action.CurrentStat;
 
     // ──── Constructor ────────────
     public PlayerStateBase(in PlayerFSMContext inContext)

@@ -15,11 +15,11 @@ public class PlayerFSMController : NetworkBehaviour
 
     private PlayerFSMContext context;
     private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
-    private CharacterCombatConfig combatConfig;
+    private CharacterCombatConfig combatCombatConfig;
     private AsyncOperationHandle<CharacterCombatConfig> combatConfigHandle;
     private bool isInitialized;
 
-    public CharacterCombatConfig Config => combatConfig;
+    public CharacterCombatConfig CombatConfig => combatCombatConfig;
 
 #if UNITY_EDITOR
     [SerializeField] private EPlayerStateType currentState;
@@ -28,7 +28,7 @@ public class PlayerFSMController : NetworkBehaviour
     // ─── Networked Properties ────────
     [Networked] private NetworkButtons PreviousButtons { get; set; }
     [Networked] public EPlayerStateType CurrentState { get; private set; }
-    [Networked] private NetworkString<_32> CharacterName { get; set; }
+    [Networked] public NetworkString<_32> CharacterName { get; private set; }
 
     public void SetCharacterName(string inName) => CharacterName = inName;
 
@@ -74,8 +74,8 @@ public class PlayerFSMController : NetworkBehaviour
             return;
         }
 
-        combatConfig = combatConfigHandle.Result;
-        GetComponent<EnvironmentProcessor>().KinematicSpeed = combatConfig.MaxMoveSpeed;
+        combatCombatConfig = combatConfigHandle.Result;
+        GetComponent<EnvironmentProcessor>().KinematicSpeed = combatCombatConfig.MaxMoveSpeed;
         
         var animator = GetComponent<PlayerNetworkedAnimatorController>();
         var kcc = GetComponent<KCC>();
