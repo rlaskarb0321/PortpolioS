@@ -1,8 +1,5 @@
-using Cysharp.Threading.Tasks;
 using Fusion;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 /// <summary>
 /// 현재 진행 중인 액션(노멀 공격, 회피, 스킬 등)의 시뮬레이션 상태.
@@ -10,11 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 /// </summary>
 public class ActionComponent : NetworkBehaviour
 {
-    [Header("Stat Config")]
-    [SerializeField] private string statConfigForm = "Data/Config/Stat/{0}";
-
     private CharacterStatConfig statConfig;
-    private AsyncOperationHandle<CharacterStatConfig> statConfigHandle;
 
     public CharacterStatConfig StatConfig => statConfig;
 
@@ -41,34 +34,17 @@ public class ActionComponent : NetworkBehaviour
         QueuedNext = queued;
     }
 
-    // ──── Private Methods ────────
-
-    private async UniTaskVoid LoadStatConfig()
-    {
-        string address = string.Format(statConfigForm, GetComponent<PlayerFSMController>().CharacterName.ToString());
-
-        statConfigHandle = Addressables.LoadAssetAsync<CharacterStatConfig>(address);
-        await statConfigHandle.Task;
-
-        if (statConfigHandle.Status != AsyncOperationStatus.Succeeded || statConfigHandle.Result == null)
-        {
-            Debug.LogError($"[ActionComponent] StatConfig 로드 실패: {address}");
-            return;
-        }
-
-        statConfig = statConfigHandle.Result;
-    }
-    
+    /// <summary>
+    /// Config 는 CharacterConfigPreloader 가 스폰 이전에 로드해 두었으므로 동기 조회만 한다.
+    /// 예전처럼 여기서 비동기 로드를 걸면 PlayerFSMController 의 로드와 완료 순서가
+    /// 보장되지 않아, FSM 이 도는 동안 statConfig 가 아직 null 일 수 있었다.
+    /// </summary>
     public override void Spawned()
     {
         base.Spawned();
-        LoadStatConfig().Forget();
-    }
 
-    public override void Despawned(NetworkRunner runner, bool hasState)
-    {
-        if (statConfigHandle.IsValid())
-            Addressables.Release(statConfigHandle);
+        string characterName = GetComponent<PlayerFSMController>().CharacterName.ToString();
+        statConfig = CharacterConfigRegistry.GetStatConfig(characterName);
     }
 }
 

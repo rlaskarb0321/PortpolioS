@@ -1,23 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Fusion;
 using Fusion.Addons.KCC;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class PlayerFSMController : NetworkBehaviour
 {
-    [Header("Combat Config")]
-    [SerializeField] private string combatConfigForm = "Data/Config/Combat/{0}";
-
     private PlayerFSMContext context;
     private Dictionary<EPlayerStateType, PlayerStateBase> stateDict;
     private CharacterCombatConfig combatCombatConfig;
-    private AsyncOperationHandle<CharacterCombatConfig> combatConfigHandle;
-    private bool isInitialized;
 
     public CharacterCombatConfig CombatConfig => combatCombatConfig;
 
@@ -34,7 +24,11 @@ public class PlayerFSMController : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (isInitialized == false)
+        // 로드 완료 여부로 시뮬레이션을 분기하지 않는다 — Config 는 스폰 이전에 프리로드된다.
+        // 여기 남은 것은 "설정 오류로 영영 초기화되지 않은 경우"를 위한 상수 가드다.
+        // (시간에 따라 값이 변하지 않으므로 재시뮬레이션 결과를 바꾸지 않는다.
+        //  실제 실패는 CharacterConfigPreloader / Spawned 에서 이미 에러로 보고된다)
+        if (stateDict == null)
             return;
 
         if (Runner.TryGetInputForPlayer(Object.InputAuthority, out PlayerInput input) == true)
@@ -49,34 +43,20 @@ public class PlayerFSMController : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// CharacterName 은 onBeforeSpawned 에서 주입되므로 이 시점에 모든 피어에서 유효하다.
+    /// Config 는 CharacterConfigPreloader 가 스폰 이전에 로드해 두었으므로 여기서는 동기 조회만 한다.
+    /// </summary>
     public override void Spawned()
     {
         base.Spawned();
-        LoadCombatConfig().Forget();
-    }
 
-    public override void Despawned(NetworkRunner runner, bool hasState)
-    {
-        if (combatConfigHandle.IsValid())
-            Addressables.Release(combatConfigHandle);
-    }
-
-    private async UniTaskVoid LoadCombatConfig()
-    {
-        string address = string.Format(combatConfigForm, CharacterName.ToString());
-
-        combatConfigHandle = Addressables.LoadAssetAsync<CharacterCombatConfig>(address);
-        await combatConfigHandle.Task;
-
-        if (combatConfigHandle.Status != AsyncOperationStatus.Succeeded || combatConfigHandle.Result == null)
-        {
-            Debug.LogError($"[PlayerFSMController] CombatConfig 로드 실패: {address}");
+        combatCombatConfig = CharacterConfigRegistry.GetCombatConfig(CharacterName.ToString());
+        if (combatCombatConfig == null)
             return;
-        }
 
-        combatCombatConfig = combatConfigHandle.Result;
         GetComponent<EnvironmentProcessor>().KinematicSpeed = combatCombatConfig.MaxMoveSpeed;
-        
+
         var animator = GetComponent<PlayerNetworkedAnimatorController>();
         var kcc = GetComponent<KCC>();
         var action = GetComponent<ActionComponent>();
@@ -88,8 +68,6 @@ public class PlayerFSMController : NetworkBehaviour
         stateDict.Add(EPlayerStateType.NormalAttack, new NormalAttackState(context));
         stateDict.Add(EPlayerStateType.Dodge, new DodgeState(context));
         stateDict.Add(EPlayerStateType.Expert, new ExpertState(context));
-
-        isInitialized = true;
     }
 
     private void ConvertState(EPlayerStateType newState)

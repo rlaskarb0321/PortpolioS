@@ -24,7 +24,7 @@ public class ExpertState : PlayerStateBase
         var step = CurrentStep;
         float elapsed = Action.Elapsed;
 
-        if (step.IsActive(EAnimMarker.Trigger, elapsed) == false)
+        if (step.HasPassed(EAnimMarker.Trigger, elapsed) == false)
             return;
         
         // 이제 여기서 추상화 호출이 또 들어가야함. 캐릭터별로 Normal/Enhance Expert 가 다 다르니까!
