@@ -28,6 +28,7 @@ MonoBehaviour:
         start: 0.7
         end: 0.7
         note: 
+      cues: []
     - clip: {fileID: 7400000, guid: f79772bae0af8484296386520662effb, type: 2}
       playbackSpeed: 0
       clipLength: 0.8000001
@@ -40,6 +41,7 @@ MonoBehaviour:
         start: 0.6333333
         end: 0.6333333
         note: 
+      cues: []
     - clip: {fileID: 7400000, guid: b5778a46fd704ed4a9096f01ec8a8476, type: 2}
       playbackSpeed: 0
       clipLength: 0.8000001
@@ -48,6 +50,7 @@ MonoBehaviour:
         start: 0.7
         end: 0.7
         note: 
+      cues: []
   - key: 1
     steps:
     - clip: {fileID: 7400000, guid: 6fdfa9253e13cbe45a3fad05928bc7e9, type: 2}
@@ -58,6 +61,7 @@ MonoBehaviour:
         start: 0
         end: 1.199599
         note: 
+      cues: []
   - key: 2
     steps:
     - clip: {fileID: 7400000, guid: b4b27930afd835d44aabe535ac578c9d, type: 2}
@@ -67,6 +71,17 @@ MonoBehaviour:
       - tag: 5
         start: 0.3341379
         end: 0.3341379
+        note: 
+      cues:
+      - tag: 5
+        occurrence: 0
+        phase: 0
+        soundAddress: 
+        effectAddress: 
+        attachBone: 
+        localOffset: {x: 0, y: 0, z: 0}
+        followBone: 0
+        lifetime: 0
         note: 
   - key: 3
     steps:
@@ -78,6 +93,7 @@ MonoBehaviour:
         start: 0.34385857
         end: 0.34385857
         note: 
+      cues: []
   dodgeSpeedCurve:
     serializedVersion: 2
     m_Curve:

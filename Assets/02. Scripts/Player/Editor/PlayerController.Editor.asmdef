@@ -2,7 +2,8 @@
     "name": "PlayerController.Editor",
     "rootNamespace": "",
     "references": [
-        "PlayerController"
+        "PlayerController",
+        "Unity.Addressables.Editor"
     ],
     "includePlatforms": [
         "Editor"
