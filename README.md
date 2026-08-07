@@ -1,39 +1,73 @@
 # PortpolioS
 
 > 게임 클라이언트 개발자 공고에서 자주 요구되거나 차별점이 되는 기능을 도입한, 기술 중심 ARPG 포트폴리오
+> 싱글+멀티 혼용 가능한 뒤끝 기반 안드로이드 유니티 프로젝트
 
 ---
 
 ## 목차
 
-- [1. 개요](#1-개요)
-  - [1.1. 프로젝트 목표](#11-프로젝트-목표)
-  - [1.2. 기술 스택](#12-기술-스택)
-- [2. 프로젝트 구조](#2-프로젝트-구조)
-  - [2.1. 부트스트랩 씬 구조](#21-부트스트랩-씬-구조)
-  - [2.2. 어셈블리 구성](#22-어셈블리-구성)
-  - [2.3. 씬 구성](#23-씬-구성)
-- [3. 앱 부트스트랩](#3-앱-부트스트랩)
-  - [3.1. AppLaunchManager 와 실행 모듈](#31-applaunchmanager-와-실행-모듈)
-  - [3.2. 로딩 씬과 씬 로드 전략](#32-로딩-씬과-씬-로드-전략)
-  - [3.3. 게임 모드와 서브 매니저](#33-게임-모드와-서브-매니저)
-- [4. 네트워크 멀티플레이](#4-네트워크-멀티플레이)
-  - [4.1. NetworkRunnerController](#41-networkrunnercontroller)
-  - [4.2. 매치메이킹과 로비](#42-매치메이킹과-로비)
-  - [4.3. 인게임 씬 구성 흐름](#43-인게임-씬-구성-흐름)
-- [5. 플레이어 컨트롤](#5-플레이어-컨트롤)
-  - [5.1. 입력과 가상 조이스틱](#51-입력과-가상-조이스틱)
-  - [5.2. 플레이어 FSM](#52-플레이어-fsm)
-  - [5.3. 애니메이션 전략](#53-애니메이션-전략)
-  - [5.4. 애니메이션 타임라인 마커](#54-애니메이션-타임라인-마커)
-- [6. 데이터 파이프라인](#6-데이터-파이프라인)
-  - [6.1. 뒤끝 차트 데이터](#61-뒤끝-차트-데이터)
-  - [6.2. 캐릭터 Config](#62-캐릭터-config)
-  - [6.3. Addressables 프리로드](#63-addressables-프리로드)
-- [7. 에디터 툴](#7-에디터-툴)
-  - [7.1. Go Test Scene](#71-go-test-scene)
-  - [7.2. Character Combat Config Editor](#72-character-combat-config-editor)
-  - [7.3. Chart Update](#73-chart-update)
+<details>
+<summary><b><a href="#1-개요">1. 개요</a></b></summary>
+
+- [1.1. 프로젝트 목표](#11-프로젝트-목표)
+- [1.2. 기술 스택](#12-기술-스택)
+
+</details>
+
+<details>
+<summary><b><a href="#2-프로젝트-구조">2. 프로젝트 구조</a></b></summary>
+
+- [2.1. 부트스트랩 씬 구조](#21-부트스트랩-씬-구조)
+- [2.2. 어셈블리 구성](#22-어셈블리-구성)
+- [2.3. 씬 구성](#23-씬-구성)
+
+</details>
+
+<details>
+<summary><b><a href="#3-앱-부트스트랩">3. 앱 부트스트랩</a></b></summary>
+
+- [3.1. AppLaunchManager 와 실행 모듈](#31-applaunchmanager-와-실행-모듈)
+- [3.2. 로딩 씬과 씬 로드 전략](#32-로딩-씬과-씬-로드-전략)
+- [3.3. 게임 모드와 서브 매니저](#33-게임-모드와-서브-매니저)
+
+</details>
+
+<details>
+<summary><b><a href="#4-네트워크-멀티플레이">4. 네트워크 멀티플레이</a></b></summary>
+
+- [4.1. NetworkRunnerController](#41-networkrunnercontroller)
+- [4.2. 매치메이킹과 로비](#42-매치메이킹과-로비)
+
+</details>
+
+<details>
+<summary><b><a href="#5-플레이어-컨트롤">5. 플레이어 컨트롤</a></b></summary>
+
+- [5.1. 입력과 가상 조이스틱](#51-입력과-가상-조이스틱)
+- [5.2. 플레이어 FSM](#52-플레이어-fsm)
+- [5.3. 애니메이션 전략](#53-애니메이션-전략)
+- [5.4. 애니메이션 타임라인 마커](#54-애니메이션-타임라인-마커)
+
+</details>
+
+<details>
+<summary><b><a href="#6-데이터-파이프라인">6. 데이터 파이프라인</a></b></summary>
+
+- [6.1. 뒤끝 차트 데이터](#61-뒤끝-차트-데이터)
+- [6.2. 캐릭터 Config](#62-캐릭터-config)
+- [6.3. Addressables 프리로드](#63-addressables-프리로드)
+
+</details>
+
+<details>
+<summary><b><a href="#7-에디터-툴">7. 에디터 툴</a></b></summary>
+
+- [7.1. Go Test Scene](#71-go-test-scene)
+- [7.2. Character Combat Config Editor](#72-character-combat-config-editor)
+- [7.3. Chart Update](#73-chart-update)
+
+</details>
 
 ---
 
@@ -41,7 +75,7 @@
 
 ### 1.1. 프로젝트 목표
 
-클라이언트 개발 직군에서 실제로 검증하는 영역 — 결정론, 네트워크 동기화, 상태 기반 전투, 데이터 주도 설계, 에셋 로딩 파이프라인 — 을 한 프로젝트 안에서 동작하는 형태로 구현하는 것을 목표로 합니다.
+— 결정론, 네트워크 동기화, 상태 기반 전투, 데이터 주도 설계, 에셋 로딩 파이프라인 — 을 한 프로젝트 안에서 동작하는 형태로 구현하는 것을 목표로 합니다.
 
 [↑ 목차](#목차)
 
@@ -51,10 +85,11 @@
 | --- | --- |
 | 엔진 | Unity |
 | 네트워크 | Photon Fusion 2 (Shared / AutoHostOrClient), Fusion KCC Addon, Fusion Physics Addon |
-| 백엔드 | 뒤끝(TheBackend) — 로그인, 유저 데이터, CDN 차트 |
+| 백엔드 | 뒤끝(TheBackend) — 구글 로그인, 유저 데이터, CDN 차트 |
 | 비동기 | UniTask |
 | 에셋 로딩 | Addressables, AWS S3 |
 | 입력 | Unity Input System + 커스텀 가상 조이스틱 |
+| 디바이스 | AOS |
 
 [↑ 목차](#목차)
 
@@ -116,7 +151,7 @@
 
 ### 3.1. AppLaunchManager 와 실행 모듈
 
-앱 초기화를 단일 함수가 아니라 **순서를 가진 모듈 배열**로 표현합니다. [`AppLaunchManager`](Assets/02.%20Scripts/Bootstrap%20Scene/AppLaunchManager.cs) 는 인스펙터에 등록된 [`AppLaunchModuleBase`](Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/00.%20Root%20Scripts/AppLaunchModuleBase.cs) 를 순차적으로 `await` 하기만 합니다.
+앱 초기화를 **순서를 가진 모듈 배열**로 표현합니다. [`AppLaunchManager`](Assets/02.%20Scripts/Bootstrap%20Scene/AppLaunchManager.cs) 는 인스펙터에 등록된 [`AppLaunchModuleBase`](Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/00.%20Root%20Scripts/AppLaunchModuleBase.cs) 를 순차적으로 `await` 하기만 합니다.
 
 <pre>
 <a href="Assets/02.%20Scripts/Bootstrap%20Scene/AppLaunchManager.cs">AppLaunchManager</a>
@@ -165,7 +200,7 @@ GameModeBase (EGameModeType)
 
 ### 4.1. NetworkRunnerController
 
-`INetworkRunnerCallbacks` 를 구현한 단일 지점으로, Fusion 콜백을 C# 이벤트로 재발행해 다른 시스템이 Fusion 인터페이스를 직접 구현하지 않아도 되게 합니다.
+[`NetworkRunnerController`](Assets/02.%20Scripts/Bootstrap%20Scene/Network/NetworkRunnerController.cs) 는 `INetworkRunnerCallbacks` 를 구현한 단일 지점으로, Fusion 콜백을 C# 이벤트로 재발행해 다른 시스템이 Fusion 인터페이스를 직접 구현하지 않아도 되게 합니다.
 
 | 이벤트 | 발행 시점 |
 | --- | --- |
@@ -177,36 +212,22 @@ GameModeBase (EGameModeType)
 
 ### 4.2. 매치메이킹과 로비
 
-`MatchMakingManager` 가 `GameMode.AutoHostOrClient` 로 세션 참가/생성을 일원화합니다. 첫 참가자가 호스트가 되고 이후 참가자는 클라이언트로 붙습니다.
+[`MatchMakingManager`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/MatchMakingManager.cs) 가 `GameMode.AutoHostOrClient` 로 세션 참가/생성을 일원화합니다. 첫 참가자가 호스트가 되고 이후 참가자는 클라이언트로 붙습니다.
 
 로비는 MVP 로 분리되어 있습니다.
 
-```
-MultiplayerScenePresenter
-├── LobbyStateManager            로비 상태
-├── MatchMakingManager           세션 참가/생성
-└── View
-    ├── CreateSessionView
-    ├── LobbyPlayerManagerView
-    ├── LobbyCharacterSlotView
-    ├── LobbyCharacterReadyView
-    └── MultiplayStageElementView
-```
+| 역할 | 클래스 | 하는 일 |
+| --- | --- | --- |
+| **Model** | [`LobbyStateManager`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/LobbyStateManager.cs) | `NetworkBehaviour`. `[Networked] NetworkArray<LobbyPlayerRef>` 가 로비 상태의 유일한 원본이고, 값이 바뀌면 `OnChangedLobbyPlayer` 를 발행 |
+| | [`LobbyPlayerRef`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/LobbyStateManager.cs) | 플레이어 한 명의 데이터 — 닉네임 · 준비 여부 · 호스트 여부. `INetworkStruct` |
+| **View** | [`MultiplayStageElementView`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/View/MultiplayStageElementView.cs) | 스테이지 선택 버튼 |
+| | [`CreateSessionView`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/View/CreateSessionView.cs) | 맵 선택 → 매칭 → 준비 → 시작으로 이어지는 버튼 상태 표시 |
+| | [`LobbyPlayerManagerView`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/View/LobbyPlayerManagerView.cs) | `Render(NetworkArray<LobbyPlayerRef>)` 로 슬롯 전체를 갱신 |
+| | [`LobbyCharacterSlotView`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/View/LobbyCharacterSlotView.cs) | 슬롯 한 칸 — 플레이어 표시 |
+| | [`LobbyCharacterReadyView`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/View/LobbyCharacterReadyView.cs) | 슬롯 한 칸 — 준비 상태 표시 |
+| **Presenter** | [`MultiplayerScenePresenter`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/MultiplayerScenePresenter.cs) | 양쪽을 모두 아는 유일한 지점. View 의 버튼 이벤트를 받아 Model 을 RPC 로 갱신하고, Model 의 변경 이벤트를 받아 View 를 렌더 |
 
-[↑ 목차](#목차)
-
-### 4.3. 인게임 씬 구성 흐름
-
-```
-MultiplayerInGameMode
-└── SubManagers (순서 = 의존 순서)
-    ├── MapLoader                  스테이지 정의에 따른 맵 로드
-    ├── CharacterConfigPreloader   참가자 선택 캐릭터의 Config 프리로드
-    ├── PlayerCharacterSpawner     플레이어 스폰 (onBeforeSpawned 로 캐릭터명 주입)
-    └── UISceneLoader              입력 UI 씬 Additive 로드
-```
-
-스폰 시점에 Config 가 이미 메모리에 있어야 하므로 프리로드가 스폰보다 앞섭니다.
+View 는 Model 을, Model 은 View 를 서로 모릅니다. `LobbyStateManager` 는 상태가 바뀌었다는 사실만 이벤트로 알리고, 그 이벤트를 어떤 View 가 어떻게 그릴지는 `MultiplayerScenePresenter` 만 압니다.
 
 [↑ 목차](#목차)
 
