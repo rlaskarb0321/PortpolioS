@@ -63,15 +63,14 @@
 
 ### 2.1. 어셈블리 구성
 
-기능 단위로 폴더를 나누고, 각 폴더에 asmdef 를 두어 컴파일 시간과 의존 방향을 통제합니다.
-
-폴더링과 어셈블리가 어떻게 대응하는지, 계층별로 몇 개만 예시로 옮기면 다음과 같습니다.
+프로젝트 규모 확장에 따른 의존성 관리와 구조 파악의 어려움을 줄이기 위해 `asmdef`를 적용했습니다. 
+기능 단위로 Assembly를 분리하여 의존 방향과 컴파일 범위를 명확하게 통제합니다.
 
 | 어셈블리 | 폴더 | 역할 |
 | --- | --- | --- |
 | `Core` | `02. Scripts/Core` | 공통 유틸. 참조 목록이 비어 있는 최하위 |
+| `BootstrapScene`(#3-앱-부트스트랩) | `02. Scripts/Bootstrap Scene` | 앱 진입, 실행 모듈, 게임 모드, 네트워크 러너 |
 | `Multiplay Definitions` | `02. Scripts/Multiplay Definitions` | 멀티플레이 열거형 · 스테이지 정의. 데이터 계층이 공유하는 어휘만 담음 |
-| `BootstrapScene` | `02. Scripts/Bootstrap Scene` | 앱 진입, 실행 모듈, 게임 모드, 네트워크 러너 |
 | `PlayerController` | `02. Scripts/Player` | 플레이어 입력 · FSM · 애니메이션 |
 | `InGameMultiplay` | `02. Scripts/Other Scenes/InGame Multiplay` | 인게임 씬 조립 (맵/스폰/UI/Config 프리로드) |
 | `BackendChart` | `02. Scripts/Scriptable Obejct/Chart Data` | 뒤끝 차트 SO. `Multiplay Definitions` 하나만 참조 |
