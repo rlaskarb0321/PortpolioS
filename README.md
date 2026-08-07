@@ -68,11 +68,11 @@
 
 ![Bootstrap 씬 계층](docs/images/bootstrap-scene-hierarchy.png)
 
-| 씬 | 수명 | 하는 일 |
+| 씬 | 수&#8288;명 | 하는 일 |
 | --- | --- | --- |
-| `Bootstrap - Instance Scene` | 상시 | 진입점. `BootstrapSceneInstance` 가 `NetworkRunner` · 현재 게임 모드 · 전역 인스턴스 레지스트리를 보유 |
-| `Bootstrap - Loading Scene` | 상시 | `LoadingSceneManager` 와 로딩 캔버스. 앱 시작 직후 Additive 로드된 뒤 씬 전환시 Canvas Enable 을 통해 씬 전환 연출 |
-| `Game Mode - *` | 교체 | 실제 콘텐츠 씬. Addressables 또는 Fusion `NetworkSceneManager` 로 로드·언로드 |
+| `Bootstrap - Instance Scene` | 상&#8288;시 | 진입점. `BootstrapSceneInstance` 가 `NetworkRunner` · 현재 게임 모드 · 전역 인스턴스 레지스트리를 보유 |
+| `Bootstrap - Loading Scene` | 상&#8288;시 | `LoadingSceneManager` 와 로딩 캔버스. 앱 시작 직후 Additive 로드된 뒤 씬 전환시 Canvas Enable 을 통해 씬 전환 연출 |
+| `Game Mode - *` | 교&#8288;체 | 실제 콘텐츠 씬. Addressables 또는 Fusion `NetworkSceneManager` 로 로드·언로드 |
 
 씬 전환은 상주 중인 `LoadingSceneManager` 를 거치므로, 게임 모드 씬은 자기 콘텐츠만 담고 전환 로직을 갖지 않습니다. 진입 순서는 [3.1. AppLaunchManager 와 실행 모듈](#31-applaunchmanager-와-실행-모듈), 로드 방식은 [3.2. 로딩 씬과 씬 로드 전략](#32-로딩-씬과-씬-로드-전략) 참고.
 
@@ -116,17 +116,17 @@
 
 ### 3.1. AppLaunchManager 와 실행 모듈
 
-앱 초기화를 단일 함수가 아니라 **순서를 가진 모듈 배열**로 표현합니다. `AppLaunchManager` 는 인스펙터에 등록된 `AppLaunchModuleBase` 를 순차적으로 `await` 하기만 합니다.
+앱 초기화를 단일 함수가 아니라 **순서를 가진 모듈 배열**로 표현합니다. [`AppLaunchManager`](Assets/02.%20Scripts/Bootstrap%20Scene/AppLaunchManager.cs) 는 인스펙터에 등록된 [`AppLaunchModuleBase`](Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/00.%20Root%20Scripts/AppLaunchModuleBase.cs) 를 순차적으로 `await` 하기만 합니다.
 
-```
-AppLaunchManager
-├── firstLaunchModule        → ExecuteSync()  : 로딩 씬 먼저 띄움
-└── appLaunchModules[]       → ExecuteAsync() : 순차 실행
-    ├── TheBackendInitManager
-    ├── TheBackendLoginManager
-    ├── TheBackendUserDataLoader
+<pre>
+<a href="Assets/02.%20Scripts/Bootstrap%20Scene/AppLaunchManager.cs">AppLaunchManager</a>
+├── firstLaunchModule    → ExecuteSync()  : <a href="Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/01.%20Depth%201/LoadingSceneLoadManager.cs">LoadingSceneLoadManager</a> — 로딩 씬 먼저 띄움
+└── appLaunchModules[]   → ExecuteAsync() : 순차 실행
+    ├── <a href="Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/01.%20Depth%201/TheBackendInitManager.cs">TheBackendInitManager</a>
+    ├── <a href="Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/01.%20Depth%201/TheBackendLoginManager.cs">TheBackendLoginManager</a>
+    ├── <a href="Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/01.%20Depth%201/TheBackendUserDataLoader.cs">TheBackendUserDataLoader</a>
     └── ...
-```
+</pre>
 
 초기화 단계가 늘어나도 매니저 코드를 건드리지 않고 모듈만 추가합니다.
 
