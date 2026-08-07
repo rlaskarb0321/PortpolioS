@@ -200,13 +200,14 @@ GameModeBase (EGameModeType)
 
 ### 4.1. NetworkRunnerController
 
-[`NetworkRunnerController`](Assets/02.%20Scripts/Bootstrap%20Scene/Network/NetworkRunnerController.cs) 는 `INetworkRunnerCallbacks` 를 구현한 단일 지점으로, Fusion 콜백을 C# 이벤트로 재발행해 다른 시스템이 Fusion 인터페이스를 직접 구현하지 않아도 되게 합니다.
+[`NetworkRunnerController`](Assets/02.%20Scripts/Bootstrap%20Scene/Network/NetworkRunnerController.cs) 는 `INetworkRunnerCallbacks` 를 구현하는 프로젝트 내 유일한 클래스입니다. 구현체를 하나로 모으기 위해 Fusion 콜백을 C# 이벤트로 다시 발행합니다.
 
-| 이벤트 | 발행 시점 |
-| --- | --- |
-| `SceneLoadStart` / `SceneLoadDone` | 네트워크 씬 로드 전후 |
-| `InputPolling` | `OnInput` — 입력 수집 |
-| `PlayerJoined` | 플레이어 참가 |
+| 이벤트 | 원본 콜백 | 구독자 |
+| --- | --- | --- |
+| `SceneLoadStart` | `OnSceneLoadStart` | [`NetworkSceneLoader`](Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/Loading%20Scene/Loading%20Scene%20Strategy/NetworkSceneLoader.cs) |
+| `SceneLoadDone` | `OnSceneLoadDone` | [`NetworkSceneLoader`](Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/Loading%20Scene/Loading%20Scene%20Strategy/NetworkSceneLoader.cs) |
+| `InputPolling` | `OnInput` | [`VirtualJoystickPresenter`](Assets/02.%20Scripts/Player/VirtualJoystickPresenter.cs) |
+| `PlayerJoined` | `OnPlayerJoined` | [`DevelopSceneManager`](Assets/02.%20Scripts/Develop%20Scene/DevelopSceneManager.cs) |
 
 [↑ 목차](#목차)
 
@@ -234,6 +235,14 @@ View 는 Model 을, Model 은 View 를 서로 모릅니다. `LobbyStateManager` 
 ---
 
 ## 5. 플레이어 컨트롤
+
+State 와 Strategy 는 계산, 렌더의 역할만 한다는 것에 주목해 POCO로 생성. 
+
+엔진·네트워크를 실제로 건드리는 지점인 [`PlayerFSMController`](Assets/02.%20Scripts/Player/Player%20FSM/PlayerFSMController.cs)와[`PlayerNetworkedAnimatorController`](Assets/02.%20Scripts/Player/PlayerNetworkedAnimatorController.cs)만 `NetworkBehaviour` 로 남겨둠.
+
+- **State** ([`PlayerStateBase`](Assets/02.%20Scripts/Player/Player%20FSM/States/Base%20Script/PlayerStateBase.cs)) — 스탯 · Config · 경과 시간을 읽어 판정하는 데이터 계층. 시간 기준인 [`ActionComponent.Elapsed`](Assets/02.%20Scripts/Player/Player%20FSM/Sub%20Component/ActionComponent.cs) 가 `Time` 이 아니라 틱(`Runner.Tick - ActionStartTick`)에서 나오므로, 판정이 프레임과 무관하고 Fusion 재시뮬레이션에서도 같은 결과가 나옵니다.
+- **Strategy** ([`PlayerAnimationStrategyBase`](Assets/02.%20Scripts/Player/Player%20FSM/Animation%20Strategies/Base%20Script/PlayerAnimationStrategyBase.cs)) — `Render()` 에서 `Animator` 만 다루는 표현 계층.
+- **`NetworkBehaviour`** — [`PlayerFSMController`](Assets/02.%20Scripts/Player/Player%20FSM/PlayerFSMController.cs)(시뮬레이션 · 상태 동기화), [`PlayerNetworkedAnimatorController`](Assets/02.%20Scripts/Player/PlayerNetworkedAnimatorController.cs)(`Render()` 진입점), [`ActionComponent`](Assets/02.%20Scripts/Player/Player%20FSM/Sub%20Component/ActionComponent.cs)(틱 · 스탯 보유).
 
 ### 5.1. 입력과 가상 조이스틱
 
@@ -277,8 +286,6 @@ FixedUpdateNetwork
 └── stateDict[CurrentState].OnUpdateState
 ```
 
-이동은 Fusion KCC 를 통해 처리하며, `MaxMoveSpeed` 는 캐릭터 Config 에서 주입해 `EnvironmentProcessor.KinematicSpeed` 에 반영합니다.
-
 [↑ 목차](#목차)
 
 ### 5.3. 애니메이션 전략
@@ -298,7 +305,11 @@ FixedUpdateNetwork
 
 ### 5.4. 애니메이션 타임라인 마커
 
-애니메이션 클립의 이벤트를 베이크해 `AnimationTimeline` 으로 만들고, FSM 이 프레임이 아니라 **마커 구간**을 기준으로 판정합니다.
+처음엔 로컬 프로젝트처럼 Animation Clip 에 AnimationEvent 를 직접 부착. 그러나 Unity Frame 과 Fusion Simulation Tick 의 불일치로 이벤트가 발행되지 않는 시점이 발생.
+
+- Tick 기준으로 판정하려면 이벤트가 놓인 **정확한 시각**이 필요.
+- 다만 비개발자와의 협업을 위해 "클립에 이벤트를 찍는다" 는 작업 방식은 유지해야 함.
+- 그래서 클립의 이벤트를 읽어 [`AnimationTimeline`](Assets/02.%20Scripts/Player/AnimationTimeline.cs) 으로 굽는 [에디터](Assets/02.%20Scripts/Player/Editor/CharacterCombatConfigEditor.cs)를 구현. 런타임은 클립 이벤트가 아니라 구워진 **마커의 데이터**와 `Elapsed` 를 비교.
 
 | 마커 | 종류 | 의미 |
 | --- | --- | --- |
@@ -308,7 +319,7 @@ FixedUpdateNetwork
 | `Hitbox` | Range | 히트박스 활성 구간 |
 | `Trigger` | Point | 임의 트리거 |
 
-`AnimMarkerInfo.KindOf` 가 태그별 종류를 한 곳에서 정의하며, 베이크 시 검증 규칙도 여기에 맞춰 동작합니다. 마커 수신은 `AnimationMarkerReceiver` 가 담당합니다.
+`AnimMarkerInfo.KindOf` 가 태그별 종류를 한 곳에서 정의하며, 베이크 시 검증 규칙도 여기에 맞춰 동작합니다. 마커 수신은 [`AnimationMarkerReceiver`](Assets/02.%20Scripts/Player/AnimationMarkerReceiver.cs) 가 담당합니다.
 
 [↑ 목차](#목차)
 
@@ -338,8 +349,6 @@ FixedUpdateNetwork
 | `CharacterCombatConfig` | 이동 속도, 상태별 애니메이션 스텝(`EAnimStepKey` → `AnimationTimeline[]`), 회피 속도 커브 |
 | `CharacterStatConfig` | 캐릭터 스탯 |
 
-`CharacterConfigRegistry` 는 캐릭터 이름으로 이 둘을 찾는 정적 보관소입니다. **로딩은 `CharacterConfigPreloader`(InGame Multiplay 어셈블리), 보관/조회는 Registry(Player Controller 어셈블리)** 로 나뉘어 있는데, 어셈블리 의존 방향이 단방향이라 플레이어 쪽에서 프리로더를 참조할 수 없기 때문입니다. 애셋 핸들 소유권은 프리로더에 있고, Registry 는 참조만 들고 있다가 씬 종료 시 비워집니다.
-
 [↑ 목차](#목차)
 
 ### 6.3. Addressables 프리로드
@@ -354,9 +363,7 @@ DoInit()
 └── CharacterConfigRegistry.Register
 ```
 
-중복 선택은 걸러내고, 핸들은 리스트로 모아 `OnDestroy` 에서 일괄 해제합니다. 덕분에 `PlayerFSMController.Spawned` 는 비동기 대기 없이 동기 조회만 하면 됩니다.
-
-> **주의**: 씬 인스펙터 설정이 사라진 것처럼 보이면 오래된 번들이 로드된 경우일 수 있습니다. Addressables 의 Play Mode Script 를 `Use Asset Database` 로 두고 확인하세요.
+중복 선택은 걸러내고, 핸들은 리스트로 모아 `OnDestroy` 에서 일괄 해제합니다.
 
 [↑ 목차](#목차)
 
