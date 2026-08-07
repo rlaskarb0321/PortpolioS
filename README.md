@@ -1,3 +1,22 @@
+# 🚧 작업 노트 — 나중의 나에게
+
+> [!IMPORTANT]
+> **아래 본문은 전부 초안이다.** 포트폴리오 PPT와의 차별점을 아직 고민 중이며, 방향이 정해지면 갈아엎을 수 있다.
+
+### 차별점 정리
+
+| 매체 | 다루는 깊이 |
+| --- | --- |
+| **포트폴리오 PPT** | 기술의 **트러블 슈팅 · 문제 해결** 과정을 **중급 정도의 디테일**로 서술 |
+| **README (이 문서)** | 같은 기술을 **더 디테일하게 파고들기** |
+
+### ❓ 아직 못 정한 것 — 다음에 여기부터
+
+- **어떻게** 더 디테일하게 팔 것인가
+- **뭘** 적을 것인가
+
+---
+
 # PortpolioS
 
 > 게임 클라이언트 개발자 공고에서 자주 요구되거나 차별점이 되는 기능을 도입한, 기술 중심 ARPG 포트폴리오
@@ -54,9 +73,8 @@
 <details>
 <summary><b><a href="#6-데이터-파이프라인">6. 데이터 파이프라인</a></b></summary>
 
-- [6.1. 뒤끝 차트 데이터](#61-뒤끝-차트-데이터)
-- [6.2. 캐릭터 Config](#62-캐릭터-config)
-- [6.3. Addressables 프리로드](#63-addressables-프리로드)
+- [6.1. 캐릭터 Config](#61-캐릭터-config)
+- [6.2. Addressables 프리로드](#62-addressables-프리로드)
 
 </details>
 
@@ -65,7 +83,7 @@
 
 - [7.1. Go Test Scene](#71-go-test-scene)
 - [7.2. Character Combat Config Editor](#72-character-combat-config-editor)
-- [7.3. Chart Update](#73-chart-update)
+- [7.3. 뒤끝 차트 동기화](#73-뒤끝-차트-동기화)
 
 </details>
 
@@ -327,20 +345,7 @@ FixedUpdateNetwork
 
 ## 6. 데이터 파이프라인
 
-### 6.1. 뒤끝 차트 데이터
-
-`ChartDataSOBase` 는 에디터에서 뒤끝 CDN 의 차트를 받아 ScriptableObject 로 역직렬화합니다. 파생 클래스는 `DeserializeFlattenRows` 만 구현하면 됩니다.
-
-| SO | 내용 |
-| --- | --- |
-| `MultiplayStageDataSO` | 멀티플레이 스테이지 정보 |
-| `PlayableCharacterInfoSO` | 플레이 가능 캐릭터 목록 |
-
-런타임에는 네트워크 호출 없이 SO 만 읽으므로, 차트 갱신 비용이 플레이 중으로 새지 않습니다.
-
-[↑ 목차](#목차)
-
-### 6.2. 캐릭터 Config
+### 6.1. 캐릭터 Config
 
 캐릭터의 수치와 애니메이션 데이터는 두 개의 SO 로 나뉩니다.
 
@@ -351,7 +356,7 @@ FixedUpdateNetwork
 
 [↑ 목차](#목차)
 
-### 6.3. Addressables 프리로드
+### 6.2. Addressables 프리로드
 
 `CharacterConfigPreloader` 는 세션 참가자들이 고른 캐릭터만 골라 Config 를 미리 로드합니다.
 
@@ -371,6 +376,11 @@ DoInit()
 
 ## 7. 에디터 툴
 
+SO 의 성격에 따라 붙는 툴이 다릅니다.
+
+- **숫자·문자열만 담긴 SO** — 언리얼의 **DataTable(DT)** 에 해당. 원본이 서버 차트라 사람이 손댈 필요 없이 통째로 다시 받으면 됨 → [7.3. 뒤끝 차트 동기화](#73-뒤끝-차트-동기화)
+- **Unity Asset 참조를 담은 SO** — 언리얼의 **DataAsset(DA)** 에 해당. 클립·커브를 사람이 붙여야 하므로 편집 UI 가 필요 → [7.2. Character Combat Config Editor](#72-character-combat-config-editor)
+
 ### 7.1. Go Test Scene
 
 로그인과 앱 초기화를 건너뛰고 곧장 개발 씬으로 진입하는 에디터 전용 스위치입니다. `GoTestSceneSettings.Enabled` 가 켜져 있으면 `AppLaunchManager` 가 초기화 파이프라인 대신 `Develop Scene` 을 로드합니다. 씬 뷰 오버레이(`GoTestSceneSceneViewOverlay`)와 전용 윈도우(`GoTestSceneWindow`)로 토글합니다.
@@ -383,8 +393,22 @@ DoInit()
 
 [↑ 목차](#목차)
 
-### 7.3. Chart Update
+### 7.3. 뒤끝 차트 동기화
 
-`Assets/Editor/Chart Update` 의 툴로 뒤끝 CDN 차트를 내려받아 대응하는 ScriptableObject 를 갱신합니다.
+DT 성격의 SO 는 손으로 옮겨 적을 이유가 없으므로, [`BackendChartManager`](Assets/Editor/Chart%20Update/BackendChartManager.cs) 가 **F5** 한 번에 프로젝트의 모든 [`ChartDataSOBase`](Assets/02.%20Scripts/Scriptable%20Obejct/Chart%20Data/00.%20Root%20Script/ChartDataSOBase.cs) 를 찾아 뒤끝 CDN 차트로 덮어씁니다.
+
+```
+F5  (MenuItem "Refresh/Refresh Chart Definition _F5")
+├── AssetDatabase.FindAssets("t:ChartDataSOBase")
+├── SO 마다 LoadChart()  — chartId 로 CDN 차트를 찾아 DeserializeFlattenRows
+└── SaveAssets
+```
+
+| SO | 내용 |
+| --- | --- |
+| `MultiplayStageDataSO` | 멀티플레이 스테이지 정보 |
+| `PlayableCharacterInfoSO` | 플레이 가능 캐릭터 목록 |
+
+파생 클래스는 `DeserializeFlattenRows` 만 구현하면 이 파이프라인에 자동으로 편입됩니다. `LoadChart` 는 `#if UNITY_EDITOR` 안에 있어 빌드에는 포함되지 않고, 런타임은 구워진 SO 만 읽습니다.
 
 [↑ 목차](#목차)
