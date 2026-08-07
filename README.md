@@ -10,9 +10,8 @@
   - [1.1. 프로젝트 목표](#11-프로젝트-목표)
   - [1.2. 기술 스택](#12-기술-스택)
 - [2. 프로젝트 구조](#2-프로젝트-구조)
-  - [2.1. 폴더 트리](#21-폴더-트리)
-  - [2.2. 어셈블리 구성](#22-어셈블리-구성)
-  - [2.3. 씬 구성](#23-씬-구성)
+  - [2.1. 어셈블리 구성](#21-어셈블리-구성)
+  - [2.2. 씬 구성](#22-씬-구성)
 - [3. 앱 부트스트랩](#3-앱-부트스트랩)
   - [3.1. AppLaunchManager 와 실행 모듈](#31-applaunchmanager-와-실행-모듈)
   - [3.2. 로딩 씬과 씬 로드 전략](#32-로딩-씬과-씬-로드-전략)
@@ -62,39 +61,7 @@
 
 ## 2. 프로젝트 구조
 
-### 2.1. 폴더 트리
-
-```
-Assets/
-├── 01. Scenes/                     씬 파일
-│   └── For Test/                   개발용 씬
-├── 02. Scripts/
-│   ├── Bootstrap Scene/            앱 진입점 · 실행 모듈 · 게임 모드 · 네트워크 러너
-│   │   ├── App Launch Module/      앱 초기화 단계별 모듈 (백엔드 초기화, 로그인, 유저 데이터)
-│   │   ├── Game Mode/              씬별 게임 모드
-│   │   ├── Go Test Scene/          에디터 전용 테스트 씬 진입 설정
-│   │   ├── Network/                NetworkRunnerController · 세션 컨텍스트
-│   │   └── Sub Game Mode/          게임 모드 하위 초기화 단위
-│   ├── Core/                       싱글턴, 씬 참조 등 공통 유틸
-│   │   └── Multiplay Definitions/  멀티플레이 열거형 · 스테이지 정의
-│   ├── Develop Scene/              개발 전용 씬 초기화
-│   ├── InGame Combat/              투사체 등 전투 오브젝트
-│   ├── Other Scenes/
-│   │   ├── InGame Multiplay/       맵 로드, 캐릭터 스폰, UI 씬 로드
-│   │   └── Menu Scene/             로비 · 매치메이킹 · 스테이지 선택 View
-│   ├── Player/                     입력, FSM, 애니메이션, 카메라, Config
-│   │   └── Player FSM/             State · Animation Strategy · Sub Component
-│   └── Scriptable Obejct/
-│       └── Chart Data/             뒤끝 차트 → ScriptableObject 역직렬화
-├── 03. Assets/                     2D 아이콘, GUI 스프라이트
-├── 04. Prefabs/                    씬별 프리팹 (맵, UI, 플레이어 모델)
-└── 05. Scriptable Objects/         Config · Definitions 에셋
-    └── Config/Combat Config/       캐릭터별 전투 Config
-```
-
-[↑ 목차](#목차)
-
-### 2.2. 어셈블리 구성
+### 2.1. 어셈블리 구성
 
 기능 단위로 asmdef 를 분리해 컴파일 시간과 의존 방향을 통제합니다.
 
@@ -114,7 +81,7 @@ Assets/
 
 [↑ 목차](#목차)
 
-### 2.3. 씬 구성
+### 2.2. 씬 구성
 
 | 씬 | 설명 |
 | --- | --- |
