@@ -10,7 +10,6 @@
         "Multiplay Definitions",
         "BackendChart",
         "Player",
-        "MultiplayInGameMode",
         "PlayerController"
     ],
     "includePlatforms": [],
