@@ -10,8 +10,9 @@
   - [1.1. 프로젝트 목표](#11-프로젝트-목표)
   - [1.2. 기술 스택](#12-기술-스택)
 - [2. 프로젝트 구조](#2-프로젝트-구조)
-  - [2.1. 어셈블리 구성](#21-어셈블리-구성)
-  - [2.2. 씬 구성](#22-씬-구성)
+  - [2.1. 부트스트랩 씬 구조](#21-부트스트랩-씬-구조)
+  - [2.2. 어셈블리 구성](#22-어셈블리-구성)
+  - [2.3. 씬 구성](#23-씬-구성)
 - [3. 앱 부트스트랩](#3-앱-부트스트랩)
   - [3.1. AppLaunchManager 와 실행 모듈](#31-applaunchmanager-와-실행-모듈)
   - [3.2. 로딩 씬과 씬 로드 전략](#32-로딩-씬과-씬-로드-전략)
@@ -61,7 +62,23 @@
 
 ## 2. 프로젝트 구조
 
-### 2.1. 어셈블리 구성
+### 2.1. 부트스트랩 씬 구조
+
+앱은 언제나 `Bootstrap - Instance Scene` 하나로 진입하고, 나머지 씬은 그 위에 Additive 로 얹힙니다.
+
+![Bootstrap 씬 계층](docs/images/bootstrap-scene-hierarchy.png)
+
+| 씬 | 수명 | 하는 일 |
+| --- | --- | --- |
+| `Bootstrap - Instance Scene` | 상시 | 진입점. `BootstrapSceneInstance` 가 `NetworkRunner` · 현재 게임 모드 · 전역 인스턴스 레지스트리를 보유 |
+| `Bootstrap - Loading Scene` | 상시 | `LoadingSceneManager` 와 로딩 캔버스. 앱 시작 직후 Additive 로드된 뒤 씬 전환시 Canvas Enable 을 통해 씬 전환 연출 |
+| `Game Mode - *` | 교체 | 실제 콘텐츠 씬. Addressables 또는 Fusion `NetworkSceneManager` 로 로드·언로드 |
+
+씬 전환은 상주 중인 `LoadingSceneManager` 를 거치므로, 게임 모드 씬은 자기 콘텐츠만 담고 전환 로직을 갖지 않습니다. 진입 순서는 [3.1. AppLaunchManager 와 실행 모듈](#31-applaunchmanager-와-실행-모듈), 로드 방식은 [3.2. 로딩 씬과 씬 로드 전략](#32-로딩-씬과-씬-로드-전략) 참고.
+
+[↑ 목차](#목차)
+
+### 2.2. 어셈블리 구성
 
 프로젝트 규모 확장에 따른 의존성 관리와 구조 파악의 어려움을 줄이기 위해 `asmdef`를 적용했습니다. 
 기능 단위로 Assembly를 분리하여 의존 방향과 컴파일 범위를 명확하게 통제합니다.
@@ -69,7 +86,7 @@
 | 어셈블리 | 폴더 | 역할 |
 | --- | --- | --- |
 | `Core` | `02. Scripts/Core` | 공통 유틸. 참조 목록이 비어 있는 최하위 |
-| `BootstrapScene`(#3-앱-부트스트랩) | `02. Scripts/Bootstrap Scene` | 앱 진입, 실행 모듈, 게임 모드, 네트워크 러너 |
+| [`BootstrapScene`](#3-앱-부트스트랩) | `02. Scripts/Bootstrap Scene` | 앱 진입, 실행 모듈, 게임 모드, 네트워크 러너 |
 | `Multiplay Definitions` | `02. Scripts/Multiplay Definitions` | 멀티플레이 열거형 · 스테이지 정의. 데이터 계층이 공유하는 어휘만 담음 |
 | `PlayerController` | `02. Scripts/Player` | 플레이어 입력 · FSM · 애니메이션 |
 | `InGameMultiplay` | `02. Scripts/Other Scenes/InGame Multiplay` | 인게임 씬 조립 (맵/스폰/UI/Config 프리로드) |
@@ -78,7 +95,7 @@
 
 [↑ 목차](#목차)
 
-### 2.2. 씬 구성
+### 2.3. 씬 구성
 
 | 씬 | 설명 |
 | --- | --- |
