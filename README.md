@@ -389,6 +389,12 @@ DoInit()
 
 중복 선택은 걸러내고, 핸들은 리스트로 모아 `OnDestroy` 에서 일괄 해제합니다.
 
+로드할 SO 는 주소를 직접 들고 다니지 않고 **캐릭터 이름을 주소 서식에 끼워** 특정합니다. 인스펙터에는 `Data/Config/Combat/{0}` · `Data/Config/Stat/{0}` 두 서식만 두고, `PlayableCharacterInfoSO` 에서 얻은 이름을 넣습니다.
+
+이 로드는 로딩 화면이 떠 있는 `OnSceneActivated` 단계에서 `UniTask` 로 진행되어 메인 스레드를 막지 않습니다.
+
+덕분에 캐릭터가 늘어도 코드는 그대로입니다. 이름 규약에 맞춰 Addressables 에 Config 를 등록하고 `PlayableCharacterInfoSO` 에 항목을 추가하면 됩니다. 그 SO 는 [뒤끝 차트 동기화](#73-뒤끝-차트-동기화) 대상이라 F5 로 갱신됩니다.
+
 [↑ 목차](#목차)
 
 ---
