@@ -348,7 +348,7 @@ FixedUpdateNetwork
 | `Trigger` | Point | 임의 트리거 |
 
 <details>
-<summary><b>에디터 화면 — 클립의 이벤트가 마커로 구워진 결과</b></summary>
+<summary><b>(시각 자료 1) 에디터 화면</b></summary>
 
 ![클립의 EventTiming 이벤트가 마커로 구워진 결과](docs/images/bake-clip-to-marker.png)
 
