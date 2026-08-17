@@ -316,7 +316,9 @@ FixedUpdateNetwork
 
 ### 5.3. 애니메이션 전략
 
-상태별 애니메이션 재생 로직은 FSM 상태와 분리해 `PlayerAnimationStrategyBase` 파생 클래스로 두었습니다.
+상태별 애니메이션 재생 로직은 FSM 상태와 분리해 `PlayerAnimationStrategyBase` 파생 클래스로 두었습니다. 재생 자체는 `PlayerNetworkedAnimatorController` 가 네트워크 동기화된 형태로 담당합니다.
+
+`Animator` 의 Parameter 를 세팅하는 지점도 FSM 이 아니라 이 전략들입니다. 파라미터 값은 `[Networked] PlayerNetworkedAnimatorData` 로 복제됩니다.
 
 | 전략 | 대응 |
 | --- | --- |
@@ -325,8 +327,6 @@ FixedUpdateNetwork
 | `DodgeStrategy` | 회피 |
 | `ExpertStrategy` | 전문 스킬 |
 
-재생 자체는 `PlayerNetworkedAnimatorController` 가 네트워크 동기화된 형태로 담당합니다.
-
 [↑ 목차](#목차)
 
 ### 5.4. 애니메이션 타임라인 마커
@@ -334,8 +334,10 @@ FixedUpdateNetwork
 처음엔 로컬 프로젝트처럼 Animation Clip 에 AnimationEvent 를 직접 부착. 그러나 Unity Frame 과 Fusion Simulation Tick 의 불일치로 이벤트가 발행되지 않는 시점이 발생.
 
 - Tick 기준으로 판정하려면 이벤트가 놓인 **정확한 시각**이 필요.
-- 다만 비개발자와의 협업을 위해 "클립에 이벤트를 찍는다" 는 작업 방식은 유지해야 함.
-- 그래서 클립의 이벤트를 읽어 [`AnimationTimeline`](Assets/02.%20Scripts/Player/AnimationTimeline.cs) 으로 굽는 [에디터](Assets/02.%20Scripts/Player/Editor/CharacterCombatConfigEditor.cs)를 구현. 런타임은 클립 이벤트가 아니라 구워진 **마커의 데이터**와 `Elapsed` 를 비교.
+- 비개발자와의 협업을 위해 "클립에 이벤트를 찍는다" 는 작업 방식은 유지해야 함.
+- 클립이 바뀌면 수치가 자동으로 따라올 것.
+
+그래서 클립의 이벤트를 읽어 [`AnimationTimeline`](Assets/02.%20Scripts/Player/AnimationTimeline.cs) 으로 굽는 [에디터(line:186)](Assets/02.%20Scripts/Player/Editor/CharacterCombatConfigEditor.cs#L186)를 구현. 런타임은 클립 이벤트가 아니라 구워진 **마커의 데이터**와 `Elapsed` 를 비교.
 
 | 마커 | 종류 | 의미 |
 | --- | --- | --- |
@@ -344,6 +346,10 @@ FixedUpdateNetwork
 | `Invincible` | Range | 무적 구간 |
 | `Hitbox` | Range | 히트박스 활성 구간 |
 | `Trigger` | Point | 임의 트리거 |
+
+![클립의 EventTiming 이벤트가 마커로 구워진 결과](docs/images/bake-clip-to-marker.png)
+
+왼쪽 Animation 창의 `EventTiming` 이벤트가 오써링 소스이고, 오른쪽 Inspector 의 `Markers`(`Invincible` · `Start 0` · `End 1.199599`)가 구워진 결과입니다.
 
 `AnimMarkerInfo.KindOf` 가 태그별 종류를 한 곳에서 정의하며, 베이크 시 검증 규칙도 여기에 맞춰 동작합니다. 마커 수신은 [`AnimationMarkerReceiver`](Assets/02.%20Scripts/Player/AnimationMarkerReceiver.cs) 가 담당합니다.
 
