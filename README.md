@@ -347,9 +347,14 @@ FixedUpdateNetwork
 | `Hitbox` | Range | 히트박스 활성 구간 |
 | `Trigger` | Point | 임의 트리거 |
 
+<details>
+<summary><b>에디터 화면 — 클립의 이벤트가 마커로 구워진 결과</b></summary>
+
 ![클립의 EventTiming 이벤트가 마커로 구워진 결과](docs/images/bake-clip-to-marker.png)
 
 왼쪽 Animation 창의 `EventTiming` 이벤트가 오써링 소스이고, 오른쪽 Inspector 의 `Markers`(`Invincible` · `Start 0` · `End 1.199599`)가 구워진 결과입니다.
+
+</details>
 
 `AnimMarkerInfo.KindOf` 가 태그별 종류를 한 곳에서 정의하며, 베이크 시 검증 규칙도 여기에 맞춰 동작합니다. 마커 수신은 [`AnimationMarkerReceiver`](Assets/02.%20Scripts/Player/AnimationMarkerReceiver.cs) 가 담당합니다.
 
