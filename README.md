@@ -233,7 +233,7 @@ GameModeBase (EGameModeType)
 
 [`MatchMakingManager`](Assets/02.%20Scripts/Other%20Scenes/Menu%20Scene/Multiplay%20Type/MatchMakingManager.cs) 가 `GameMode.AutoHostOrClient` 로 세션 참가/생성을 일원화합니다. 첫 참가자가 호스트가 되고 이후 참가자는 클라이언트로 붙습니다.
 
-로비는 MVP 로 분리되어 있습니다.
+로비는 MVP 로 분리되어 있습니다. 상태의 원본이 하나 있고 표현은 그 데이터를 읽어 그리기만 한다는 점에 주목해서 MVP 를 Lobby UI 구현에 적용했습니다.
 
 | 역할 | 클래스 | 하는 일 |
 | --- | --- | --- |
@@ -254,13 +254,21 @@ View 는 Model 을, Model 은 View 를 서로 모릅니다. `LobbyStateManager` 
 
 ## 5. 플레이어 컨트롤
 
-State 와 Strategy 는 계산, 렌더의 역할만 한다는 것에 주목해 POCO로 생성. 
+State 와 Strategy 는 계산, 렌더의 역할만 한다는 것에 주목해 순수 C# 클래스(POCO)로 생성. 
 
 엔진·네트워크를 실제로 건드리는 지점인 [`PlayerFSMController`](Assets/02.%20Scripts/Player/Player%20FSM/PlayerFSMController.cs)와[`PlayerNetworkedAnimatorController`](Assets/02.%20Scripts/Player/PlayerNetworkedAnimatorController.cs)만 `NetworkBehaviour` 로 남겨둠.
 
-- **State** ([`PlayerStateBase`](Assets/02.%20Scripts/Player/Player%20FSM/States/Base%20Script/PlayerStateBase.cs)) — 스탯 · Config · 경과 시간을 읽어 판정하는 데이터 계층. 시간 기준인 [`ActionComponent.Elapsed`](Assets/02.%20Scripts/Player/Player%20FSM/Sub%20Component/ActionComponent.cs) 가 `Time` 이 아니라 틱(`Runner.Tick - ActionStartTick`)에서 나오므로, 판정이 프레임과 무관하고 Fusion 재시뮬레이션에서도 같은 결과가 나옵니다.
-- **Strategy** ([`PlayerAnimationStrategyBase`](Assets/02.%20Scripts/Player/Player%20FSM/Animation%20Strategies/Base%20Script/PlayerAnimationStrategyBase.cs)) — `Render()` 에서 `Animator` 만 다루는 표현 계층.
-- **`NetworkBehaviour`** — [`PlayerFSMController`](Assets/02.%20Scripts/Player/Player%20FSM/PlayerFSMController.cs)(시뮬레이션 · 상태 동기화), [`PlayerNetworkedAnimatorController`](Assets/02.%20Scripts/Player/PlayerNetworkedAnimatorController.cs)(`Render()` 진입점), [`ActionComponent`](Assets/02.%20Scripts/Player/Player%20FSM/Sub%20Component/ActionComponent.cs)(틱 · 스탯 보유).
+- **State** ([`PlayerStateBase`](Assets/02.%20Scripts/Player/Player%20FSM/States/Base%20Script/PlayerStateBase.cs)) —
+
+  스탯 · Config · 경과 시간을 읽어 판정하는 데이터 계층. 시간 기준인 [`ActionComponent.Elapsed`](Assets/02.%20Scripts/Player/Player%20FSM/Sub%20Component/ActionComponent.cs) 가 `Time` 이 아니라 틱(`Runner.Tick - ActionStartTick`)에서 나오므로, 판정이 프레임과 무관하고 Fusion 재시뮬레이션에서도 같은 결과가 나옵니다.
+
+- **Strategy** ([`PlayerAnimationStrategyBase`](Assets/02.%20Scripts/Player/Player%20FSM/Animation%20Strategies/Base%20Script/PlayerAnimationStrategyBase.cs)) —
+
+  `Render()` 에서 `Animator` 만 다루는 표현 계층.
+
+- **`NetworkBehaviour`** —
+
+  [`PlayerFSMController`](Assets/02.%20Scripts/Player/Player%20FSM/PlayerFSMController.cs)(시뮬레이션 · 상태 동기화), [`PlayerNetworkedAnimatorController`](Assets/02.%20Scripts/Player/PlayerNetworkedAnimatorController.cs)(`Render()` 진입점), [`ActionComponent`](Assets/02.%20Scripts/Player/Player%20FSM/Sub%20Component/ActionComponent.cs)(틱 · 스탯 보유).
 
 ### 5.1. 입력과 가상 조이스틱
 
