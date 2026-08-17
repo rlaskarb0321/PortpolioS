@@ -1,2 +1,2 @@
-# PortpolioS
+# PortfolioS
 게임 클라이언트 개발자 공고에서 자주/차별적인 기능을 도입한 기술 위주의 ARPG 포트폴리오
