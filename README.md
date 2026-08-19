@@ -241,8 +241,9 @@ State 와 Strategy 는 계산, 렌더의 역할만 한다는 것에 주목해 �
 엔진·네트워크를 실제로 건드리는 지점인 [`PlayerFSMController`](Assets/02.%20Scripts/Player/Player%20FSM/PlayerFSMController.cs)와[`PlayerNetworkedAnimatorController`](Assets/02.%20Scripts/Player/PlayerNetworkedAnimatorController.cs)만 `NetworkBehaviour` 로 남겨둠.
 
 ```mermaid
-flowchart TD
+flowchart LR
     subgraph SIM["시뮬레이션 · FixedUpdateNetwork"]
+        direction TB
         FSM["PlayerFSMController<br/>: NetworkBehaviour<br/>상태 전이 · 동기화"]
         AC["ActionComponent<br/>: NetworkBehaviour<br/>틱 · 스탯"]
         ST["PlayerStateBase<br/>(POCO)<br/>판정"]
@@ -252,6 +253,7 @@ flowchart TD
     end
 
     subgraph REN["렌더 · Render"]
+        direction TB
         ANI["PlayerNetworkedAnimatorController<br/>: NetworkBehaviour<br/>Render 진입점"]
         SG["PlayerAnimationStrategyBase<br/>(POCO)<br/>표현"]
         UA["Animator"]
