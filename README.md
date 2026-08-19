@@ -408,6 +408,15 @@ SO 의 성격에 따라 붙는 툴이 다릅니다.
 
 로그인과 앱 초기화를 건너뛰고 곧장 개발 씬으로 진입하는 에디터 전용 스위치입니다. `GoTestSceneSettings.Enabled` 가 켜져 있으면 `AppLaunchManager` 가 초기화 파이프라인 대신 `Develop Scene` 을 로드합니다. 씬 뷰 오버레이(`GoTestSceneSceneViewOverlay`)와 전용 윈도우(`GoTestSceneWindow`)로 토글합니다.
 
+토글 값은 `EditorPrefs` 에 저장되어 플레이를 반복해도 유지됩니다.
+
+<details>
+<summary><b>(시각 자료 2) 테스트 모드 ON 상태</b></summary>
+
+![Go Test Scene 토글과 씬 뷰 경고 배지](docs/images/go-test-scene.png)
+
+</details>
+
 [↑ 목차](#목차)
 
 ### 7.2. Character Combat Config Editor
