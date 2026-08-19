@@ -243,16 +243,17 @@ State 와 Strategy 는 계산, 렌더의 역할만 한다는 것에 주목해 �
 ```mermaid
 flowchart TD
     subgraph SIM["시뮬레이션 · FixedUpdateNetwork"]
-        FSM["PlayerFSMController<br/>NetworkBehaviour"]
-        AC["ActionComponent<br/>NetworkBehaviour · 틱 · 스탯"]
-        ST["PlayerStateBase<br/>POCO · 판정"]
+        FSM["PlayerFSMController<br/>: NetworkBehaviour<br/>상태 전이 · 동기화"]
+        AC["ActionComponent<br/>: NetworkBehaviour<br/>틱 · 스탯"]
+        ST["PlayerStateBase<br/>(POCO)<br/>판정"]
+        FSM --- AC
         FSM --> ST
         AC -.->|Elapsed 와 스탯| ST
     end
 
     subgraph REN["렌더 · Render"]
-        ANI["PlayerNetworkedAnimatorController<br/>NetworkBehaviour"]
-        SG["PlayerAnimationStrategyBase<br/>POCO · 표현"]
+        ANI["PlayerNetworkedAnimatorController<br/>: NetworkBehaviour<br/>Render 진입점"]
+        SG["PlayerAnimationStrategyBase<br/>(POCO)<br/>표현"]
         UA["Animator"]
         ANI --> SG
         SG --> UA
@@ -260,10 +261,12 @@ flowchart TD
 
     FSM ==>|CurrentState 를 직접 읽음| ANI
 
-    classDef nb fill:#1d3557,color:#ffffff,stroke:#0d1b2a
-    classDef poco fill:#f1faee,color:#1d3557,stroke:#a8dadc
-    classDef engine fill:#adb5bd,color:#212529,stroke:#6c757d
-    class FSM,AC,ANI nb
+    classDef nb fill:#1d3557,color:#ffffff,stroke:#0d1b2a,font-size:14px
+    classDef nbSub fill:#1d3557,color:#dbe4ef,stroke:#0d1b2a,font-size:11px
+    classDef poco fill:#f1faee,color:#4a6fa5,stroke:#a8dadc,font-size:13px
+    classDef engine fill:#adb5bd,color:#212529,stroke:#6c757d,font-size:11px
+    class FSM,ANI nb
+    class AC nbSub
     class ST,SG poco
     class UA engine
 ```
