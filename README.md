@@ -1,22 +1,3 @@
-# 🚧 작업 노트 — 나중의 나에게
-
-> [!IMPORTANT]
-> **아래 본문은 전부 초안이다.** 포트폴리오 PPT와의 차별점을 아직 고민 중이며, 방향이 정해지면 갈아엎을 수 있다.
-
-### 차별점 정리
-
-| 매체 | 다루는 깊이 |
-| --- | --- |
-| **포트폴리오 PPT** | 기술의 **트러블 슈팅 · 문제 해결** 과정을 **중급 정도의 디테일**로 서술 |
-| **README (이 문서)** | 같은 기술을 **더 디테일하게 파고들기** |
-
-### ❓ 아직 못 정한 것 — 다음에 여기부터
-
-- **어떻게** 더 디테일하게 팔 것인가
-- **뭘** 적을 것인가
-
----
-
 # Portfolio S
 
 > 게임 클라이언트 개발자 공고에서 자주 요구되거나 차별점이 되는 기능을 도입한, 기술 중심 ARPG 포트폴리오
@@ -117,7 +98,8 @@
 
 ### 2.1. 부트스트랩 씬 구조
 
-앱은 언제나 `Bootstrap - Instance Scene` 하나로 진입하고, 나머지 씬은 그 위에 Additive 로 얹힙니다.
+> [!IMPORTANT]
+> 앱은 언제나 `Bootstrap - Instance Scene` 하나로 진입하고, 나머지 씬은 그 위에 Additive 로 얹힙니다.
 
 ![Bootstrap 씬 계층](docs/images/bootstrap-scene-hierarchy.png)
 
@@ -408,7 +390,8 @@ SO 의 성격에 따라 붙는 툴이 다릅니다.
 
 로그인과 앱 초기화를 건너뛰고 곧장 개발 씬으로 진입하는 에디터 전용 스위치입니다. `GoTestSceneSettings.Enabled` 가 켜져 있으면 `AppLaunchManager` 가 초기화 파이프라인 대신 `Develop Scene` 을 로드합니다. 씬 뷰 오버레이(`GoTestSceneSceneViewOverlay`)와 전용 윈도우(`GoTestSceneWindow`)로 토글합니다.
 
-토글 값은 `EditorPrefs` 에 저장되어 플레이를 반복해도 유지됩니다.
+> [!WARNING]
+> 토글 값은 `EditorPrefs` 에 저장되어 플레이를 반복해도 유지됩니다.
 
 <details>
 <summary><b>(시각 자료 2) 테스트 모드 ON 상태</b></summary>
@@ -429,11 +412,12 @@ SO 의 성격에 따라 붙는 툴이 다릅니다.
 
 DT 성격의 SO 는 손으로 옮겨 적을 이유가 없으므로, [`BackendChartManager`](Assets/Editor/Chart%20Update/BackendChartManager.cs) 가 **F5** 한 번에 프로젝트의 모든 [`ChartDataSOBase`](Assets/02.%20Scripts/Scriptable%20Obejct/Chart%20Data/00.%20Root%20Script/ChartDataSOBase.cs) 를 찾아 뒤끝 CDN 차트로 덮어씁니다.
 
-```
-F5  (MenuItem "Refresh/Refresh Chart Definition _F5")
-├── AssetDatabase.FindAssets("t:ChartDataSOBase")
-├── SO 마다 LoadChart()  — chartId 로 CDN 차트를 찾아 DeserializeFlattenRows
-└── SaveAssets
+```mermaid
+flowchart TD
+    A["F5 · MenuItem<br/>Refresh/Refresh Chart Definition"] --> B["AssetDatabase.FindAssets<br/>('t:ChartDataSOBase')"]
+    B --> C["SO 마다 LoadChart()<br/>chartId 로 CDN 차트를 찾아 DeserializeFlattenRows"]
+    C --> D["AssetDatabase.SaveAssets()"]
+    style A fill:#2d6a4f,color:#ffffff,stroke:#1b4332
 ```
 
 | SO | 내용 |
