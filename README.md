@@ -240,6 +240,34 @@ State 와 Strategy 는 계산, 렌더의 역할만 한다는 것에 주목해 �
 
 엔진·네트워크를 실제로 건드리는 지점인 [`PlayerFSMController`](Assets/02.%20Scripts/Player/Player%20FSM/PlayerFSMController.cs)와[`PlayerNetworkedAnimatorController`](Assets/02.%20Scripts/Player/PlayerNetworkedAnimatorController.cs)만 `NetworkBehaviour` 로 남겨둠.
 
+```mermaid
+flowchart TD
+    subgraph SIM["시뮬레이션 · FixedUpdateNetwork"]
+        FSM["PlayerFSMController<br/>NetworkBehaviour"]
+        AC["ActionComponent<br/>NetworkBehaviour · 틱 · 스탯"]
+        ST["PlayerStateBase<br/>POCO · 판정"]
+        FSM --> ST
+        AC -.->|Elapsed 와 스탯| ST
+    end
+
+    subgraph REN["렌더 · Render"]
+        ANI["PlayerNetworkedAnimatorController<br/>NetworkBehaviour"]
+        SG["PlayerAnimationStrategyBase<br/>POCO · 표현"]
+        UA["Animator"]
+        ANI --> SG
+        SG --> UA
+    end
+
+    FSM ==>|CurrentState 를 직접 읽음| ANI
+
+    classDef nb fill:#1d3557,color:#ffffff,stroke:#0d1b2a
+    classDef poco fill:#f1faee,color:#1d3557,stroke:#a8dadc
+    classDef engine fill:#adb5bd,color:#212529,stroke:#6c757d
+    class FSM,AC,ANI nb
+    class ST,SG poco
+    class UA engine
+```
+
 - **State** ([`PlayerStateBase`](Assets/02.%20Scripts/Player/Player%20FSM/States/Base%20Script/PlayerStateBase.cs)) —
 
   스탯 · Config · 경과 시간을 읽어 판정하는 데이터 계층. 시간 기준인 [`ActionComponent.Elapsed`](Assets/02.%20Scripts/Player/Player%20FSM/Sub%20Component/ActionComponent.cs) 가 `Time` 이 아니라 틱(`Runner.Tick - ActionStartTick`)에서 나오므로, 판정이 프레임과 무관하고 Fusion 재시뮬레이션에서도 같은 결과가 나옵니다.
