@@ -175,6 +175,8 @@
 
 `LoadingSceneManager` 는 `OnSceneActivated` / `OnCompleteLoad` 이벤트를 발행해, 게임 모드가 "에셋 활성화 시점"과 "모든 준비 완료 시점"을 구분해 훅을 걸 수 있게 합니다.
 
+[`LoadingCanvas`](Assets/02.%20Scripts/Bootstrap%20Scene/App%20Launch%20Module/Loading%20Scene/LoadingCanvas.cs) 는 `SetActive` 가 아니라 `canvas.enabled` 로 껐다 켜는데(드로우 콜), 이 경우 렌더링만 멈출 뿐 하위 오브젝트는 계속 활성 상태로 남는다는 점에서 `Animator` 대신 DOTween 으로 구현했습니다. 만일 `Animator` 를 붙였다면 화면에 보이지 않는 동안에도 Idle 상태가 매 프레임 PlayableGraph 를 평가하게 됩니다. 이 캔버스는 부트스트랩 씬에 상주해 앱 수명 내내 살아 있으므로, 그 낭비 역시 앱이 켜져 있는 내내 누적됩니다.
+
 [↑ 목차](#목차)
 
 ### 3.3. 게임 모드와 서브 매니저
